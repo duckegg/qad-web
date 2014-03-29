@@ -1,0 +1,185 @@
+//==============================================================================
+// Legend and indicator
+//
+// @revision Leo Liao, 2013/05/25, modified
+//==============================================================================
+
+//------------------------------------------------
+// STATUS, LEGEND
+//------------------------------------------------
+
+select.select-status option {
+  color: #000;
+  background-color: #fff;
+}
+
+select.select-narrow {
+  margin: 0;
+  padding: 0;
+  height: auto;
+  line-height: 100%;
+  font-size: 0.9em;
+}
+
+.status-warn {
+  color: @status_warn_text_color;
+  background-color: @status_warn_back_color;
+  border-color: @status_warn_border_color;
+}
+
+.status-ok,
+.status-success {
+  color: @status_good_text_color;
+  background-color: @status_good_back_color;
+  border-color: @status_good_border_color;
+}
+
+.status-overdue {
+  color: @status_serious_text_color;
+  background-color: @status_serious_back_color;
+  border-color: @status_serious_back_color;
+}
+
+.status-fail,
+.status-failed,
+.status-failed .fc-event-skin,
+.status-failed.fc-event-skin {
+  color: @status_error_text_color;
+  border-color: @status_error_back_color;
+  background-color: @status_error_back_color;
+}
+
+.status-abort,
+.status-aborted,
+.status-aborted .fc-event-skin,
+.status-aborted.fc-event-skin {
+  color: @status_error_text_color;
+  border-color: @status_error_back_color;
+  background-color: @status_error_back_color;
+}
+
+.status-skipped,
+.status-design,
+.status-design .fc-event-skin,
+.status-design.fc-event-skin {
+  color: @status_unready_text_color;
+  background-color: @status_unready_back_color;
+  border-color: @status_unready_border_color;
+}
+
+.status-ready,
+.status-ready .fc-event-skin,
+.status-ready.fc-event-skin {
+  color: @status_info_text_color;
+  background-color: @status_info_back_color;
+  border-color: @status_info_border_color;
+}
+
+.status-pending {
+  color: @status_warn_text_color;
+  background-color: @status_warn_back_color;
+  border-color: @status_warn_border_color;
+}
+
+.status-running,
+.status-running .fc-event-skin,
+.status-running.fc-event-skin {
+  color: @status_running_text_color;
+  background-color: @status_running_back_color;
+  border-color: @status_running_border_color;
+}
+
+.status-succeeded,
+.status-succeeded .fc-event-skin,
+.status-succeeded.fc-event-skin {
+  color: @status_good_text_color;
+  background-color: @status_good_back_color;
+  border-color: @status_good_border_color;
+}
+
+/* Status and Legend */
+.color-label-list li {
+  margin-bottom: 0.5em;
+}
+
+.color-indicator {
+  width: 6px;
+  display: inline-block;
+  margin-right: 0.5em;
+}
+
+.color-label-list .name {
+  color: @gray;
+}
+
+.badge-counter {
+  color: @gray;
+  background-color: white;
+  border-color: #ccc;
+}
+
+/**************************************/
+/*           NOTICE TAG               */
+/**************************************/
+.notice-tag {
+  position: relative;
+  top: -5px;
+  display: inline-block;
+  height: 10px;
+  line-height: 10px;
+  padding: 2px;
+  font-size: smaller;
+  margin-left: 2px;
+  color: #eee;
+}
+
+.notice-tag.error {
+  color: #e00;
+}
+
+.notice-tag.beta {
+  background-color: #08C;
+}
+
+.notice-tag.new {
+  background-color: #e00;
+}
+
+//------------------------------------------------
+// TAGS
+//------------------------------------------------
+.kui-tag {
+  //  border: 1px solid #ddd;
+  padding: 2px 4px;
+  border-radius: 2px;
+  color: @gray;
+  background-color: #eee;
+  &:hover {
+    background-color: #ccc;
+  }
+}
+
+.kui-tag-list {
+  &:before {
+    .kui-fonticon('\f02b');
+    color: #ccc;
+  }
+  li {
+    padding: 0;
+    a {
+      .kui-tag;
+    }
+  }
+}
+
+.label.label-tag {
+  background-color: @gray-light;
+  color: @white;
+}
+
+a.label.label-tag:hover,
+a.label.label-tag:hover i {
+  color: @white;
+  background: #555;
+  text-decoration: none;
+}

@@ -1,0 +1,79 @@
+//==============================================================================
+// JqPlot Charts
+//
+// @revision Leo Liao, 2013/05/01, created
+//
+//==============================================================================
+
+.jqplot-title, table.chart caption {
+  font-size: @font-size-base;
+  font-weight: normal;
+  color: @primary_text_color;
+  text-align: center;
+}
+
+@kui-tooltip-padding: 4px;
+.jqplot-highlighter-tooltip/*, .jqplot-canvasOverlay-tooltip*/            {
+  border: 1px solid rgba(0, 0, 0, 0.75);
+  border-radius: 2px;
+  font-size: 1em;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: @kui-tooltip-padding;
+  strong {
+//    background-color: #fff;
+    display: block;
+//    color: #000;
+//    padding: @kui-tooltip-padding;
+//    margin: -@kui-tooltip-padding;
+//    margin-bottom: 0;
+  }
+}
+
+.jqplot-xaxis-tick, .jqplot-yaxis-tick {
+  font-size: 11px;
+}
+
+.jqplot-data-label {
+  color: #eee;
+}
+
+.jqplot-series-shadowCanvas {
+  border: 0;
+}
+
+.jqplot-table-legend {
+  border: 0 !important;
+  &.kui-chart-legend-horizontal {
+  }
+  &.highlight {
+    background-color: #ffef8f;
+  }
+}
+
+.jqplot-table-legend-label {
+  padding: 0 8px 0 4px;
+}
+
+.jqplot-legend-label.jqplot-series-hidden {
+  font-style: italic;
+  text-decoration: line-through;
+}
+
+/* CSS Chart*/
+.chart span.chart-bar {
+  background-color: #007FC5;
+  text-align: left;
+  padding: 4px;
+  display: block;
+}
+
+.chart-controls {
+  position: absolute;
+  //  display: inline-block;
+  //  padding: 4px;
+  right: 20px;
+  z-index: 10;
+}
+

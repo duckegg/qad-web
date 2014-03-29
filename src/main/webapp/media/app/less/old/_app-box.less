@@ -1,0 +1,386 @@
+.portlet-container {
+  padding: 0 5px;
+  vertical-align: top;
+}
+
+.portlet-container .portlet {
+  margin-bottom: 5px;
+}
+
+.portlet-container .portlet.fluid {
+  width: inherit;
+}
+
+.portlet-container.horizontal .portlet {
+  margin-right: 5px;
+}
+
+.portlet {
+  min-height: 150px;
+  min-width: 150px;
+  width: 300px;
+  height: 240px;
+  float: left;
+  min-height: 300px;
+}
+
+.portlet .edit-box {
+  color: @white;
+  background: @primary_back_color;
+  z-index: 10000;
+  width: 100%;
+  position: absolute;
+}
+
+.portlet .edit-box ul li label {
+  float: left;
+  width: 4em;
+  padding: 0 0 0 10px;
+}
+
+.portlet .edit-box ul li.item {
+  padding: 10px 0;
+}
+
+.portlet .edit-box ul.colors li {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #EEE;
+  float: left;
+  display: inline;
+  margin: 0 5px 2px 0;
+  cursor: pointer;
+}
+
+.portlet-content {
+  padding: 5px;
+}
+
+.portlet-header, .portlet {
+  min-height: @widget_header_height;
+}
+
+.portlet-header {
+  border: 0px;
+  cursor: move;
+}
+
+.portlet-header a {
+  color: @grayLight;
+  cursor: pointer;
+}
+
+.portlet-header h3 {
+  display: inline-block;
+  font-size: 14px;
+  margin: 0;
+  padding-left: 5px;
+}
+
+.portlet-header.not-moveable {
+  cursor: default;
+}
+
+.portlet.minimized .portlet-header {
+}
+
+.ui-sortable-placeholder {
+  border: 2px dashed #999;
+  visibility: visible !important;
+  height: 50px !important;
+}
+
+.ui-sortable-placeholder * {
+  visibility: hidden;
+}
+
+//------------------------------------------------
+// PORTLET LAYOUT
+//------------------------------------------------
+.portlet-content {
+  overflow: auto;
+}
+
+/**************************************/
+/*       CUSTOM: BROWSER/BLOCK        */
+/**************************************/
+/* Effect */
+.bubble {
+  padding: 3px;
+  background-color: #eee;
+}
+
+.mybox {
+  /*http://webdesignerwall.com/tutorials/css-specific-for-internet-explorer*/
+  background-color: #fff;
+  border: 1px solid @border_color_default;
+}
+
+.mybox-header {
+  font-size: 11px;
+  height: 30px;
+  border-bottom: 1px solid @border_color_default;
+  .header_background;
+}
+
+.mybox-footer {
+  padding: 5px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #777;
+  overflow: hidden;
+  min-height: 15px;
+  background: #F6F6F6;
+}
+
+.mybox-content .pagination {
+  margin: 0;
+  padding: .5em;
+  font-size: 11px;
+  overflow: hidden;
+
+  background: #ECF0F1;
+  background-image: -webkit-linear-gradient(top, #FFFFFF 0%, #ECF0F1 100%);
+  background-image: -moz-linear-gradient(top, #FFFFFF 0%, #ECF0F1 100%);
+  background-image: -ms-linear-gradient(top, #FFFFFF 0%, #ECF0F1 100%);
+  background-image: -o-linear-gradient(top, #FFFFFF 0%, #ECF0F1 100%);
+  background-image: linear-gradient(top, #FFFFFF 0%, #ECF0F1 100%);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF',endColorstr='#ECF0F1')";
+}
+
+ul.sorts,
+ul.filters {
+  margin: 5px 10px 0 0;
+  height: 18px;
+}
+
+//ul.sorts {
+//  float: right;
+//}
+
+//ul.filters {
+//  float: left;
+//}
+
+ul.sorts li,
+ul.filters li {
+  list-style-type: none;
+  display: inline-block;
+  margin: 0;
+
+  cursor: pointer;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  position: relative;
+}
+
+ul.sorts li {
+  padding: 0 10px 0 20px;
+  font-weight: normal;
+}
+
+ul.filters li {
+  padding-left: 5px;
+}
+
+ul.sorts li a {
+  color: #333;
+}
+
+ul.sorts li a:hover {
+  text-decoration: none;
+}
+
+ul.sorts li.asc,
+ul.sorts li.desc {
+  color: #000;
+}
+
+ul.sorts li.asc::before,
+ul.sorts li.desc::before {
+  margin-top: 1px;
+  margin-right: 5px;
+  display: inline;
+  font-family: FontAwesome;
+  height: auto;
+  font-weight: 300;
+  text-shadow: none;
+}
+
+ul.sorts li.asc::before {
+  content: "\f106";
+}
+
+ul.sorts li.desc::before {
+  content: "\f107";
+}
+
+//------------------------------------------------
+// PORTLET THEMES
+//------------------------------------------------
+.themeOrange {
+  background-color: @orange;
+  color: @white;
+}
+
+.themeGreen {
+  background-color: @green;
+  color: @white;
+}
+
+.themeYellow {
+  background-color: @yellow;
+  color: @white;
+}
+
+.themeRed {
+  background-color: @red;
+  color: @white;
+}
+
+.themeBlack {
+  background-color: @black;
+  color: @white;
+}
+
+.themeBlue {
+  background-color: @blue;
+  color: @white;
+}
+
+.themePurple {
+  background-color: @purple;
+  color: @white;
+}
+
+.themePink {
+  background-color: @pink;
+  color: @white;
+}
+
+.themeGray {
+  background-color: @grayLight;
+  color: @white;
+}
+
+.portlet {
+  &.box {
+    border: 1px solid @widget_header_back_color;
+    border-top: 0;
+    .portlet-header {
+      background-color: @widget_header_back_color;
+    }
+    &.theme-orange {
+      border-color: @orange;
+    }
+    &.theme-green {
+      border-color: @green;
+    }
+    &.theme-blue {
+      border-color: @blue;
+    }
+    &.theme-red {
+      border-color: @red;
+    }
+    &.theme-black {
+      border-color: @black;
+    }
+    &.theme-pink {
+      border-color: @pink;
+    }
+    &.theme-yellow {
+      border-color: @yellow;
+    }
+    &.theme-purple {
+      border-color: @purple;
+    }
+  }
+
+  .portlet-header {
+    background-color: @widget_header_back_color;
+  }
+
+  &.theme-orange {
+    .portlet-header {
+      .themeOrange;
+    }
+  }
+  &.theme-blue {
+    .portlet-header {
+      .themeBlue;
+    }
+  }
+  &.theme-green {
+    .portlet-header {
+      .themeGreen;
+    }
+  }
+
+  &.theme-red {
+    .portlet-header {
+      .themeRed;
+    }
+  }
+
+  &.theme-yellow {
+    .portlet-header {
+      .themeYellow;
+    }
+  }
+
+  &.theme-pink {
+    .portlet-header {
+      .themePink;
+    }
+  }
+
+  &.theme-purple {
+    .portlet-header {
+      .themePurple}
+  }
+
+  &.theme-black {
+    .portlet-header {
+      .themeBlack;
+    }
+  }
+}
+
+.portlet code {
+  white-space: pre-wrap;
+}
+
+.colors {
+  .theme-orange {
+    .themeOrange;
+  }
+
+  .theme-green {
+    .themeGreen;
+  }
+
+  .theme-red {
+    .themeRed;
+  }
+
+  .theme-yellow {
+    .themeYellow;
+  }
+
+  .theme-blue {
+    .themeBlue;
+  }
+
+  .theme-pink {
+    .themePink;
+  }
+
+  .theme-purple {
+    .themePurple
+  }
+
+  .theme-black {
+    .themeBlack;
+  }
+}

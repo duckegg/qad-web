@@ -1,0 +1,103 @@
+//==============================================================================
+// Listing
+//
+// @revision Leo Liao, 2013/04/28, modified
+//==============================================================================
+
+ul.listing-bullet, ul.listing-bullet ul {
+  list-style: circle;
+  margin-left: 2em;
+}
+
+ul.listing-bullet.horizontal > li {
+  float: left;
+  text-overflow: ellipsis;
+}
+
+ul.listing-vertical {
+  overflow-y: auto;
+  margin-left: 0;
+  margin-bottom: 0;
+  max-height: 600px;
+}
+
+ul.listing-bordered > li:first-child {
+  border-top: 1px dotted #e0e0e0;
+}
+
+ul.listing-bordered > li {
+  border-bottom: 1px dotted #e0e0e0;
+//  padding: 0.5em 1em;
+}
+
+ul.listing-condensed>li {
+  padding: 0;
+}
+
+//------------------------------------------------
+// WIZARD TAB
+//------------------------------------------------
+.step-number {
+  font-size: 40px;
+  display: inline-block;
+}
+
+.step-desc {
+  display: inline-block;
+
+}
+
+.step.listing {
+  border-bottom: 1px dotted @kui-border-color-gray;
+  padding: 0.5em 1em;
+}
+
+.step > div {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.step.checked {
+  background-image: url('../images/bg-closed.gif');
+}
+
+//------------------------------------------------
+// STATS BOX
+//------------------------------------------------
+li > a.stat-box {
+  position: relative;
+  border-radius: 0px;
+  width: 8em;
+  padding: 0;
+}
+.badge {
+  padding: 2px 4px;
+  min-width: 10px;
+  text-align: center;
+  //  border: 2px solid white;
+  border-radius: 50px;
+  //  box-shadow: 0 0px 2px 1px rgba(0, 0, 0, 0.1);
+}
+
+.stat-box .badge {
+  position: absolute;
+  right: -8px;
+  z-index: 1;
+}
+
+li > a.stat-box .desc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  line-height: 16px;
+  padding: 4px;
+  text-align: center;
+}
+
+li > a.stat-box .number {
+  font-size: 160%;
+  line-height: 100%;
+  padding: 10px 4px 4px 4px;
+  text-align: center;
+}

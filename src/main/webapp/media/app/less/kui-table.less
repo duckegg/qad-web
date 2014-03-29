@@ -1,0 +1,410 @@
+//==============================================================================
+// For DataTable (http://www.datatables.net)
+//
+// @revision Leo Liao, 2013/04/23, created
+//
+//==============================================================================
+
+@table_max_height: 400px;
+
+.sorting_image(@image-url) {
+  background-color: inherit;
+  background-image: @image-url;
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+
+//-----------------------------------------
+// OVERALL LAYOUT
+//-----------------------------------------
+// Override bootstrap
+.dataTables_wrapper table.table {
+  margin-bottom: 0 !important;
+  & > thead > tr > th {
+    border-bottom: 0;
+  }
+}
+
+// ScrollX on IE 8, 9 and Firefox not working correctly when serverSideProcessing is set
+// http://datatables.net/forums/discussion/11438/scrollx-on-ie-8-9-and-firefox-not-working-correctly-when-serversideprocessing-is-set/p1
+// It is indeed a max-width:100% issue and it comes from bootstrap.css (line 1515).
+table.dataTable {
+  max-width: none;
+}
+
+//-----------------------------------------
+// WRAPPER HEADER AND FOOTER
+//-----------------------------------------
+.dataTables_footer {
+  padding-top: 4px;
+  * {
+    //  Make elements vertical aligned
+    line-height: 30px;
+  }
+}
+
+.dataTables_header, .dataTables_footer {
+  border: 0px solid @kui-border-color-gray;
+  select, input {
+    margin: 0 !important;
+  }
+}
+
+//-----------------------------------------
+// TABLE WITH SCROLLER
+//-----------------------------------------
+
+table.table > thead > tr th {
+  .header_background;
+}
+
+.dataTables_scrollHead,
+.dataTables_wrapper > table.dataTable thead tr /*Table without scroll bar*/                                 {
+  .header_background;
+  border: 1px solid @kui-border-color-gray !important;
+}
+
+.dataTables_scrollHead table {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top: none;
+
+  thead tr:last-child th:first-child,
+  thead tr:last-child td:first-child {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+}
+
+// Fix issue of wide table exceed 100% viewport in Firefox and IE. Chrome does not need this
+//.dataTables_scrollHead, .dataTables_scrollBody {
+//  width: 100% !important;
+//}
+
+.dataTables_scrollBody {
+  border: 1px solid @kui-border-color-gray;
+  border-top: 0;
+  height: auto;
+  max-height: @table_max_height;
+
+  table {
+    border-top: 0 !important;
+  }
+
+  tbody tr:first-child th,
+  tbody tr:first-child td {
+    border-top: none;
+  }
+}
+
+.dataTables_scrollFoot {
+  table {
+    border-top: none !important;
+  }
+}
+
+//-----------------------------------------
+// SORTING
+//-----------------------------------------
+th.sorting, th.sorting_asc, th.sorting_desc, th.sorting_asc_disabled, th.sorting_desc_disabled {
+  padding-right: 20px;
+}
+
+th.sorting {
+  .sorting_image(url('../images/sort_both.png'));
+}
+
+th.sorting_asc {
+  .sorting_image(url('../images/sort_asc.png'));
+}
+
+th.sorting_desc {
+  .sorting_image(url('../images/sort_desc.png'));
+}
+
+th.sorting_asc_disabled {
+  .sorting_image(url('../images/sort_asc_disabled.png'));
+}
+
+th.sorting_desc_disabled {
+  .sorting_image(url('../images/sort_desc_disabled.png'));
+}
+
+th.sorting_asc,
+th.sorting_desc {
+  background-color: @widget_header_back_color_active !important;
+}
+
+//-----------------------------------------
+// TABLE WITHOUT SCROLLER
+//-----------------------------------------
+.dataTables_wrapper > .dataTable {
+  border: 1px solid @kui-border-color-gray;
+  tbody {
+    background-color: #fff;
+  }
+}
+
+//-----------------------------------------
+// CUSTOM ELEMENTS
+//-----------------------------------------
+.dataTables_toolbar {
+  float: left;
+}
+
+.dataTables_controls {
+  float: right;
+  vertical-align: middle;
+  //  padding-right: @padding-base-horizontal;
+}
+
+//-----------------------------------------
+// CONTROLS IN HEADER AND FOOTER
+//-----------------------------------------
+div.dataTables_length {
+  label {
+    float: left;
+    text-align: left;
+  }
+
+  select {
+    width: 75px;
+  }
+}
+
+div.dataTables_paginate {
+  float: right;
+  margin: 0;
+}
+
+.dataTables_filter {
+  float: right;
+  text-align: right;
+  label {
+    float: right;
+  }
+  .form-control {
+    width: auto;
+    display: inline-block;
+  }
+}
+
+.dataTables_info {
+  float: left;
+  width: auto;
+}
+
+.dataTables_length {
+  float: left;
+  margin-right: 1em;
+}
+
+.ColVis {
+  display: inline-block;
+}
+
+.ColVis_radio {
+  margin-right: 0.5em;
+}
+
+.ColVis_MasterButton, .DTTT_button {
+  border: 0 !important;
+  background-image: none;
+  background-color: transparent;
+  margin-right: 3px !important;
+}
+
+.ColVis_collection {
+  width: 10em !important;
+  background-color: white;
+  border: 1px solid #CACACA;
+  border: 1px solid rgba(0, 0, 0, .2);
+  z-index: 100;
+}
+
+.ColVis_collection button {
+  background-color: transparent;
+  background-image: none;
+  cursor: default;
+  border: 0;
+  width: 100% !important;
+  display: block;
+  text-align: left;
+  padding: 3px 5px;
+}
+
+.ColVis_collection button:hover {
+  background-color: #efefef;
+}
+
+.ColVis_collection button.ColVis_Restore {
+  text-align: center;
+  font-weight: bold;
+}
+
+.DTTT_container {
+  display: inline-block;
+}
+
+//-----------------------------------------
+// PAGINATION
+//-----------------------------------------
+.dataTables_paginate {
+  float: right;
+  text-align: right;
+  display: block;
+}
+
+.paginate_disabled_previous,
+.paginate_enabled_previous,
+.paginate_disabled_next,
+.paginate_enabled_next {
+  height: 19px;
+  width: 19px;
+  margin-left: 3px;
+  float: left;
+}
+
+.paging_full_numbers a.paginate_button,
+.paging_full_numbers a.paginate_active {
+  /* KISS, remove border */
+  border: 0 solid @kui-border-color-gray;
+  padding: 2px 2px;
+  margin: 0 3px;
+  cursor: pointer;
+}
+
+.paging_full_numbers a.paginate_button:hover,
+.paging_full_numbers a.paginate_active {
+  text-decoration: none !important;
+}
+
+.paging_full_numbers a.paginate_active {
+  font-weight: bold;
+}
+
+.paging_full_numbers a.paginate_active,
+.paging_full_numbers a.paginate_button_disabled,
+.paging_full_numbers a.paginate_button_disabled:hover {
+  color: @text-color;
+  cursor: default;
+}
+
+//-----------------------------------------
+// COLORS
+//-----------------------------------------
+// For KeyTable, override bootstrap table style
+td.focus {
+  background-color: #C4FFC4 !important;
+}
+
+tr.disabled {
+  color: #808080;
+}
+
+.table-striped tr.odd {
+  background-color: #F8F8F8;
+}
+
+.table-striped tr.even {
+  background-color: white;
+}
+
+tbody tr.even td.highlighted {
+  background-color: #ECFFB3;
+}
+
+tbody tr.odd td.highlighted {
+  background-color: #E6FF99;
+}
+
+//-----------------------------------------
+// ROW GROUPING
+//-----------------------------------------
+.dataTables_wrapper tr.group {
+  font-weight: bold;
+  border-bottom: 1px solid #DADADA;
+  .block_state_default
+  &:hover {
+    border-bottom: 1px solid #CFDCE8;
+    //  .block_state_active
+  }
+}
+
+.dataTables_wrapper td.group {
+  background-color: #eee;
+  font-weight: bold;
+  border-bottom: 1px solid #CACACA;
+  border-top: 1px solid #CACACA;
+}
+
+.dataTables_wrapper tr.subgroup {
+  font-weight: bold;
+}
+
+.dataTables_wrapper .expanded-group {
+  background: url("../../datatables/images/node-expanded.png") no-repeat scroll left center transparent;
+  padding-left: 20px !important
+}
+
+.dataTables_wrapper .collapsed-group {
+  background: url("../../datatables/images/node-collapsed.png") no-repeat scroll left center transparent;
+  padding-left: 20px !important
+}
+
+.dataTables_wrapper td.group-item-expander {
+  &, &.focus {
+    /* override bootstrap table style*/
+    background-color: transparent !important;
+  }
+}
+
+.dataTables_wrapper .group-child-count {
+  position: relative;
+  top: -1px;
+  display: inline-block;
+  height: 15px;
+  margin: 0 0 0 5px;
+  padding: 0 8px 1px 8px;
+  font-size: 10px;
+  line-height: 14px;
+  text-align: center;
+  color: #777;
+  background: white;
+  border-top: 1px solid #CACACA;
+  text-shadow: 0 1px 0 white;
+}
+
+//-----------------------------------------
+// SIMPLE THEME
+//-----------------------------------------
+.table-simple tbody tr {
+  background-color: #fafafa;
+}
+
+.dataTables_wrapper.simple {
+  .dataTables_scroll .table-bordered {
+    border: 0;
+  }
+
+  .table-bordered th:first-child,
+  .table-bordered td:first-child {
+    border-left: 0;
+  }
+
+  .dataTables_header {
+    display: none;
+  }
+}
+
+//-----------------------------------------
+// CUSTOM STYLE
+//-----------------------------------------
+table.no-border {
+  border: 0;
+}
+
+// Make dropdown menu
+li.DTTT_button_text a:hover {
+  cursor: pointer;
+}

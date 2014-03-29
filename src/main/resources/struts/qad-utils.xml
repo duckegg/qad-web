@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************************************
+Sub config file for system admin.
+
+@author leo.liao@hp.com, 2012/05/30, modified
+@author leo.liao@hp.com, 2014/03/10, renamed from struts-admin.xml and adopt drupal like URL route
+********************************************************************************
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="qad-utils" namespace="/" extends="qad-basic">
+        <action name="utils/tag/controls" class="hpps.qad.core.tag.TagAction" method="controls">
+        </action>
+    </package>
+</struts>

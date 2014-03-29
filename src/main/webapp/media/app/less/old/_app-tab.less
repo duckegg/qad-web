@@ -1,0 +1,53 @@
+//==============================================================================
+// action-tabs extends jQueryUI tabs
+//
+// @revision Leo Liao, 2013/04/26, created
+//
+//==============================================================================
+
+//-----------------------------------------
+// ACTION-TABS
+//-----------------------------------------
+.tab_button {
+  border: 0 !important;
+  border-bottom-width: 0px !important;
+  background-color: @grayLighter;
+  text-align: center;
+  width: 100px;
+  font-weight: normal;
+  padding-bottom: 0;
+}
+
+.tabbable-custom .nav-tabs > li.active {
+  border-top: 3px solid @primary_back_color_highlight;
+  margin-top: 0;
+  position: relative;
+  & > a {
+    border-top: none;
+    font-weight: 400;
+  }
+}
+
+.tabbable-custom .nav-tabs > li {
+  margin-right: 2px;
+  border-top: 2px solid transparent;
+  & > a {
+    //  -webkit-border-radius: 2px;
+    //  -moz-border-radius: 2px;
+    //  border-radius: 2px;
+    margin-right: 0;
+    padding: 5px 10px;
+  }
+}
+
+//-----------------------------------------
+// DROPDOWN FORM
+//-----------------------------------------
+.dropdown.dropdown-form > div,
+.dropdown.dropdown-form > ul {
+  padding: 4px;
+}
+
+.nav-pills.condensed > li > a {
+  padding: 0px;
+}

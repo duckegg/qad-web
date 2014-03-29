@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************************************
+Core definitions for qad with code refactoring.
+
+@author Leo Liao, 2012/05/30, modified
+@author Leo Liao, 2014/03/10, rename from struts-qad.xml
+********************************************************************************
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <!-- =================================================================== -->
+    <!-- Simple Dependancy Injection using Struts2 built-in Google Guice     -->
+    <!-- =================================================================== -->
+    <bean name="queryDAO" type="hpps.qad.core.query.QueryDAO"
+          class="hpps.qad.core.query.QueryDAOHibImpl"/>
+    <bean name="qdfManager" type="hpps.qad.core.query.QueryDefManager"
+          class="hpps.qad.core.query.QueryDefManagerXmlImpl"/>
+
+    <package name="qad-query" extends="qad-basic" namespace="/">
+        <action name="/query/json/{jsonFormat}" class="hpps.qad.core.query.QdfQueryAction" method="$json">
+            <result type="stream">
+                <param name="contentType">application/json</param>
+                <param name="inputName">jsonStream</param>
+            </result>
+        </action>
+        <action name="query/data" class="hpps.qad.core.query.QdfQueryAction" method="$data">
+        </action>
+
+        <!-- This action simply goes to a page -->
+        <!-- @deprecated: Do NOT use view?pid=xxx/yyy or view?next=zzz. Use named URL instead -->
+
+        <!-- Execute query. -->
+        <!--
+        This action is always invoked by Struts <action> tag in selenium page as below.
+        <@s.action name="query" namespace="/" var="lsc" rethrowException=true>
+            <@s.param name="qid">rs6000.RS6K_ASSET_SERVER_COUNT_BY_MODEL</@s.param>
+        </@s.action>
+        Its return result (an Action object stored in var) can be used directly in page.
+        It does not need <result>
+        -->
+        <action name="query" class="hpps.qad.core.query.QueryAction" method="executeQuery">
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="auth"/>
+            <result type="json"/>
+        </action>
+
+        <!-- Execute update -->
+        <action name="update" class="hpps.qad.core.query.QueryAction" method="executeUpdate">
+            <result type="json"/>
+        </action>
+        <!-- Export -->
+        <action name="query/export/{exportFormat}" class="hpps.qad.core.query.ExportableQdfQueryAction" method="execute">
+            <result name="screen" type="stream">
+                <param name="contentType">${contentType}</param>
+                <param name="inputName">exportStream</param>
+                <param name="contentCharSet">UTF-8</param>
+                <param name="contentDisposition">filename="${displayFilename}"</param>
+            </result>
+            <result name="file" type="freemarker">/WEB-INF/pages/commons/file/print-file-result.ftl</result>
+        </action>
+
+        <!-- =================================================================== -->
+        <!-- DEPRECATED ACTIONS. DOUBLE CHECK BEFORE REMOVE                      -->
+        <!-- =================================================================== -->
+        <!--
+        <action name="view" class="hpps.qad.core.query.QueryAction" method="doDefault">
+            <result name="success" type="freemarker">${next}.ftl</result>
+        </action>
+        -->
+        <!-- Query and return JSON data for display with DataTables -->
+        <!-- @deprecated, use query/data -->
+        <action name="tabledata" class="hpps.qad.core.query.DataTablesQueryAction" method="execute">
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="auth"/>
+            <result type="json"/>
+        </action>
+        <!-- Query and return JSON data for charting with jqPlot -->
+        <!-- @deprecated, use query/data -->
+        <action name="chartdata" class="hpps.qad.core.query.JqPlotQueryAction" method="execute">
+            <result type="json"/>
+        </action>
+
+        <!-- Query and display a printable page. It uses print-output as a chain. -->
+        <!-- @deprecated, use export -->
+        <action name="print" class="hpps.qad.core.query.QueryAction" method="executeQuery">
+            <result name="success" type="chain">
+                <param name="actionName">print-output</param>
+                <param name="namespace">/</param>
+            </result>
+        </action>
+
+        <!-- @deprecated, use export -->
+        <action name="print/{pid}" class="hpps.qad.core.query.QueryAction" method="executeQuery">
+            <!--<param name="pid">{1}</param>-->
+            <result name="success" type="chain">
+                <param name="actionName">print-output</param>
+                <param name="namespace">/</param>
+            </result>
+        </action>
+
+        <!-- @deprecated, use export -->
+        <!-- Action to generate printable page.  -->
+        <action name="print-output" class="hpps.qad.core.query.PrintableOutputAction" method="execute">
+            <!--<param name="outputDir">files</param>-->
+            <!-- Plain -->
+            <result name="html" type="freemarker">${next}.print.ftl</result>
+            <result name="html_file" type="stream">
+                <param name="contentType">application/octet-stream</param>
+                <param name="inputName">inputStream</param>
+                <param name="contentCharSet">UTF-8</param>
+                <param name="contentDisposition">filename="${outputFile.name}"</param>
+            </result>
+            <!-- Office -->
+            <result name="word" type="stream">
+                <param name="contentType">application/octet-stream</param>
+                <param name="inputName">inputStream</param>
+                <param name="contentCharSet">UTF-8</param>
+                <param name="contentDisposition">filename="${outputFile.name}"</param>
+            </result>
+            <result name="excel" type="stream">
+                <param name="contentType">application/excel</param>
+                <param name="inputName">inputStream</param>
+                <param name="contentCharSet">UTF-8</param>
+                <param name="contentDisposition">filename="${outputFile.name}"</param>
+            </result>
+            <!-- PDF -->
+            <result name="pdf_file" type="freemarker">/WEB-INF/pages/commons/file/pdf-result.ftl</result>
+            <result name="pdf" type="stream">
+                <param name="contentType">application/pdf</param>
+                <param name="inputName">inputStream</param>
+                <param name="contentDisposition">filename="${outputFile.name}"</param>
+            </result>
+            <result name="pdf_screen" type="stream">
+                <param name="contentType">application/pdf</param>
+                <param name="inputName">inputStream</param>
+                <param name="contentDisposition">filename="${outputFile.name}"</param>
+            </result>
+            <!--<result name="pdf_file_screen" type="stream">-->
+            <!--<param name="contentType">application/pdf</param>-->
+            <!--<param name="inputName">inputStream</param>-->
+            <!--<param name="contentDisposition">filename="${outputFile.name}"</param>-->
+            <!--</result>-->
+        </action>
+        <action name="tree-query" class="hpps.qad.base.action.TreeQueryAction" method="execute">
+        </action>
+    </package>
+</struts>

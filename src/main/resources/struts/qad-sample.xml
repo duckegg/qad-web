@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************************************
+Sample and demo code
+
+@author Leo, 2013/01/30, created
+********************************************************************************
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="qad-sample" extends="qad-basic" namespace="/sample">
+        <action name="stock" class="hpps.qad.app.sample.stock.StockAction" method="$index">
+            <result name="success" type="freemarker">/WEB-INF/pages/sample/stock/stock-list.ftl</result>
+        </action>
+        <action name="stock/{function}" class="hpps.qad.app.sample.stock.StockAction" method="${1}">
+            <result name="success" type="freemarker">/WEB-INF/pages/sample/stock/stock-{1}.ftl</result>
+        </action>
+    </package>
+</struts>

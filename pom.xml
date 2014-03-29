@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--=====================================================================-->
+    <!-- The Basics -->
+    <!--=====================================================================-->
+    <groupId>hpps</groupId>
+    <artifactId>qad-sample</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--<tomcat.transportUrl>file://usr/tomcat/webapps</tomcat.transportUrl>-->
+        <tomcat.transportUrl>file://usr/tomcat/webapps</tomcat.transportUrl>
+        <tomcat.accessUrl>http://99.1.76.195:8080</tomcat.accessUrl>
+        <!-- Private repository -->
+        <repo.transportUrl>${tomcat.transportUrl}/maven/${project.artifactId}</repo.transportUrl>
+        <repo.accessUrl>${tomcat.accessUrl}/maven/repository</repo.accessUrl>
+        <site.transportUrl>${tomcat.transportUrl}/sites/${project.artifactId}</site.transportUrl>
+    </properties>
+
+    <!--=====================================================================-->
+    <!-- SCM -->
+    <!-- http://maven.apache.org/scm/maven-scm-plugin/-->
+    <!--=====================================================================-->
+    <scm>
+        <connection>scm:svn:https://99.1.76.221/svn/cmb/CMBSA/8000_Dashboard/8200_hpps-opshere/hpps-opshere</connection>
+        <developerConnection>scm:svn:https://99.1.76.221/svn/cmb/CMBSA/8000_Dashboard/8200_hpps-opshere/hpps-opshere</developerConnection>
+        <url>http://somerepository.com/view.cvs</url>
+    </scm>
+
+    <!--=====================================================================-->
+    <!-- More Project Information -->
+    <!--=====================================================================-->
+    <name>qad-sample</name>
+    <description>Qad Sample</description>
+    <inceptionYear>2012</inceptionYear>
+    <organization>
+        <name>HP Software Professional Service</name>
+    </organization>
+    <developers>
+        <developer>
+            <id>leo</id>
+            <name>Leo Liao</name>
+            <email>leo.liao@hp.com</email>
+            <roles>
+                <role>lead architect</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>Wally Zhong</id>
+            <name>Wally</name>
+            <email>hong-wei.zhong@hp.com</email>
+            <roles>
+                <role>architect</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>liuqt</id>
+            <name>Liu Qingtian</name>
+            <email>liu_qingtian@126.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>weijl</id>
+            <name>Wei JiaLiang</name>
+            <email>weijialiang_1987@126.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>wuss</id>
+            <name>Wu Sisi</name>
+            <email>si-si.wu@hp.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>zhangj</id>
+            <name>Zhang Jian</name>
+            <email>jian.zhang4@hp.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <!--=====================================================================-->
+    <!-- Dependency -->
+    <!--=====================================================================-->
+    <dependencies>
+        <dependency>
+            <groupId>hpps</groupId>
+            <artifactId>hpps-qad</artifactId>
+            <version>2.0-alpha7</version>
+            <type>jar</type>
+        </dependency>
+        <!--=============================================-->
+        <!-- LOGGING -->
+        <!--=============================================-->
+        <!-- SLF4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.6.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Logback -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.0.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Perf4J -->
+        <dependency>
+            <groupId>org.perf4j</groupId>
+            <artifactId>perf4j</artifactId>
+            <version>0.9.16</version>
+        </dependency>
+
+        <!--=============================================-->
+        <!-- STRUTS2 FRAMEWORK -->
+        <!--=============================================-->
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-core</artifactId>
+            <version>2.3.15.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-json-plugin</artifactId>
+            <version>2.3.15.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-sitemesh-plugin</artifactId>
+            <version>2.3.15.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.20</version>
+        </dependency>
+
+        <!--=============================================-->
+        <!-- DEPENDENCY INJECTION -->
+        <!--=============================================-->
+        <!--guice-->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>3.0</version>
+        </dependency>
+        <!--guice-struts-plugin-->
+        <!--<dependency>-->
+            <!--<groupId>com.google.inject.extensions</groupId>-->
+            <!--<artifactId>guice-struts2</artifactId>-->
+            <!--<version>3.0</version>-->
+        <!--</dependency>-->
+
+        <!--=============================================-->
+        <!-- REST -->
+        <!--=============================================-->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>2.3.5.Final</version>
+        </dependency>
+
+        <!--=============================================-->
+        <!-- J2EE -->
+        <!--=============================================-->
+        <!-- Taglib -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <!-- Servlet and JSP -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--=============================================-->
+        <!-- SEARCH -->
+        <!--=============================================-->
+        <!--<dependency>-->
+        <!--<groupId>org.elasticsearch</groupId>-->
+        <!--<artifactId>elasticsearch</artifactId>-->
+        <!--<version>0.90.7</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.mitre.dsmiley.httpproxy</groupId>
+            <artifactId>smiley-http-proxy-servlet</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <!--=============================================-->
+        <!-- UTILITIES -->
+        <!--=============================================-->
+        <!-- Commons -->
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2</version>
+        </dependency>
+        <!-- Beanshell-->
+        <dependency>
+            <groupId>org.beanshell</groupId>
+            <artifactId>bsh</artifactId>
+            <version>2.0b4</version>
+        </dependency>
+        <!-- JSON -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.easygson</groupId>
+            <artifactId>easygson</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>15.0</version>
+        </dependency>
+
+        <!--=============================================-->
+        <!-- DATABASE -->
+        <!--=============================================-->
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>4.1.4.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>4.1.4.Final</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.28</version>
+        </dependency>
+        <!--=============================================-->
+        <!-- SECURITY -->
+        <!--=============================================-->
+        <!-- Shiro -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+
+        <!--=============================================-->
+        <!-- TESTING -->
+        <!--=============================================-->
+        <!-- Test Framework -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>2.28.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Mock -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.9.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-testng</artifactId>
+            <version>1.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>1.5</version>
+            <scope>test</scope>
+        </dependency>
+        <!--=============================================-->
+        <!-- WEB SERVICE -->
+        <!--=============================================-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2-alpha1</version>
+        </dependency>
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis-saaj</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis-jaxrpc</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis-wsdl4j</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <!--=============================================-->
+        <!-- MEDIA -->
+        <!--=============================================-->
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>4.2</version>
+            <type>jar</type>
+        </dependency>
+
+        <!--=============================================-->
+        <!-- quartz scheduler -->
+        <!--=============================================-->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+
+        <!--google kaptcha, not in maven central -->
+        <dependency>
+            <groupId>com.google.code</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+
+        <!--=============================================-->
+        <!-- APACHE POI (IMPORT EXCEL FILE) -->
+        <!--=============================================-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.poi</groupId>-->
+            <!--<artifactId>poi</artifactId>-->
+            <!--<version>3.9</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.poi</groupId>-->
+            <!--<artifactId>poi-ooxml</artifactId>-->
+            <!--<version>3.9</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>commons-pool</groupId>-->
+            <!--<artifactId>commons-pool</artifactId>-->
+            <!--<version>1.6</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>net.sf.supercsv</groupId>
+            <artifactId>super-csv</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+    </dependencies>
+
+    <!--=====================================================================-->
+    <!-- Plugins -->
+    <!--=====================================================================-->
+    <build>
+        <finalName>${project.name}</finalName>
+        <!-- To define the plugin version in your parent POM -->
+        <plugins>
+            <!-- Site Plugin -->
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-site-plugin</artifactId>-->
+            <!--<version>3.1</version>-->
+            <!--<configuration>-->
+            <!--<inputEncoding>UTF-8</inputEncoding>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
+            <!--*************************************************************-->
+            <!-- SCM Plugin. Usage: mvn scm:checkout -->
+            <!--*************************************************************-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.7</version>
+                <configuration>
+                    <!--<goals>install</goals>-->
+                    <username>appbuilder</username>
+                    <password>hp.appbuilder</password>
+                    <excludes>docs/**,lib/**,release/**</excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <!--=====================================================================-->
+    <!-- Reporting -->
+    <!--=====================================================================-->
+
+    <!--=====================================================================-->
+    <!-- Distribution -->
+    <!--=====================================================================-->
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>${project.artifactId}</id>
+            <name>${project.name}</name>
+            <url>${repo.transportUrl}</url>
+            <layout>default</layout>
+        </repository>
+        <!-- http://www.avajava.com/tutorials/lessons/how-do-i-deploy-a-site.html -->
+        <!-- Usage: mvn site-deploy -->
+        <site>
+            <id>site.deployments</id>
+            <name>Site deployments</name>
+            <!--<url>dav:http://127.0.0.1:18080/sites/${project.artifactId}/</url>-->
+            <url>${site.transportUrl}</url>
+        </site>
+        <!-- downloadUrl: is the url of the repository from whence another
+        POM may point to in order to grab this POM's artifact. -->
+        <downloadUrl>${repo.accessUrl}</downloadUrl>
+    </distributionManagement>
+</project>

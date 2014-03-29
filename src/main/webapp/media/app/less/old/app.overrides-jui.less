@@ -1,0 +1,68 @@
+//==============================================================================
+// CSS overrides jQuery UI.
+// @revision Leo Liao, 2012/09, extracted from site.css
+// @revision Leo Liao, 2012/09/28, use LESS
+// @revision Leo Liao, 2013/04/05, extracted for jui only
+//==============================================================================
+
+//-----------------------------------------
+// JUI DIALOG
+//-----------------------------------------
+
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+  border-radius: 0;
+}
+
+//-----------------------------------------
+// JUI Widget General
+//-----------------------------------------
+.ui-widget {
+  font-family: @baseFontFamily;
+  font-size: 1em;
+}
+
+.ui-widget-header {
+  .widget_header;
+}
+
+.ui-widget-content {
+  border: 1px solid @border_color_default;
+  background-image: none;
+  background-color: @widget_content_back_color;
+}
+
+.ui-widget-overlay {
+  opacity: .50;
+  filter: ~"Alpha(Opacity = 50)";
+  background-color: #000;
+  background-image: none;
+}
+
+//-----------------------------------------
+// JUI Date Plugin
+//-----------------------------------------
+.ui-daterangepicker .ui-widget-header.ranges {
+  background-color: @widget_content_back_color;
+  background-image: none;
+  border: 0;
+}
+
+.ui-daterangepicker.ui-widget-content {
+  background-color: @widget_content_back_color;
+}
+
+/*A quick fix to instActive.inline bug in 1.8.18*/
+#ui-datepicker-div {
+  display: none;
+}
+
+.ui-resizable-handle {
+  opacity: 0.3;
+}
+
+.ui-dialog .ui-dialog-title {
+  width: auto;
+  max-width: 90%;
+  text-overflow: ellipsis;
+  //  width: 100%;
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************************************
+Config file for demo only.
+
+@author Leo, 2013/01/30, created
+********************************************************************************
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="qad-report" extends="qad-basic" namespace="/">
+        <action name="udr" class="hpps.qad.core.udr.UserDefinedReportAction" method="$list">
+            <result name="success" type="freemarker">/WEB-INF/pages/commons/report/udr-list.ftl</result>
+        </action>
+        <action name="udr/json/{displayFormat}" class="hpps.qad.core.udr.UserDefinedReportAction" method="$json">
+            <result type="stream">
+                <param name="contentType">application/json</param>
+                <param name="inputName">jsonStream</param>
+            </result>
+        </action>
+        <action name="udr/view/{id}/{displayFormat}" class="hpps.qad.core.udr.UserDefinedReportAction" method="$view">
+            <result name="success" type="freemarker">/WEB-INF/pages/commons/report/udr-view.ftl</result>
+        </action>
+        <action name="udr/{function}" class="hpps.qad.core.udr.UserDefinedReportAction" method="${1}">
+            <result name="success" type="freemarker">/WEB-INF/pages/commons/report/udr-{1}.ftl</result>
+        </action>
+        <action name="report/{page}">
+            <result name="success" type="freemarker">/WEB-INF/pages/{1}.ftl</result>
+        </action>
+    </package>
+</struts>

@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+<web-app version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         metadata-complete="false">
+
+    <display-name>Kanban</display-name>
+
+    <!-- =================================================================== -->
+    <!-- Context -->
+    <!-- =================================================================== -->
+    <!--&lt;!&ndash; Auto scan REST service &ndash;&gt;-->
+    <!--<context-param>-->
+    <!--<param-name>resteasy.scan</param-name>-->
+    <!--<param-value>true</param-value>-->
+    <!--</context-param>-->
+    <!--&lt;!&ndash; this need same with resteasy servlet url-pattern &ndash;&gt;-->
+    <!--<context-param>-->
+    <!--<param-name>resteasy.servlet.mapping.prefix</param-name>-->
+    <!--<param-value>/api/rest</param-value>-->
+    <!--</context-param>-->
+
+    <!-- =================================================================== -->
+    <!-- Error Handling -->
+    <!--Sitemesh cannot decorate error page, may be a bug -->
+    <!-- =================================================================== -->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/pages/commons/util/500.jsp</location>
+        <!--<location>ftl.action?next=error/error</location>-->
+    </error-page>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/WEB-INF/pages/commons/util/400.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>401</error-code>
+        <location>/WEB-INF/pages/commons/util/401.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/pages/commons/util/404.jsp</location>
+    </error-page>
+
+
+    <!-- =================================================================== -->
+    <!-- Servlets -->
+    <!-- =================================================================== -->
+    <!--<servlet>-->
+    <!--<servlet-name>resteasy-servlet</servlet-name>-->
+    <!--<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>-->
+    <!--</servlet>-->
+    <servlet>
+        <servlet-name>JspSupportServlet</servlet-name>
+        <servlet-class>org.apache.struts2.views.JspSupportServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>sitemesh-freemarker</servlet-name>
+        <!--<servlet-class>org.apache.struts2.sitemesh.FreemarkerDecoratorServlet</servlet-class>-->
+        <servlet-class>hpps.qad.base.filter.CustFreemarkerDecoratorServlet</servlet-class>
+        <init-param>
+            <param-name>default_encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <!-- Beanshell -->
+    <servlet>
+        <servlet-name>bshservlet</servlet-name>
+        <servlet-class>bsh.servlet.BshServlet</servlet-class>
+    </servlet>
+    <!-- Proxy -->
+    <servlet>
+        <servlet-name>_elasticsearch</servlet-name>
+        <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>targetUri</param-name>
+            <param-value>http://localhost:9200</param-value>
+        </init-param>
+        <init-param>
+            <param-name>log</param-name>
+            <param-value>false</param-value>
+        </init-param>
+    </servlet>
+    <!--<servlet-mapping>-->
+    <!--<servlet-name>resteasy-servlet</servlet-name>-->
+    <!--<url-pattern>/api/rest/*</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <servlet-mapping>
+        <servlet-name>sitemesh-freemarker</servlet-name>
+        <url-pattern>*.ftl</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>bshservlet</servlet-name>
+        <url-pattern>/sysadm/bsh</url-pattern>
+    </servlet-mapping>
+
+    <!--google kaptcha-->
+    <servlet>
+        <servlet-name>Kaptcha</servlet-name>
+        <servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Kaptcha</servlet-name>
+        <url-pattern>/kaptcha</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>_elasticsearch</servlet-name>
+        <url-pattern>/_elasticsearch/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- =================================================================== -->
+    <!-- Listeners -->
+    <!-- =================================================================== -->
+    <!--<listener>-->
+    <!--<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>-->
+    <!--</listener>-->
+    <listener>
+        <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+    </listener>
+    <!-- Doc says StrutsListener needed for Sitemesh. But Sitemesh seems work without it -->
+    <listener>
+        <listener-class>org.apache.struts2.dispatcher.ng.listener.StrutsListener</listener-class>
+    </listener>
+    <!--TODO#UPD: Put all application defined listener in one single AppInitListener -->
+    <listener>
+        <listener-class>hpps.qad.base.config.AppInitListener</listener-class>
+    </listener>
+    <!-- quartz scheduler listener -->
+    <!--<listener>-->
+        <!--<listener-class>hpps.opshere.quartz.listener.QuartzSchedulerListener</listener-class>-->
+    <!--</listener>-->
+    <!-- ucmdb connection listener -->
+    <!--<listener>-->
+        <!--<listener-class>hpps.opshere.rs6000.ci.CreateSDKConnection</listener-class>-->
+    <!--</listener>-->
+    <!--<listener>-->
+    <!--<listener-class>hpps.qad.commons.config.GuiceListener</listener-class>-->
+    <!--</listener>-->
+
+    <!-- =================================================================== -->
+    <!-- Filters -->
+    <!-- =================================================================== -->
+    <!--See SiteMesh Plugin for an example on when to use seperate Filters for prepare and execution phase-->
+    <filter>
+        <filter-name>struts-prepare</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>sitemesh-decorator</filter-name>
+        <filter-class>hpps.qad.base.filter.SiteMeshDecoratorFilter</filter-class>
+        <init-param>
+            <param-name>decorator.param</param-name>
+            <param-value>sessionDecorator</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>struts-execute</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsExecuteFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+        <init-param>
+            <param-name>configPath</param-name>
+            <param-value>classpath:shiro.ini</param-value>
+        </init-param>
+        <!-- no init-param means load the INI config from classpath:shiro.ini -->
+    </filter>
+    <!--<filter>-->
+    <!--<filter-name>guice</filter-name>-->
+    <!--<filter-class>com.google.inject.servlet.GuiceFilter</filter-class>-->
+    <!--</filter>-->
+
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>sitemesh-decorator</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>struts-prepare</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>struts-execute</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--<filter-mapping>-->
+    <!--<filter-name>guice</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
+    <session-config>
+        <session-timeout>15</session-timeout>
+    </session-config>
+
+    <!-- =================================================================== -->
+    <!-- Misc -->
+    <!-- =================================================================== -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>

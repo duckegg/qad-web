@@ -1,0 +1,205 @@
+.widget_content_highlight {
+  border: 1px solid #52a8ec;
+}
+.widget_header {
+  border: 0;
+  background-color: #f7f7f7;
+  background-image: none;
+}
+.header_background {
+  background-color: #f7f7f7;
+}
+.header_background_active {
+  background-color: #dddddd;
+}
+.block_state_default {
+  background: #f0f0f0;
+  color: #555;
+}
+.block_state_active {
+  background: #1ba1e2;
+  color: #ffffff;
+}
+.block_state_disabled {
+  background-color: #999999;
+  color: #eeeeee;
+}
+.tab_state_default {
+  border-color: transparent;
+  border-top: 1px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: #000000;
+}
+.tab_state_hover {
+  border-color: transparent;
+  background: transparent;
+  color: #4183c4;
+}
+.tab_state_active {
+  border-top: 1px solid #faa732;
+  border-right: 1px solid #dddddd;
+  border-left: 1px solid #dddddd;
+  background-color: #fff;
+}
+.themeOrange {
+  background-color: #f0ad4e;
+  color: #ffffff;
+}
+.themeGreen {
+  background-color: #46a546;
+  color: #ffffff;
+}
+.themeYellow {
+  background-color: #ffc40d;
+  color: #ffffff;
+}
+.themeRed {
+  background-color: #9d261d;
+  color: #ffffff;
+}
+.themeBlack {
+  background-color: #000000;
+  color: #ffffff;
+}
+.themeBlue {
+  background-color: #049cdb;
+  color: #ffffff;
+}
+.themePurple {
+  background-color: #7a43b6;
+  color: #ffffff;
+}
+.themePink {
+  background-color: #c3325f;
+  color: #ffffff;
+}
+.themeGray {
+  background-color: #999999;
+  color: #ffffff;
+}
+.portlet.box {
+  border: 1px solid #f7f7f7;
+  border-top: 0;
+}
+.portlet code {
+  white-space: pre-wrap;
+}
+.colors .theme-orange {
+  background-color: #f0ad4e;
+  color: #ffffff;
+}
+.colors .theme-green {
+  background-color: #46a546;
+  color: #ffffff;
+}
+.colors .theme-red {
+  background-color: #9d261d;
+  color: #ffffff;
+}
+.colors .theme-yellow {
+  background-color: #ffc40d;
+  color: #ffffff;
+}
+.colors .theme-blue {
+  background-color: #049cdb;
+  color: #ffffff;
+}
+.colors .theme-pink {
+  background-color: #c3325f;
+  color: #ffffff;
+}
+.colors .theme-purple {
+  background-color: #7a43b6;
+  color: #ffffff;
+}
+.colors .theme-black {
+  background-color: #000000;
+  color: #ffffff;
+}
+/**************************************/
+/*       CUSTOM: DRILL                */
+/**************************************/
+.drill.mybox .page-header {
+  color: #fff;
+}
+.drill-plan .title {
+  background: url('../images/drill-plan.png') no-repeat left center;
+}
+.drill-template .title {
+  background: url('../images/drill-template.png') no-repeat left center;
+}
+.drill-task .title {
+  background: url('../images/drill-task.png') no-repeat left center;
+}
+.pair-main {
+  height: 80px;
+  width: 200px;
+  overflow: hidden;
+  background: #E0E0E0;
+}
+.pair-left {
+  background: buttonhighlight;
+  float: left;
+  height: 70px;
+  width: 92px;
+  border: thin solid #f5fffa;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+.pair-right {
+  background: #E0E0E0;
+  float: right;
+  height: 70px;
+  width: 92px;
+  border: thin solid #f5fffa;
+  margin-top: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+[class^="icon-"],
+[class*=" icon-"] {
+  font-size: 1.2em;
+}
+/* Sidebar Icons*/
+.imgicon-win {
+  background-image: url('../images/icon/computer.png') !important;
+}
+.imgicon-km {
+  background-image: url('../images/icon/ic-km.png') !important;
+}
+.imgicon-db {
+  background-image: url('../images/icon/database.png') !important;
+}
+.imgicon-rs6000 {
+  background-image: url('../images/icon/cassette.png') !important;
+}
+.imgicon-platform {
+  background-image: url('../images/icon/lookup.png') !important;
+}
+.imgicon-sec {
+  background-image: url('../images/icon/shield.png') !important;
+}
+.imgicon-network {
+  background-image: url('../images/icon/network.png') !important;
+}
+.imgicon-sysadmin {
+  background-image: url('../images/icon/configuration.png') !important;
+}
+.imgicon-processing {
+  background-image: url('../images/icon/processing.png') !important;
+}
+.icomoon-detail-link:before {
+  content: "\e043";
+}
+i[class^="imgicon-"] {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  background-repeat: no-repeat;
+  background-position: left;
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 30px;
+}

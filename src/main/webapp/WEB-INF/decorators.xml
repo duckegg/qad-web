@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decorators defaultdir="/WEB-INF/decorators">
+    <excludes>
+        <pattern>*/print*</pattern>
+        <pattern>*/download*</pattern>
+        <pattern>*/login*</pattern>
+        <pattern>*/logout*</pattern>
+        <pattern>*/uidemo/data/*</pattern>
+        <pattern>*/drill/report*</pattern>
+        <pattern>*.json</pattern>
+        <pattern>*.xml*</pattern>
+        <pattern>/sysadm/bsh</pattern>
+        <pattern>/api/rest/*</pattern>
+        <pattern>/*.jsp*</pattern>
+        <pattern>/static/*</pattern>
+        <pattern>/_elasticsearch/*</pattern>
+    </excludes>
+
+    <decorator name="mobile" page="layout-mobile.ftl">
+        <!--<pattern>/m/*</pattern>-->
+    </decorator>
+    <decorator name="main" page="layout-main.ftl">
+        <!--<pattern>/*</pattern>-->
+    </decorator>
+    <decorator name="newqad" page="layout-newqad.ftl">
+        <pattern>/*</pattern>
+    </decorator>
+    <decorator name="embed" page="layout-embed.ftl"/>
+    <decorator name="pjax" page="layout-pjax.ftl"/>
+    <decorator name="xml" page="layout-xml.ftl"/>
+    <decorator name="bs3" page="layout-bs3.ftl"/>
+    <decorator name="ajax" page="layout-embed.ftl"/>
+    <decorator name="outlink" page="layout-outlink.ftl"/>
+</decorators>
