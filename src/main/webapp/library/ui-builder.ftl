@@ -195,33 +195,33 @@ Pagination.
         /${records}项
     </div>
     </#if>
-<div class="pagination pagination-centered actions">
+<ul class="pagination pagination-sm">
     <#if (current==1 || pages<=1)>
-        <span class="disabled">« 上一页</span>
+        <li class="disabled"><a href="javascript:;">« 上一页</a></li>
     <#else>
-        <a href="${link?replace("[page]",max(current-1,0)?string)}">« 上一页</a>
+        <li><a href="${link?replace("[page]",max(current-1,0)?string)}">« 上一页</a></li>
     </#if>
     <#if current_pager gt 0>
-        <a href="${link?replace("[page]","1")}">1</a>
-        <span>...</span>
+        <li><a href="${link?replace("[page]","1")}">1</a></li>
+        <li><span>...</span></li>
     </#if>
     <#list start_page..end_page as page>
         <#if current=page>
-            <span class="current">${page}</span>
+            <li class="active"><span>${page}</span></li>
         <#else>
-            <a href="${link?replace("[page]",page)}">${page}</a>
+            <li><a href="${link?replace("[page]",page)}">${page}</a></li>
         </#if>
     </#list>
     <#if current_pager<total_pager-1>
-        <span>...</span>
-        <a href="${link?replace("[page]",pages?string)}">${pages}</a>
+        <li><span>...</span></li>
+        <li><a href="${link?replace("[page]",pages?string)}">${pages}</a></li>
     </#if>
     <#if (current==pages || pages<=1)>
-        <span class="disabled">下一页 »</span>
+        <li class="disabled"><span>下一页 »</span></li>
     <#else>
-        <a href="${link?replace("[page]",min(current+1,pages)?string)}">下一页 »</a>
+        <li><a href="${link?replace("[page]",min(current+1,pages)?string)}">下一页 »</a></li>
     </#if>
-</div>
+</ul>
 </#macro>
 
 <#-- Helper -->

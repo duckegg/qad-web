@@ -1,11 +1,3 @@
-/**************************************/
-/*          DIALOG AND WEBFORM        */
-/**************************************/
-.ui-dialog.webform, .webform {
-  background-color: #fff;
-  max-width: 100%;
-}
-
 //.ui-dialog.webform {
 .ui-dialog {
   padding: 0;
@@ -53,6 +45,11 @@
 .webform {
   max-width: 600px;
   padding-bottom: 1em;
+  &.ui-dialog {
+    background-color: #fff;
+    max-width: 100%;
+    padding-bottom: 0;
+  }
 }
 
 .webform textarea {
@@ -65,36 +62,14 @@
   }
 }
 
-.toolbar-container {
+.kui-toolbar-container {
   position: relative; /* important for positioning toolbar*/
-}
-
-.toolbar-container .toolbar-inline {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: none;
-  padding: 4px 5px;
-  background-color: #aaa;
-  background-color: rgba(128, 128, 128, 0.7);
-  vertical-align: middle;
-  text-align: right;
-  line-height: 20px;
-}
-
-.toolbar-container .toolbar-inline a {
-  color: white;
-  text-decoration: none;
-}
-
-.toolbar-container .toolbar-inline * {
-  margin: 0;
-  line-height: 20px;
-}
-
-.toolbar-container .toolbar-inline a [class^="icon-"] {
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.3);
-  font-size: 16px;
+  .btn-toolbar {
+    position: absolute;
+    bottom: 0;
+    right: 0px;
+    padding: 4px 5px;
+  }
 }
 
 //------------------------------------------------
@@ -125,4 +100,21 @@
   &.select2-dropdown-open .select2-choices {
     background: #fff;
   }
+}
+
+// Search
+.kui-search-input {
+  background: #fff url('../images/search-icon.png') no-repeat right center;
+  padding-right: 24px;
+  .page-header &, .page-sidebar & {
+    background-color: #ddd;
+    height: 26px;
+    &:focus {
+      background-color: #fff;
+    }
+  }
+}
+
+.btn .checkbox {
+  margin: 0;
 }

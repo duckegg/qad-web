@@ -5,7 +5,7 @@
 ********************************************************************************
 -->
 <#include "/library/taglibs.ftl" parse=true/>
-<#include "/WEB-INF/pages/commons/tag/tag-helper.ftl" parse=true/>
+<#include "/WEB-INF/pages/commons/tag/tag-controls.ftl" parse=true/>
 <#include "udr-lib.ftl" parse=true/>
 <#assign pageId="udr-edit"/>
 <#assign isCreate=!userDefinedReport.id??/>

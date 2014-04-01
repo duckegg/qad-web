@@ -240,7 +240,7 @@ var uiKit = new DesktopUiKit();
         initEventListener();
 
         function createHeaderControls() {
-            var $headerBtnGroup = $('.btn-group.btn-group-sm', $portletHeader);
+            var $headerBtnGroup = $('.btn-group.btn-group-xs', $portletHeader);
             if ($headerBtnGroup.length == 0) {
                 $headerBtnGroup = $('<div class="btn-group btn-group-sm"></div>').appendTo($portletHeader);
             }

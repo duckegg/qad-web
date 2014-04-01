@@ -43,7 +43,7 @@
         <li><a href="${base}/rs6000/audit-policy"><i class="fa fa-list-ol"></i> 检查策略</a></li>
         <li><a href="${base}/rs6000/capacity-manage"><i class="fa fa-cloud"></i> 容量管理</a></li>
         <li><a href="${base}/ootask/mgmt/main"><i class="fa fa-magic"></i> 一键任务</a></li>
-        <li><a href="${base}/rs6000/drill/index" data-menu-key="${base}/drill"><i
+        <li><a href="${base}/rs6000/drill/index" data-kui-menu-key="${base}/drill"><i
                 class="fa fa-flag"></i> 演练管理</a></li>
     <@shiro.hasPermission name="sysadm:*:*">
         <li><a href="${base}/provision/provision-index"><i class="fa fa-suitcase"></i> 投产管理</a></li>

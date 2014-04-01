@@ -70,7 +70,7 @@ Exception is not normal operation error and is not supposed to be resolved by en
         <h3>诊断信息[<%=exSource%>]</h3>
 
         <div style="height:40em;overflow:auto;background-color: white">
-            <%@ include file="/WEB-INF/pages/commons/util/env.jsp" %>
+            <%--<%@ include file="/WEB-INF/pages/commons/util/env.jsp" %>--%>
         </div>
     </div>
 </div>

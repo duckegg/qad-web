@@ -10,8 +10,8 @@
         <!--=================================================================-->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost:3306/qad_sample?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=UTF-8</property>
-        <property name="connection.username">root</property>
-        <property name="connection.password">myvps#12345</property>
+        <property name="connection.username">appowner</property>
+        <property name="connection.password">st$0nger</property>
 
 
         <!--=================================================================-->
@@ -49,6 +49,7 @@
         <mapping class="hpps.qad.core.post.JpostType"/>
         <mapping class="hpps.qad.core.param.ConfigParam"/>
         <mapping class="hpps.qad.core.appsec.user.User"/>
+        <mapping class="hpps.qad.core.appsec.user.UserProfile"/>
         <mapping class="hpps.qad.core.appsec.role.Role"/>
         <mapping class="hpps.qad.core.appsec.perm.Permission"/>
         <mapping class="hpps.qad.base.auditor.AppLog"/>
@@ -64,5 +65,14 @@
         <mapping class="hpps.opshere.demo.DemoObject"/>
         <mapping class="hpps.qad.app.sample.stock.Stock"/>
         <mapping class="hpps.qad.app.sample.stock.StockQuote"/>
+        <!--<mapping class="hpps.opshere.drill.DrillPlan"/>-->
+        <!--<mapping class="hpps.opshere.drill.DrillTask"/>-->
+        <!--<mapping class="hpps.opshere.drill.DrillScenario"/>-->
+        <!--<mapping class="hpps.opshere.drill.DrillTarget"/>-->
+        <!--<mapping class="hpps.opshere.drill.DrillRun"/>-->
+        <!--<mapping class="hpps.opshere.drill.StepDef"/>-->
+        <!--<mapping class="hpps.opshere.drill.DrillStep"/>-->
+        <!--<mapping class="hpps.opshere.drill.DrillRunStep"/>-->
+        <!--<mapping class="hpps.opshere.integration.hpsm.itil.ItilRequest"/>-->
     </session-factory>
 </hibernate-configuration>

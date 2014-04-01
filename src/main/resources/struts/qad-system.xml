@@ -11,7 +11,7 @@ Shared features like home, link, upload, download.
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
     <package name="system" extends="qad-basic" namespace="/">
-
+        <!--<default-action-ref name="notFound"></default-action-ref>-->
         <!-- =================================================================== -->
         <!-- Actions: General -->
         <!-- =================================================================== -->
@@ -21,11 +21,22 @@ Shared features like home, link, upload, download.
         <action name="home">
             <result type="freemarker">/WEB-INF/pages/home.ftl</result>
         </action>
-        <action name="sitemap">
-            <result type="freemarker">/WEB-INF/pages/sitemap.ftl</result>
-        </action>
-        <action name="my" class="hpps.qad.core.portal.PortalAction" method="execute">
+        <!--<action name="sitemap">-->
+            <!--<result type="freemarker">/WEB-INF/pages/sitemap.ftl</result>-->
+        <!--</action>-->
+        <!-- User Portal -->
+        <action name="my">
             <result name="success" type="freemarker">/WEB-INF/pages/commons/portal/my-portal.ftl</result>
+        </action>
+        <action name="my/portal/{function}" class="hpps.qad.core.appsec.user.ProfileAction" method="$portal_{1}">
+            <result name="json" type="json">
+                <param name="root">myPortalAndPref</param>
+            </result>
+        </action>
+        <action name="my/pref" class="hpps.qad.core.appsec.user.ProfileAction" method="$pref">
+            <result name="json" type="json">
+                <param name="root">myPrefJson</param>
+            </result>
         </action>
         <action name="help/{topic}" class="hpps.qad.base.action.HelpAction">
             <result name="success">/WEB-INF/pages/help/help-{1}.ftl</result>
@@ -37,10 +48,6 @@ Shared features like home, link, upload, download.
         <!-- Shotcuts -->
         <action name="shortcuts">
             <result name="success" type="freemarker">/WEB-INF/pages/commons/util/shortcuts.ftl</result>
-        </action>
-        <!-- UI Demo-->
-        <action name="uidemo/{next}" class="hpps.qad.base.action.BasicAction" method="doDefault">
-            <result name="success" type="freemarker">/uidemo/{1}.ftl</result>
         </action>
         <!-- Integration with external system -->
         <action name="outlink" class="hpps.qad.base.action.BasicAction" method="doDefault">

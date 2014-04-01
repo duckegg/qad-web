@@ -21,7 +21,7 @@
                   method="post" data-ajax-form data-kui-target="#${pageId}">
                 <fieldset>
                     <input type="hidden" name="reply.parentId" value="${jpost.id}"/>
-                    <textarea name="reply.content" class="required"></textarea>
+                    <@ui.textarea name="reply.content" required=true></@ui.textarea>
                 </fieldset>
 
                 <@ui.buttonGroup>

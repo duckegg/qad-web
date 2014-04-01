@@ -23,7 +23,7 @@
 @page_title_height: 30px;
 @page_header_height: 50px;
 @page_footer_height: 50px;
-@page-sidebar-width: 220px;
+@kui-sidebar-width: 220px;
 @page-sidebar-closed-width: 50px;
 @widget_header_height: 24px;
 @kui-topbar-height:42px;
@@ -56,27 +56,27 @@
 @status_serious_border_color: darken(@status_serious_back_color, 10%);
 @status_serious_text_color: #ffffff;
 
-//------------------------------------------------
-// METRO COLORS
-//------------------------------------------------
-@metroPurple: #a200ff;
-@metroMagenta: #ff0097;
-@metroTeal: #00aba9;
-@metroLime: #8cbf26;
-@metroBrown: #a05000;
-@metroPink: #e671b8;
-@metroOrange: #f09609;
-@metroBlue: #1ba1e2;
-@metroRed: #e51400;
-@metroGreen: #339933;
+////------------------------------------------------
+//// METRO COLORS
+////------------------------------------------------
+//@metroPurple: #a200ff;
+//@metroMagenta: #ff0097;
+//@metroTeal: #00aba9;
+//@metroLime: #8cbf26;
+//@metroBrown: #a05000;
+//@metroPink: #e671b8;
+//@metroOrange: #f09609;
+//@metroBlue: #1ba1e2;
+//@metroRed: #e51400;
+//@metroGreen: #339933;
 
 //------------------------------------------------
 // UNIT COLORS
 //------------------------------------------------
-@primary_back_color: #3d3d3d;
-@primary_text_color: @gray;
+@kui-primary-back-color: #3d3d3d;
+@kui-primary-text-color: @gray;
 @primary_highlight_text_color: @white;
-@primary_back_color_highlight: @metroBlue;
+@primary_back_color_highlight: @kui-color-blue;
 @secondary_back_color_highlight: @gray-light;
 
 //------------------------------------------------
@@ -125,7 +125,7 @@
 }
 
 .block_state_active {
-  background: @metroBlue;
+  background: @kui-color-blue;
   color: @white;
 }
 
@@ -162,3 +162,5 @@
 }
 
 
+// Override bootstrap
+@navbar-height:@kui-topbar-height;

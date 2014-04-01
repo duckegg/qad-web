@@ -11,9 +11,9 @@
     <script type="text/javascript" src="${base}/media/jquery/jquery-1.10.1.leo.js"></script>
     <script type="text/javascript"
             src="${base}/media/supersized/supersized.core.3.2.1.min.js"></script>
-    <script type="text/javascript" src="${base}/media/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="${base}/media/bootstrap3/js/bootstrap.js"></script>
     <link type="text/css" rel="stylesheet" media="screen"
-          href="${base}/media/app/lib/bootstrap-light.css"/>
+          href="${base}/media/bootstrap3/css/bootstrap.min.css"/>
     <link type="text/css" rel="stylesheet" media="screen" href="${base}/media/icomoon/style.css"/>
     <link type="text/css" rel="stylesheet" media="screen"
           href="${base}/media/fontawesome/css/font-awesome.min.css"/>
@@ -150,47 +150,44 @@
                     <div class="mybox-header"><img src="${base}/media/app/images/logo-login.png">
                     </div>
                     <div class="mybox-content">
-                        <form action="${base}/login" class="form-vertical" method="post">
-                            <span>请输入Windows域帐户登录</span>
-                            <input type="text" id="username" name="username" class="required"
-                                   placeholder="用户名" style="width:24em;font-weight: bold"/>
-                            <input type="password" id="password" name="password" class="required"
-                                   placeholder="密码" style="width:24em; font-weight: bold"/>
-                        <span>
+                        <form action="${base}/login" class="clearfix" method="post">
+                            <div class="form-group">
+                                <span>请输入Windows域帐户登录</span>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" id="username" name="username"
+                                       class="required form-control"
+                                       placeholder="用户名" style="font-weight: bold"/>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="password" name="password"
+                                       class="required form-control"
+                                       placeholder="密码" style="font-weight: bold"/>
+                            </div>
+                            <div>
                             <@ui.strutsErrors/>
-                        <#--<@s.if test="hasActionErrors()">-->
-                            <#--<div class="alert alert-error">-->
-                                <#--<#list action.errorMessages as msg>-->
-                                    <#--<li>${msg}</li>-->
-                                <#--</#list>-->
-                            <#--</div>-->
-                        <#--</@s.if>-->
-                        </span>
-                            <button type="submit" class="btn btn-success"
-                                    style="width:220px;font-weight: bold"
-                                    data-loading-text="正在登录...">
-                                登录
-                            </button>
-                            <button class="btn" name="guest" value="true"
-                                    style="width:100px;float:right">直接访问
-                            </button>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success col-xs-8"
+                                        style="font-weight: bold"
+                                        data-loading-text="正在登录...">
+                                    登录
+                                </button>
+                                <button class="btn btn-default col-xs-offset-1 col-xs-3"
+                                        name="guest" value="true">
+                                    直接访问
+                                </button>
+                            </div>
                         </form>
-                        <small>
-                            <ul class="unstyled inline">
-                                <li><i class="fa fa-cloud-download"></i> 推荐浏览器下载</li>
-                                <li><a href="http://k.cmbchina.com/art/download/chrome.exe"><i
-                                        class="icomoon-chrome"></i> Chrome</a></li>
-                                <li><a href="http://k.cmbchina.com/art/download/firefox.exe"><i
-                                        class="icomoon-firefox"></i> Firefox</a></li>
-                            </ul>
-                        </small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div id="footer">
-    <#include "../decorators/footer.ftl"/>
+    <#include "../decorators/footer-qadweb.ftl"/>
     </div>
 </div>
 </body>

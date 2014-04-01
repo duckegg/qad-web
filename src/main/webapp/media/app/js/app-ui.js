@@ -51,23 +51,25 @@ function UiKit() {
     this.uiBuildSidebar = function (selector) {
         return $(selector).each(function () {
             var $navTree = $(this);
+            var $body = $("body");
+            var SIDEBAR_CLOSED_CLASS = "kui-sidebar-closed";
+            var SIDEBAR_OPEN_CLASS = "kui-sidebar-open";
             if ($navTree.not('ul'))
                 $navTree = $navTree.find('ul.nav-list-tree');
 
             sbHighlightMatch();
             sbRegisterEvents();
-            var sidebarOpen = qadPref.loadPreference("sidebarOpen", true);
-            sbToggleSidebar(sidebarOpen);
+            sbToggleSidebar(qadPref.loadPreference("sidebarOpen", true));
 
             function sbToggleSidebar(toOpen) {
                 $(".sidebar-search").toggleClass("open", toOpen);
-                $(".page-container").toggleClass("sidebar-closed", !toOpen);
+                $body.toggleClass(SIDEBAR_CLOSED_CLASS, !toOpen).toggleClass(SIDEBAR_OPEN_CLASS, toOpen);
             }
 
             function sbRegisterEvents() {
                 // handle sidebar show/hide
                 $('.sidebar-toggler').on('click.kui', function (e) {
-                    var toOpen = $(".page-container").hasClass("sidebar-closed");
+                    var toOpen = $body.hasClass(SIDEBAR_CLOSED_CLASS);
                     qadPref.savePreference("sidebarOpen", toOpen);
                     sbToggleSidebar(toOpen);
                     e.preventDefault();
@@ -77,7 +79,7 @@ function UiKit() {
             function sbHighlightMatch() {
                 var matched = null;
                 $('li a', $navTree).each(function (index) {
-                    var key = $(this).data("menu-key");
+                    var key = $(this).data("kui-menu-key");
                     if (qadUtil.isBlank(key))
                         key = $(this).attr("href");
                     var loc = decodeURIComponent(document.location.href);

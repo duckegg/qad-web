@@ -30,7 +30,7 @@
   }
   .kui-portlet-edit-box {
     color: @white;
-    background: @primary_back_color;
+    background: @kui-primary-back-color;
     z-index: 10000;
     width: 100%;
     position: absolute;
@@ -65,7 +65,7 @@
     //      cursor: pointer;
     //    }
   }
-  .panel-heading {
+  > .panel-heading {
     .clearfix();
     min-height: @widget_header_height;
     a {
@@ -78,7 +78,12 @@
     .btn-group {
       position: absolute;
       right: @padding-base-horizontal;
-      top: 6px;
+      top: 4px;
+    }
+    .panel-title {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
   }
 }

@@ -5,59 +5,12 @@
  * @author Leo Liao, 2014/03, extracted from app-util.js
  *
  ******************************************************************************/
-//==============================================================================
-// Functions: Preferences
-//==============================================================================
-(function (window) {
-    var PREF_KEY = "qad.pref";
-
-    function loadQadPref(defaultValue) {
-        var ret = defaultValue || {};
-        var json = localStorage.getItem(PREF_KEY);
-        if (isNotBlank(json)) {
-            try {
-                $.extend(true, ret, JSON.parse(json));
-            } catch (error) {
-                console.warn(error.message);
-            }
-        }
-        return ret;
-    }
-
-    /**
-     * Save user preference.
-     * @param key preference key
-     * @param pref preference object
-     */
-    function savePreference(key, pref) {
-        var dbPref = loadQadPref();
-        console.debug("savePreference", dbPref);
-        var obj = {};
-        obj[key] = pref;
-        $.extend(true, dbPref, obj);
-        localStorage.setItem(PREF_KEY, JSON.stringify(dbPref));
-    }
-
-    /**
-     * Load user prederence
-     * @param key preference key
-     * @param defaultPref default preference
-     * @return {Object} preference object
-     */
-    function loadPreference(key, defaultPref) {
-        var pref = loadQadPref();
-        return pref[key] || defaultPref;
-    }
-
-    window.qadPref = {
-        savePreference: savePreference,
-        loadPreference: loadPreference
-    }
-})(window);
-
+'use strict';
+var qadContextPath = window.qadContextPath || '';
 //==============================================================================
 // Functions: strings
 //==============================================================================
+
 (function (window) {
     /**
      * If an object is null, undefined, or empty string ""
@@ -187,4 +140,80 @@
         shortenText: shortenText,
         formatDateTime: formatDateTime
     };
+})(window);
+
+//==============================================================================
+// Functions: Preferences
+//==============================================================================
+(function (window) {
+    function QadPref(url) {
+        var LOCAL_PREF_KEY = "qad.pref";
+        var serverUrl = null;
+        var localPref = {};
+        var USE_LOCAL_STORAGE = false;
+
+        function saveServerPref(prefJson) {
+            if (qadUtil.isBlank(serverUrl)) {
+                console.warn("saveServerPref: Server URL not set");
+                return;
+            }
+            $.ajax({type: "post", url: serverUrl, data: {myPrefJson: prefJson}});
+        }
+
+        function loadQadPref() {
+            if (qadUtil.isBlank(serverUrl)) {
+                console.info("loadQadPref:Server URL not set, use local storage");
+                var json = localStorage.getItem(LOCAL_PREF_KEY);
+                if (!qadUtil.isBlank(json)) {
+                    try {
+                        localPref = JSON.parse(json);
+                    } catch (error) {
+                        console.warn(error.message);
+                    }
+                }
+            } else {
+                // We use async!
+                $.ajax({type: "get", url: serverUrl, async: false, success: function (xhr) {
+                    localPref = JSON.parse(xhr) || {};
+                }});
+            }
+        }
+
+        /**
+         * Save user preference.
+         * @param key preference key
+         * @param pref preference object
+         */
+        function savePreference(key, pref) {
+            var obj = {};
+            obj[key] = pref;
+            $.extend(true, localPref, obj);
+            var json = JSON.stringify(localPref);
+            saveServerPref(json);
+            if (USE_LOCAL_STORAGE)
+                localStorage.setItem(LOCAL_PREF_KEY, json);
+        }
+
+        /**
+         * Load user prederence
+         * @param key preference key
+         * @param defaultPref default preference
+         * @return {Object} preference object
+         */
+        function loadPreference(key, defaultPref) {
+            return localPref[key] || defaultPref;
+        }
+
+        this.initServer = function (url) {
+            console.debug("initServer",url);
+            serverUrl = url;
+            loadQadPref();
+        };
+        this.savePreference = savePreference;
+        this.loadPreference = loadPreference;
+        this.initServer(url);
+        console.debug("localPref",localPref);
+    }
+
+    window.qadPref = new QadPref(qadContextPath + "/my/pref.json");
 })(window);

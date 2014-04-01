@@ -7,7 +7,7 @@
 <#include "/library/taglibs.ftl" parse=true/>
 <#include "/library/functions.ftl" parse=true/>
 <#include "post-helper.ftl" parse=true/>
-<#include "/WEB-INF/pages/commons/tag/tag-helper.ftl" parse=true/>
+<#include "/WEB-INF/pages/commons/tag/tag-controls.ftl" parse=true/>
 <#assign pageId="jpost-edit"/>
 <@ui.page id=pageId class="webform">
 <form id="jpost-edit-form" method="post"
@@ -19,19 +19,19 @@
         <input type="hidden" name="jpost.id" value="${jpost.id!""}"/>
         <input type="hidden" name="jpost.parentId" value="${jpost.parentId!""}"/>
         <#if jpost.isThread()>
-        <@s.textfield id="title" name="jpost.title" label="标题" cssClass="required" title="请输入标题" maxlength="100" required="true"/>
+            <@ui.textfield id="title" name="jpost.title" label="标题" title="请输入标题" maxlength="100" required=true/>
         </#if>
-        <@s.textarea id="content" name="jpost.content" label="正文" cssClass="required" title="请输入详细内容" style="height:15em" maxlength="1024" required="true"/>
-        <@ui.labelControlGroup>
-            <#if jpost.postType.isReplyEnabled() && jpost.isThread()>
+        <@ui.textarea id="content" name="jpost.content" label="正文" title="请输入详细内容" maxlength="1024" required=true/>
+        <#if jpost.postType.isReplyEnabled() && jpost.isThread()>
+            <@ui.labelControlGroup>
                 <label class="checkbox-inline">
                     <input type="checkbox" name="jpost.enableReply" value="1"
                            <#if jpost.isReplyEnabled()>checked="checked"</#if>/>允许回复</label>
-            <#else>
-            </#if>
-        </@ui.labelControlGroup>
+            </@ui.labelControlGroup>
+        </#if>
         <#assign tagLabelString=colToString(jpost.tagLabels)/>
-        <#--<@tagging id="jpost-edit-tagging" label="标签" tagCategory="${postType}" controlName="jpost.tagLabelString" selectedValues="${tagLabelString}"/>-->
+        <@tagging id="jpost-edit-tagging" label="标签" tagCategory="jpost" controlName="jpost.tagLabelString" selectedValues="${tagLabelString}" allowInput=true/>
+        <@listCustomer label="协同室组" controlName="jpost.customerKeys" selectedValues=jpost.customerKeys class="required"/>
         <#if jpost.isThread()>
             <@s.select label="状态" name="jpost.status" list="jpost.postType.allowedStatuses" value="jpost.status" cssClass="select2"
             cssStyle="width:6em;"/>

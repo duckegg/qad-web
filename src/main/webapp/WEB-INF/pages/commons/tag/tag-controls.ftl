@@ -11,17 +11,23 @@ We have to set ignoreContextParams=true to avoid it.
 ********************************************************************************
 -->
 <#include "/library/taglibs.ftl" parse=true/>
-<#macro tagging tagCategory controlName selectedValues id label="" style="width:400px" class="">
-    <@s.action name="tag/controls" namespace="/sysadm" var="tagAction" executeResult=false rethrowException=true ignoreContextParams=true>
+<#--
+================================================================================
+@desc Build tagging control with select2
+@param allowInput boolean, true(default) - user can input tag, false - user can only select
+================================================================================
+-->
+<#macro tagging tagCategory controlName selectedValues id label="" style="width:400px" class="" allowInput=true>
+    <@s.action name="utils/tag/controls" namespace="/" var="tagAction" executeResult=false rethrowException=true ignoreContextParams=true>
         <@s.param name="category" value="%{'${tagCategory}'}"/>
     </@s.action>
-    <#assign _editable=false/>
-    <#if tagAction.ciType??><#assign _editable=tagAction.ciType.isTagEditable()/></#if>
-<div class="control-group">
+<#--<#assign allowInput=false/>-->
+<#--<#if tagAction.ciType??><#assign _editable=tagAction.ciType.isTagEditable()/></#if>-->
+<div class="form-group">
     <label class="control-label"><#if label!="">${label}:</#if></label>
 
     <div class="controls">
-        <#if _editable>
+        <#if allowInput>
             <#assign allTags=""/>
             <#list tagAction.tags as tag>
                 <#assign allTags=allTags+'"'+tag.label+'"'/>
@@ -42,6 +48,7 @@ We have to set ignoreContextParams=true to avoid it.
                             <#if _seqValues?seq_contains(tag.label)>selected="selected"</#if>>${tag.label}</option>
                 </#list>
             </select> <a href="#${id}-help" data-dialog="#${id}-help"><i class="fa fa-info"></i></a>
+
             <div id="${id}-help" style="display: none">
                 这类标签不能自由编辑，如果找不到你所需要的标签，请联系管理员添加。
             </div>
@@ -50,7 +57,7 @@ We have to set ignoreContextParams=true to avoid it.
 </div>
 <script type="text/javascript">
     $('#${id}').select2({
-        <#if _editable>
+        <#if allowInput>
             tags: ${allTags},
             maximumInputLength: 10,
             tokenSeparators: [",", " "]
@@ -58,13 +65,21 @@ We have to set ignoreContextParams=true to avoid it.
     });
 </script>
 </#macro>
-
+<#--
+================================================================================
+@desc Build a customer selection list.
+================================================================================
+-->
 <#macro listCustomer controlName selectedValues="" label="" style="" class="">
     <#assign _currentCustomer=customer!''/>
     <@s.action name="customer/list" namespace="/" var="custListAction" executeResult=false rethrowException=true ignoreContextParams=true>
     </@s.action>
-    <#assign values=selectedValues?eval/>
-<div class="control-group">
+    <#if selectedValues?is_sequence>
+        <#assign sequenceValues=selectedValues/>
+    <#else>
+        <#assign sequenceValues=selectedValues?eval/>
+    </#if>
+<div class="form-group">
     <label class="control-label"><#if label!="">${label}:</#if></label>
 
     <div class="controls">
@@ -72,14 +87,14 @@ We have to set ignoreContextParams=true to avoid it.
             <select name="${controlName}" multiple="multiple" <#if class!="">class="${class}"</#if>>
                 <#list custListAction.customers as cust>
                     <option value="${cust.keyword}"
-                            <#if values?seq_contains(cust.keyword)>selected="selected"</#if>>${cust.name}</option>
+                            <#if sequenceValues?seq_contains(cust.keyword)>selected="selected"</#if>>${cust.name}</option>
                 </#list>
             </select>
         <#else>
             <#list custListAction.customers as cust>
-                <label class="checkbox inline"><input type="checkbox" name="${controlName}"
+                <label class="checkbox-inline"><input type="checkbox" name="${controlName}"
                                                       value="${cust.keyword}"
-                                                      <#if values?seq_contains(cust.keyword) || cust.keyword==_currentCustomer>checked="checked"</#if>
+                                                      <#if sequenceValues?seq_contains(cust.keyword) || cust.keyword==_currentCustomer>checked="checked"</#if>
                                                       <#if cust.keyword==_currentCustomer>style="display:none"</#if>/>
                     <#if cust.keyword==_currentCustomer>
                         <strong>${cust.name}</strong><#else>${cust.name}</#if>

@@ -30,5 +30,9 @@ Development tools.
             <result name="input" type="freemarker">/WEB-INF/pages/commons/sysadm/sql-console.ftl</result>
             <result name="success" type="freemarker">/WEB-INF/pages/commons/sysadm/sql-console.ftl</result>
         </action>
+        <!-- UI Demo-->
+        <action name="uidemo/{next}" class="hpps.qad.base.action.BasicAction" method="doDefault">
+            <result name="success" type="freemarker">/uidemo/{1}.ftl</result>
+        </action>
     </package>
 </struts>
