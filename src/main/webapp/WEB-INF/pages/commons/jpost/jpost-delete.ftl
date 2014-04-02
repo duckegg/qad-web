@@ -10,7 +10,7 @@
     <form action="${base}/jpost/${postType}/delete_do" class="form-horizontal"
           data-ajax-form data-kui-target="#jpost-delete" method="POST">
         <div class="alert alert-danger">确认删除么？
-            <ul>
+            <ul class="list-unstyled">
             <#list id as id>
                 <li><label class="checkbox-inline">
                     <input type="checkbox" name="id" value="${id}"

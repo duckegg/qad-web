@@ -72,19 +72,26 @@ body {
 }
 
 .page-container {
-  padding-top: @kui-topbar-height;
   width: 100%;
-//  min-height: 700px;
+  //  min-height: 700px;
   padding-left: 0;
   padding-right: 0;
+}
 
+.page-fixed-header {
+  .page-header {
+    //    position:fixed;
+  }
+  .page-container, .mm-menu > .mm-list {
+    padding-top: @kui-topbar-height;
+  }
 }
 
 .page-content {
   margin-left: @kui-sidebar-width;
   margin-top: 0px;
   min-height: 800px;
-  height:auto;
+  height: auto;
   background-color: #fff;
   .mm-page & {
     margin-left: 0;
@@ -126,11 +133,15 @@ body {
 
 .flash-message-container {
   position: fixed;
-  top: 0;
+  top: 4px;
   left: 50%;
   margin-left: -300px;
   width: 600px;
   z-index: 1105;
+  .alert {
+    padding: 4px;
+    border-radius: 2px;
+  }
 }
 
 .page-sidebar {
@@ -139,24 +150,3 @@ body {
   width: @kui-sidebar-width;
 }
 
-// Sidebar hide
-.kui-sidebar-closed {
-  .page-sidebar {
-    display: none;
-  }
-  .page-content {
-    margin-left: 0 !important;
-  }
-}
-
-// In sm and xs screen, we use sliding drawer sidebar.
-// In this case, the sidebar is closed by default and the content is 100% wide.
-@media (max-width: @screen-sm-max) {
-  .kui-sidebar-open .page-container {
-    overflow-x: hidden;
-  }
-
-  .page-content, #body-content {
-    width: 100%;
-  }
-}

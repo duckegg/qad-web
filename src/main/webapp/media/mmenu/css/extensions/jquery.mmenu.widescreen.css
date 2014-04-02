@@ -14,11 +14,11 @@ body {
 .mm-page {
   box-shadow: none !important;
   background: inherit;
-  width: 70% !important;
+  width: 80% !important;
   min-height: 100% !important;
   height: auto !important;
   margin: 0 !important;
-  left: 30% !important;
+  left: 20% !important;
   top: 0 !important;
   position: relative !important;
   z-index: 1;
@@ -31,7 +31,7 @@ body {
 .mm-menu {
   position: fixed;
   z-index: 0;
-  width: 30% !important;
+  width: 20% !important;
   padding: 0; }
   .mm-menu.mm-top, .mm-menu.mm-right, .mm-menu.mm-bottom {
     top: 0 !important;

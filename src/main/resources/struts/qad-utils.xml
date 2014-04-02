@@ -14,5 +14,7 @@ Sub config file for system admin.
     <package name="qad-utils" namespace="/" extends="qad-basic">
         <action name="utils/tag/controls" class="hpps.qad.core.tag.TagAction" method="controls">
         </action>
+        <action name="utils/customer/list" class="hpps.qad.core.customer.CustomerAction" method="list">
+        </action>
     </package>
 </struts>

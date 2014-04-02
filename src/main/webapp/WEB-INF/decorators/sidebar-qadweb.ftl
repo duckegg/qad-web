@@ -8,12 +8,12 @@
 <#include "/library/functions.ftl" parse=true/>
 <#-- TODO: do not put cur_month here! -->
 <#assign cur_month=timeOffset(.now, -1, "month", "yyyy-MM")/>
-<ul class="nav nav-list-tree dark">
+<ul>
     <li class="visible-xs">
         <form action="${base}/search" method="get"
               data-pjax style="padding:8px;">
-                <input type="text" name="query" placeholder="输入/进入搜索"
-                       class="form-control kui-search-input">
+            <input type="text" name="query" placeholder="输入/进入搜索"
+                   class="form-control kui-search-input">
         </form>
     </li>
     <li><a href="${base}/my">My Dashboard</a>
@@ -33,7 +33,8 @@
     </li>
 
     <li>
-        <a href="#"><i class="imgicon-sysadmin"></i><span class="title"> 系统管理</span></a>
+        <a href="#${base}/admin"><i class="imgicon-sysadmin"></i><span
+                class="title"> 系统管理</span></a>
         <ul>
 
         <@shiro.hasPermission name="sysadm:*">
@@ -79,30 +80,3 @@
         </ul>
     </li>
 </ul>
-<script type="text/javascript">
-    $(function () {
-        function initMmenuSidebar() {
-            var $sidebar = $('#page-sidebar-left').mmenu();
-            var toggleSidebar = function (e) {
-                if ($sidebar.hasClass('mm-opened')){
-                    console.debug("to close mmenu");
-                    $sidebar.trigger('close.mm');
-                }else{
-                    console.debug("to open mmenu");
-                    $sidebar.trigger('open.mm');
-                }
-            };
-            $('.sidebar-toggler').on('click', toggleSidebar);
-            toggleSidebar();
-            console.debug("mmenu initialized");
-        }
-
-        function initSidebar() {
-            $('.page-sidebar .nav-list-tree').kuiListTree();
-            uiKit.uiBuildSidebar(".page-sidebar");
-        }
-
-        initSidebar();
-//        initMmenuSidebar();
-    });
-</script>

@@ -77,30 +77,27 @@
 <script type="text/javascript" src="${base}/media/form/jquery.form.js"></script>
 <script type="text/javascript" src="${base}/media/form/jquery.validate.min.js"></script>
 <#-- Sheepit -->
-<script type="text/javascript"
-        src="${base}/media/sheepIt/jquery.sheepItPlugin-1.1.1.min.js"></script>
+<#--<script type="text/javascript" src="${base}/media/sheepIt/jquery.sheepItPlugin-1.1.1.min.js"></script>-->
 <script type="text/javascript" src="${base}/media/select/select2.min.js"></script>
 <script type="text/javascript" src="${base}/media/select/select2_locale_zh-CN.js"></script>
 <link type="text/css" rel="stylesheet" media="all" href="${base}/media/select/select2.css"/>
 <#-- Smart Wizard -->
-<link type="text/css" href="${base}/media/step/smart_wizard.css" rel="stylesheet">
-<script type="text/javascript" src="${base}/media/step/jquery.smartWizard-2.0.js"></script>
+<#--<link type="text/css" href="${base}/media/step/smart_wizard.css" rel="stylesheet">-->
+<#--<script type="text/javascript" src="${base}/media/step/jquery.smartWizard-2.0.js"></script>-->
 <#--=========================        MENU     ===============================-->
 <link type="text/css" rel="stylesheet" media="all" href="${base}/media/mmenu/css/jquery.mmenu.all.css"/>
 <script type="text/javascript" src="${base}/media/mmenu/js/jquery.mmenu.min.all.js"></script>
 <#--<link type="text/css" rel="stylesheet" media="all and (min-width: 900px)" href="${base}/media/mmenu/css/extensions/jquery.mmenu.widescreen.css"/>-->
 <#--=========================   LIST AND TREE ===============================-->
 <script type="text/javascript" src="${base}/media/list/list.min.js"></script>
-<script type="text/javascript"
-        src="${base}/media/list/jquery.carouFredSel-5.6.2-packed.js"></script>
-<script type="text/javascript" src="${base}/media/tree/jquery.tree.custom.js"></script>
-<link type="text/css" rel="stylesheet" media="all" href="${base}/media/tree/css/jquery.tree.css"/>
+<script type="text/javascript" src="${base}/media/list/jquery.carouFredSel-5.6.2-packed.js"></script>
+<#--<script type="text/javascript" src="${base}/media/tree/jquery.tree.custom.js"></script>-->
+<#--<link type="text/css" rel="stylesheet" media="all" href="${base}/media/tree/css/jquery.tree.css"/>-->
 <#--=========================   CANLENDAR & DATE  ===========================-->
 <#-- date -->
 <link rel="stylesheet" href="${base}/media/datepicker/ui.daterangepicker.css" type="text/css"/>
-<script type="text/javascript"
-        src="${base}/media/timepicker/jquery-ui-timepicker-addon.js"></script>
-<script type="text/javascript" src="${base}/media/timepicker/jquery-ui-sliderAccess.js"></script>
+<#--<script type="text/javascript" src="${base}/media/timepicker/jquery-ui-timepicker-addon.js"></script>-->
+<#--<script type="text/javascript" src="${base}/media/timepicker/jquery-ui-sliderAccess.js"></script>-->
 <link type="text/css" href="${base}/media/timepicker/jquery-ui-timepicker-addon.css"/>
 <script type="text/javascript" src="${base}/media/datepicker/date.js"></script>
 <script type="text/javascript"
@@ -110,8 +107,8 @@
       media="print"/>
 <script type='text/javascript' src='${base}/media/calendar/fullcalendar.min.js'></script>
 <#--==========================   EFFECTS  ===================================-->
-<script type="text/javascript" src="${base}/media/jqModal/jqModal.js"></script>
-<link type="text/css" rel="stylesheet" media="all" href="${base}/media/jqModal/jqModal.css"/>
+<#--<script type="text/javascript" src="${base}/media/jqModal/jqModal.js"></script>-->
+<#--<link type="text/css" rel="stylesheet" media="all" href="${base}/media/jqModal/jqModal.css"/>-->
 <#--==========================   UTILITIES   ================================-->
 <script type="text/javascript" src="${base}/media/util/lodash.min.js"></script>
 <script type="text/javascript" src="${base}/media/keyboard/jquery.scrollintoview.js"></script>

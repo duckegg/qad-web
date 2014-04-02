@@ -42,7 +42,7 @@
 <script type="text/javascript" src="${base}/media/jqplot/excanvas.min.js"></script>
 <![endif]-->
 <script type="text/javascript" src="${base}/media/jqplot/jquery.jqplot.leo.js"></script>
-<script type="text/javascript" src="${base}/media/jqplot/plugins/jqplot.dateAxisRenderer.min.js"></script>
+<script type="text/javascript" src="${base}/media/jqplot/plugins/jqplot.dateAxisRenderer.js"></script>
 <#--<script type="text/javascript" src="${base}/media/jqplot/jqplot.dateAxisRenderer.custom.js"></script>-->
 <script type="text/javascript" src="${base}/media/jqplot/plugins/jqplot.barRenderer.min.js"></script>
 <script type="text/javascript" src="${base}/media/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
@@ -55,11 +55,11 @@
 <script type="text/javascript" src="${base}/media/jqplot/plugins/jqplot.highlighter.js"></script>
 <script type="text/javascript" src="${base}/media/jqplot/plugins/jqplot.dragable.min.js"></script>
 <script type="text/javascript" src="${base}/media/jqplot/plugins/jqplot.json2.min.js"></script>
-<script type="text/javascript" src="${base}/media/jqplot/plugins/jqplot.enhancedLegendRenderer.js"></script>
+<script type="text/javascript" src="${base}/media/jqplot/jqplot.enhancedLegendRenderer.leo.js"></script>
 <link rel="stylesheet" type="text/css" href="${base}/media/jqplot/jquery.jqplot.custom.css"/>
 <#--=========================== FORM ELEMENTS ===============================-->
-<#--<script type="text/javascript" src="${base}/media/form/jquery.form.js"></script>-->
-<script type="text/javascript" src="${base}/media/form/jquery.form.custom.js"></script>
+<script type="text/javascript" src="${base}/media/form/jquery.form.js"></script>
+<#--<script type="text/javascript" src="${base}/media/form/jquery.form.custom.js"></script>-->
 <script type="text/javascript" src="${base}/media/form/jquery.validate.min.js"></script>
 <#--=========================== Sheepit ===============================-->
 <script type="text/javascript" src="${base}/media/sheepIt/jquery.sheepItPlugin-1.1.1.min.js"></script>
@@ -90,14 +90,15 @@
 <script type="text/javascript" src="${base}/media/jqModal/jqModal.js"></script>
 <link type="text/css" rel="stylesheet" media="all" href="${base}/media/jqModal/jqModal.css"/>
 <#--==========================   UTILITIES   ================================-->
+<script type="text/javascript" src="${base}/media/util/lodash.min.js"></script>
 <script type="text/javascript" src="${base}/media/keyboard/jquery.scrollintoview.js"></script>
 <script type="text/javascript" src="${base}/media/resize/jquery.ba-resize.js"></script>
+<script type="text/javascript" src="${base}/media/util/jquery.sizes.js"></script>
 <#--========================== APP OVERRIDES ================================-->
 <link rel='stylesheet' type='text/css' href='${base}/media/app/css/basic.css'/>
 <link rel='stylesheet' type='text/css' href='${base}/media/app/lib/kui.css'/>
 <link rel='stylesheet' type='text/css' href='${base}/media/app/css/app.css'/>
-<#--<link rel='stylesheet' type='text/css' href='${base}/media/app/lib/kui-light.css'/>-->
-<#--<link rel='stylesheet' type='text/css' href='${base}/media/app/css/app-light.css'/>-->
+<script type="text/javascript" src="${base}/media/app/js/qad-util.js"></script>
 <script type="text/javascript" src="${base}/media/app/js/app-global.js"></script>
 <script type="text/javascript" src="${base}/media/app/js/app-util.js"></script>
 <script type="text/javascript" src="${base}/media/app/js/app-events.js"></script>

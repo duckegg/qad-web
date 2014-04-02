@@ -72,7 +72,7 @@ We have to set ignoreContextParams=true to avoid it.
 -->
 <#macro listCustomer controlName selectedValues="" label="" style="" class="">
     <#assign _currentCustomer=customer!''/>
-    <@s.action name="customer/list" namespace="/" var="custListAction" executeResult=false rethrowException=true ignoreContextParams=true>
+    <@s.action name="utils/customer/list" namespace="/" var="custListAction" executeResult=false rethrowException=true ignoreContextParams=true>
     </@s.action>
     <#if selectedValues?is_sequence>
         <#assign sequenceValues=selectedValues/>

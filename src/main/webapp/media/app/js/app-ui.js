@@ -15,6 +15,10 @@ function UiKit() {
     this.getUiType = function () {
         return this.type;
     };
+    /**
+     * Initialize UI elements in a page.
+     * @param pageSelector jquery page selector
+     */
     this.initPage = function (pageSelector) {
         if (qadUtil.isBlank(pageSelector)) {
             logger.error("Argument 'pageSelector' cannot be empty for function initPage()");
@@ -25,7 +29,7 @@ function UiKit() {
             logger.error("UiKit.initPage: Cannot find page by selector " + pageSelector);
             return;
         }
-        this.uiBuildCollapsibleForm($page);
+//        this.uiBuildCollapsibleForm($page);
         this.uiBuildCollapsible($page);
         this.uiBuildPortlet($page);
         this.uiLoadPanelContent($page);
@@ -45,57 +49,11 @@ function UiKit() {
             }
         });
     };
-    this.uiBuildCollapsibleForm = function (selector) {
-        $('.kui-collapsible-form fieldset', selector).collapsibleForm();
-    };
+//    this.uiBuildCollapsibleForm = function (selector) {
+//        $('.kui-collapsible-form fieldset', selector).collapsibleForm();
+//    };
     this.uiBuildSidebar = function (selector) {
-        return $(selector).each(function () {
-            var $navTree = $(this);
-            var $body = $("body");
-            var SIDEBAR_CLOSED_CLASS = "kui-sidebar-closed";
-            var SIDEBAR_OPEN_CLASS = "kui-sidebar-open";
-            if ($navTree.not('ul'))
-                $navTree = $navTree.find('ul.nav-list-tree');
-
-            sbHighlightMatch();
-            sbRegisterEvents();
-            sbToggleSidebar(qadPref.loadPreference("sidebarOpen", true));
-
-            function sbToggleSidebar(toOpen) {
-                $(".sidebar-search").toggleClass("open", toOpen);
-                $body.toggleClass(SIDEBAR_CLOSED_CLASS, !toOpen).toggleClass(SIDEBAR_OPEN_CLASS, toOpen);
-            }
-
-            function sbRegisterEvents() {
-                // handle sidebar show/hide
-                $('.sidebar-toggler').on('click.kui', function (e) {
-                    var toOpen = $body.hasClass(SIDEBAR_CLOSED_CLASS);
-                    qadPref.savePreference("sidebarOpen", toOpen);
-                    sbToggleSidebar(toOpen);
-                    e.preventDefault();
-                });
-            }
-
-            function sbHighlightMatch() {
-                var matched = null;
-                $('li a', $navTree).each(function (index) {
-                    var key = $(this).data("kui-menu-key");
-                    if (qadUtil.isBlank(key))
-                        key = $(this).attr("href");
-                    var loc = decodeURIComponent(document.location.href);
-                    if (loc.indexOf(key) > 0) {
-                        if (matched == null) {
-                            matched = $(this);
-                        } else if (key.length > matched.attr("href").length) {
-                            matched = $(this); // Longest match
-                        }
-                    }
-                });
-                if (matched != null) {
-                    $navTree.kuiListTree("activateItem", matched.closest("li"));
-                }
-            }
-        });
+        $(selector).kuiSidebar();
     };
     this.uiBuildCollapsible = function (selector) {
         var $container = $('[data-role="collapsible"],.accordion', $(selector))
@@ -155,7 +113,553 @@ function UiKit() {
         });
     };
     this.uiBuildPortlet = function (key) {
-        alert("Need be implemented by subclass");
+        $('.portlet-container').addClass("clearfix").kuiPortal();
+    };
+    /**
+     * Close a jQuery UI dialog where the element resides
+     * @param element
+     */
+    this.closeDialog = function (element) {
+        var dialog;
+        dialog = $(element).parents('.ui-dialog-content:first');
+        if (dialog.length > 0) {
+            dialog.dialog("close");
+        } else {
+            if (window.history.length > 1) {
+                window.history.go(-1);
+            } else {
+                location.href = "/home";
+            }
+        }
+    };
+    /**
+     * Replot a chart
+     * @param chartId
+     */
+    this.replotChart = function (chartId) {
+        var plot = _getPlot(chartId);
+        //TODO: quick and dirt to replot
+        plotChart(chartId, plot._chartOptions, plot._chartType);
+    };
+    this.refreshDataTable = function (tableId) {
+        try {
+            AppRuntime.oTables[tableId].fnReloadAjax();
+        } catch (err) {
+            alert(err);
+        }
+    };
+    /**
+     * Plot chart. Used with FreeMarker macro pieChart, lineChart and barChart.
+     * @param chartId div id of the chart
+     * @param chartOptions jqPlot options with custom kuiExtraChartOptions
+     * @param chartType "bar", "line", "pie"
+     */
+    this.plotChart = function (chartId, chartOptions, chartType) {
+        var kuiOptions = chartOptions.kuiExtraChartOptions;
+        var chartArgument = {_chartOptions: chartOptions, _chartType: chartType};
+        var $chartDiv = $('#' + chartId);
+        var chartTitle = $("#" + chartId).data('title');
+        var DISPLAY_TOOLBAR = true;
+        var prefKey = "chart_" + chartId;
+        var pref = qadPref.loadPreference(prefKey, {});
+
+        //------------------------------------------
+        // Default options for all kinds of charts
+        //------------------------------------------
+        var DEFAULT_OPTIONS = {
+            title: chartTitle,
+            legend: {
+                show: false,
+                renderer: $.jqplot.EnhancedLegendRenderer,
+                rendererOptions: {
+                    numberRows: null
+                },
+                location: 'nw',
+                showSwatch: true,
+//            border: "1",
+                seriesToggle: 'fast'
+            },
+            grid: {
+                borderWidth: 0,
+                shadow: false,
+                background: 'rgba(0,0,0,0)'
+            },
+            highlighter: {
+                //LEO: undocumented property to customize tooltip, please refer to source code of jqplot.highlighter.js
+                tooltipContentEditor: jqplotTooltip,
+                show: true,
+                tooltipFadeSpeed: "fast"
+            },
+            cursor: {
+                show: false
+            },
+            seriesDefaults: {
+                shadow: false, // show shadow or not.
+                markerOptions: {
+                    show: false,
+                    shadow: false
+                },
+                rendererOptions: {
+                    animation: {
+//                    show: true
+                    }
+                }
+            },
+            axes: {
+                xaxis: {
+                    tickOptions: {
+                        showGridline: false
+                    }
+                },
+                yaxis: {
+                    tickOptions: {
+                        showGridline: false
+                    }
+                }
+            }
+        };
+
+        // Local variable allOptions is assigned to hold all plot options
+        var allOptions = chartOptions;
+
+        //------------------------------------------
+        /*--- Highlight color ---*/
+        //------------------------------------------
+        function assignHighlightColors(chartType) {
+            if (chartType === "pie") {
+                var highlightColors = [];
+                for (var index in AppRuntime.charting.colorScheme) {
+                    var color = AppRuntime.charting.colorScheme[index];
+                    highlightColors[index] = _colorLuminance(color, 0.15);
+                }
+
+                if (typeof allOptions.seriesDefaults !== "undefined") {
+                    if (typeof allOptions.seriesDefaults.rendererOptions !== "undefined") {
+                        allOptions.seriesDefaults.rendererOptions.highlightColors = highlightColors;
+                    }
+                }
+            }
+        }
+
+        assignHighlightColors(chartType);
+
+        //------------------------------------------
+        /*--- Fetch plot data ---*/
+        //------------------------------------------
+        var plotData = fetchPlotData(chartOptions);
+        if (plotData == null)
+            return;
+
+        //------------------------------------------
+        // Wrap chart div
+        //------------------------------------------
+        var wrapperId = chartId + "_wrapper";
+        var targetId = chartId + '_target';
+        var $targetDiv = $('#' + targetId).empty().css("height", "100%");
+        // Make them full height
+        $('#' + wrapperId).css("height", "100%").addClass('chart-wrapper')
+            .on({mouseenter: function () {
+//            $(this).find('.chart-controls').show();
+            }, mouseleave: function () {
+//            $(this).find('.chart-controls').hide();
+            }});
+        $('#' + chartId).css("height", "100%");
+
+        //------------------------------------------
+        // Check error or empty data
+        //------------------------------------------
+        var isEmptyChart = false;
+        var emptyChartMessage = "";
+        if (isNotBlank(plotData.error)) {
+            isEmptyChart = true;
+            emptyChartMessage = plotData.error;
+            // If no data returned, display no data
+            $targetDiv.addClass("jqplot-target").append(
+                    '<div class="jqplot-title">' + chartTitle + '</div><div style="text-align: center;padding-top:1em;">' + emptyChartMessage + '</div>');
+            AppRuntime.jqPlots[chartId] = $.extend(true, {isError: true}, chartArgument);
+            return;
+        }
+
+        // Combine chart options with priority: plotData (server data) > allOptions (custom options) > DEFAULT_OPTIONS
+        allOptions = $.extend(true, {}, DEFAULT_OPTIONS, allOptions, plotData);
+        allOptions.legend.rendererOptions.numberRows = allOptions.legend.location == "s" || allOptions.legend.location == "n" ? 1 : null;
+//    console.log("plotChart.allOptions", allOptions);
+
+        //------------------------------------------
+        // Create plot and save it in global variable
+        //------------------------------------------
+        //*******************************************
+        var thePlot = $.jqplot(targetId, plotData.data, allOptions);
+        AppRuntime.jqPlots[chartId] = $.extend(true, thePlot, chartArgument);
+        //*******************************************
+
+
+        // Save original dimensions
+        if (qadUtil.isBlank($targetDiv.data("old-height")))
+            $targetDiv.data("old-height", $targetDiv.height());
+        if (qadUtil.isBlank($targetDiv.data("old-width")))
+            $targetDiv.data("old-width", $targetDiv.width());
+
+        //------------------------------------------
+        // Determine Chart Type
+        //------------------------------------------
+        var isPieChart = false, isBarChart = false, isLineChart = false;
+        var renderer = AppRuntime.jqPlots[chartId].series[0].renderer;
+        if (renderer._hiBandGridData === undefined) {
+            isPieChart = true;
+        } else if (renderer.smooth === undefined) {
+            isBarChart = true;
+        } else {
+            isLineChart = true;
+        }
+
+        //------------------------------------------
+        // Activate theme
+        //------------------------------------------
+        var chartTheme = {seriesStyles: {seriesColors: AppRuntime.charting.colorScheme}};
+        if (chartTheme != null) {
+            AppRuntime.jqPlots[chartId].themeEngine.newTheme('myStyle', chartTheme);
+            // TODO AND NOTE
+            // if not use plot.activateTheme, piechart chartTheme can not be applied
+            // if use plot.activateTheme, barchart x-axis label can not be displayed
+            if (isPieChart)
+                AppRuntime.jqPlots[chartId].activateTheme('myStyle');
+        }
+
+        /**
+         * Shorten legend labels, apply CSS styles.
+         */
+        function formatChartLegend($chartDiv, allOptions) {
+//        $chartDiv.find('td.jqplot-table-legend-label').each(function () {
+//            var text = $(this).text();
+//            $(this).html('<a href="javascript:void(0);" title="' + text + '">' + $(this).text() + '</a>');
+//        });
+            var $legendTable = $('table.jqplot-table-legend', $chartDiv);
+            if ($legendTable.length > 0) {
+                if (!allOptions.legend.show) {
+                    $legendTable.hide();
+                }
+                var location = allOptions.legend.location;
+                if (location == "n" || location == "s") {
+                    $legendTable.addClass("kui-chart-legend-horizontal");
+                }
+            }
+
+        }
+
+        formatChartLegend($chartDiv, allOptions);
+        //------------------------------------------
+        // Post plot: create action toolbar
+        //------------------------------------------
+        if (DISPLAY_TOOLBAR) {
+            createToolbar(chartId);
+        }
+
+        //
+        /**
+         * Now bind function to the highlight event to show the tooltip and highlight the row in the legend.
+         */
+        function processHighlight() {
+            var highlight = 'highlight';
+            var legendTds = $targetDiv.find('table.jqplot-table-legend td');
+            if (isBarChart || isPieChart) {
+                $targetDiv.bind('jqplotDataHighlight',
+                    function (ev, seriesIndex, pointIndex, data, radius) {
+                        // Pie chart has only one single series
+                        legendTds.removeClass(highlight).eq(isPieChart ? pointIndex * 2 + 1 : seriesIndex * 2 + 1).addClass(highlight);
+                    });
+                //Bind a function to the unhighlight event to clean up after highlighting.
+                $targetDiv.bind('jqplotDataUnhighlight',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        legendTds.removeClass(highlight);
+                    });
+            }
+            else if (isLineChart) {
+                // Event jqplotDataHighlight does not work for line chart, use jqplotDataMouseOver instead
+                $targetDiv.bind('jqplotDataMouseOver',
+                    function (ev, seriesIndex, pointIndex, data, radius) {
+                        legendTds.removeClass(highlight).eq(seriesIndex * 2 + 1).addClass(highlight);
+                    });
+            }
+        }
+
+        processHighlight();
+
+        /**
+         * Create chart toolbar
+         * @param chartId
+         * @private
+         */
+        function createToolbar(chartId) {
+
+            var controlsId = chartId + "_controls";
+            var $chartDiv = $('#' + chartId);
+
+            var $controlsDiv = $('#' + controlsId);
+            if ($controlsDiv.length > 0) {
+                $controlsDiv.detach().empty();
+            }
+            var legendList = "";
+
+            // Iterate series
+            $.each(AppRuntime.jqPlots[chartId].legend._series, function (index, series) {
+                // Load user preference
+                var isShow = true;
+                if (isNotBlank(pref[series.label])) {
+                    isShow = pref[series.label].show;
+                    if (isNotBlank(isShow) && !isShow) {
+                        series.toggleDisplay({data: {series: series}});
+                    }
+                }
+                legendList += '<li><a class="js-toggle-series jqplot-legend-label jqplot-seriesToggle ' + (!isShow ? "jqplot-series-hidden" : "") + '" href="#" data-series-index="' + index + '">' +
+                    '<span class="label" style="width:1em;display:inline-block;background:' + series.color + ';margin-right:5px">&nbsp;</span>' + series.label + '</a></li>';
+            });
+
+            if (uiKit.getUiType() === "desktop") {
+                $chartDiv.prepend
+//            $('.jqplot-title',$targetDiv).append
+                ('<div id="' + controlsId + '" class="chart-controls" style="sdisplay:none">' +
+                    '<div class="btn-group">' +
+                    '<a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="#">' +
+                    '<i class="text-muted fa fa-bars"></i></a>' +
+                    '<ul class="dropdown-menu dropdown-menu-right">' +
+                    '<li><a class="js-chart-legend" href="#">显示图标</a></li>' +
+                    '<li><a class="js-chart-image" href="#">保存图片</a></li>' +
+                    '<li><a class="js-chart-refresh" href="#"><i class="icomoon-refresh"></i> 刷新</a></li>' +
+                    '<li><a class="js-chart-enlarge" href="#"><i class="icomoon-zoom-in"></i> 放大</a></li>' +
+                    '<li class="divider"></li>' + legendList +
+                    '</ul>' +
+                    '</div></div>');
+                $('.dropdown-toggle').dropdown();
+            }
+
+            //------------------------------------------
+            // Event: toggle legend
+            // Use off() to remove possible registered event during refresh
+            //------------------------------------------
+            $chartDiv.off('click.kui', '.js-toggle-series').on('click.kui', '.js-toggle-series', function (e) {
+                var series = AppRuntime.jqPlots[chartId].legend._series[$(this).data('series-index')];
+                series.toggleDisplay({data: {series: series}});
+
+                var isHidden = series.canvas._elem.hasClass('jqplot-series-hidden');
+                if (isHidden) {
+                    $(this).addClass('jqplot-series-hidden');
+                }
+                else {
+                    $(this).removeClass('jqplot-series-hidden');
+                }
+                // Update preference
+                pref[series.label] = {show: !isHidden};
+                qadPref.savePreference(prefKey, pref);
+
+                e.preventDefault();
+                return false; // Prevent dropdown menu from closing
+            });
+
+            //------------------------------------------
+            // Event: toggle legend
+            //------------------------------------------
+            $chartDiv.on('click.kui', '.js-chart-legend', function (e) {
+                $(this).data("show", $(this).data("show") !== true);
+                var show = $(this).data("show");
+                var plot = _getPlot(chartId);
+                plot.legend.show = show;
+                plot.replot();
+                // NOTE: replot does not work for Pie chart. Use following toggle() as workaround for pie chart.
+                $chartDiv.find('table.jqplot-table-legend').toggle(show);
+                e.preventDefault();
+                return false;
+            });
+
+            //------------------------------------------
+            // Event: save image
+            //------------------------------------------
+            $chartDiv.off('click.kui', '.js-chart-image').on('click.kui', '.js-chart-image', {chart: $targetDiv}, function (e) {
+                var imgelem = e.data.chart.jqplotToImageElem();
+                var $imgDialog = $('<div></div>').css('display', "none");
+                $imgDialog.html("<img src='" + imgelem.src + "'/>").appendTo($('body'));
+                $imgDialog.kuiDialog({title: "点右键保存图片", modal: true, width: "auto", height: "auto", position: "center",
+                    close: function (event, ui) {
+                        $imgDialog.remove();
+                    }
+                });
+                e.preventDefault();
+                return false;
+            });
+
+            //------------------------------------------
+            // Event: enlarge
+            //------------------------------------------
+            $chartDiv.off('click.kui', '.js-chart-enlarge').on('click.kui', '.js-chart-enlarge', function (e) {
+                var $chartDialog = $('<div></div>');
+                $('body').append($chartDialog);
+
+                // Move chart to dialog
+                $chartDiv.detach().prependTo($chartDialog);
+
+                $chartDialog.addClass("resizable-container");
+                $chartDialog.kuiDialog({resizable: true, position: "center",
+                    width: 800, height: 500,
+                    modal: false,
+                    dialogClass: "",
+                    close: function () {
+                        $chartDialog.remove();
+                    },
+                    resizeStop: function (event, ui) {
+                        resizeChart(chartId);
+                        replotChart(chartId);
+                    },
+                    afterMaximize: function (event, ui) {
+                        resizeChart(chartId);
+                        replotChart(chartId);
+                    },
+                    afterUnmaximize: function (event, ui) {
+                        resizeChart(chartId);
+                        replotChart(chartId);
+                    },
+                    beforeClose: function (event, ui) {
+                        // Put chart back
+                        $chartDiv.detach().prependTo($('#' + wrapperId));
+                        $targetDiv.height($targetDiv.data('old-height')).width($targetDiv.data('old-width'));
+                        replotChart(chartId);
+                        $chartDialog.removeClass("resizable-container");
+                    }
+                });
+                resizeChart(chartId);
+                replotChart(chartId);
+                //LEO@2012/11/14: do not return false, otherwise the dropdown menu will not close after clicking
+                e.preventDefault();
+            });
+
+            //------------------------------------------
+            // Event: refresh
+            //------------------------------------------
+            $chartDiv.off('click.kui', '.js-chart-refresh').on('click.kui', '.js-chart-refresh', function (e) {
+                replotChart(chartId);
+                e.preventDefault();
+            });
+
+//        $chartDiv.find('table.jqplot-table-legend').hide();
+//    $('table.jqplot-table-legend', $chartDiv).appendTo($('#' + controlsId));
+        }
+
+        /**
+         * Fetch plot data from AJAX
+         * @param options contains KUI enhanced options kuiExtraChartOptions
+         * @return {*} null if program error
+         */
+        function fetchPlotData(options) {
+            var kuiOptions = options.kuiExtraChartOptions;
+            // Prepare AJAX arguments
+            var ajaxUrl = kuiOptions.chartAjaxUrl;
+            var ajaxParam = kuiOptions.chartAjaxParam;
+            var ajaxForm = kuiOptions.chartAjaxForm;
+
+            if (qadUtil.isBlank(ajaxUrl) && qadUtil.isBlank(ajaxForm)) {
+                alert("Program Error. Parameter 'ajaxUrl' or 'ajaxForm' must be specified");
+                return null;
+            }
+            if (!qadUtil.isBlank(ajaxForm)) {
+                if ($(ajaxForm).length == 0) {
+                    alert("Program Error: Cannot find form element '" + ajaxForm + "'");
+                    return null;
+                }
+                ajaxUrl = $(ajaxForm).attr("action");
+                ajaxParam = $(ajaxForm).serialize();
+            }
+
+            // Call AJAX and process data
+            var jsonData = null;
+            callAjax({
+                url: ajaxUrl, type: "POST", data: ajaxParam, dataType: "json",
+                async: false, /* Have to use synchronous here, else the function will return before the data is fetched */
+                success: function (xhr) {
+                    jsonData = xhr;
+                }
+            });
+
+            /**
+             * Process return json data.
+             * TODO: rename plotData to plot in Java accordingly?
+             * @param jsonData
+             * <pre>
+             * - plotData: Array of object, each object is a series legend and its data
+             *     - dataPoints: Array of 2-D array (x value, y value)
+             *     - legendLabel: String
+             * </pre>
+             * JSON format: {"plotData":[{"dataPoints":[[x1,y1],[x2,y2],...,[xn,yn]],"legendLabel":"series1_legend"},...,{"dataPoints":...,"legendLabel:...}]}
+             * @return plotData
+             */
+            function processJson(jsonData) {
+                var plotData = {series: [], data: [], error: ""};
+
+                if (qadUtil.isBlank(jsonData) || qadUtil.isBlank(jsonData['plotData']) || jsonData['plotData'].length == 0) {
+                    plotData.error = "没有数据";
+                    return plotData;
+                }
+
+                var chartSeries = [];
+                var chartData = [];
+//        var theme = {seriesStyles:{seriesColors:AppRuntime.charting.colorScheme}};
+                var seriesColors = AppRuntime.charting.colorScheme;
+
+                // Iterate all series
+                $.each(jsonData['plotData'], function (i, item) {
+                    if (chartType === "pie") {
+                        i = 0; // Pie chart has only one series
+                    }
+                    // For on series (legend + data)
+                    chartData[i] = item['dataPoints'];
+                    var color = null;
+                    if (!qadUtil.isBlank(seriesColors)) {
+                        color = seriesColors[i % (seriesColors.length)];
+                    }
+                    if (isNotBlank(color)) {
+                        chartSeries.push({label: item['legendLabel'], color: color});
+                    } else {
+                        chartSeries.push({label: item['legendLabel']});
+                    }
+                    if (chartData[i].length == 0) {
+                        plotData.error = "没有数据点";
+                    }
+                });
+                plotData.series = chartSeries;
+                plotData.data = chartData;
+                return plotData;
+            }
+
+            return processJson(jsonData);
+        }
+
+        /**
+         * Resize a chart to its parent <code>.resizable-container</code> element
+         * @param chartId
+         */
+        function resizeChart(chartId) {
+            var $targetDiv = $('#' + chartId + "_target");
+            var $container = $targetDiv.closest('.resizable-container');
+            var margin = 20;
+            if ($container.length > 0 && $container.height() > margin) {
+                $targetDiv.height($container.height() - margin);
+                $targetDiv.width($container.width() - margin);
+            }
+        }
+
+        /**
+         * Customize tooltip
+         * @param str default tooltip
+         * @param seriesIndex
+         * @param pointIndex
+         * @param plot
+         * @return {String}
+         * @private
+         */
+        function jqplotTooltip(str, seriesIndex, pointIndex, plot) {
+//        console.debug('chartOptions.kuiShowSeriesInTooltip',chartOptions.kuiShowSeriesInTooltip);
+            if (kuiOptions.showSeriesInTooltip)
+                return "<strong>" + plot.series[seriesIndex]["label"] + "</strong> " + str;//plot.data[seriesIndex][pointIndex];
+            return str;
+        }
     };
 }
 
@@ -202,538 +706,26 @@ function _colorLuminance(hex, lum) {
 /**
  * Replot a chart
  * @param chartId
+ * @deprecated use uiKit.replotChart
  */
 function replotChart(chartId) {
-    var plot = _getPlot(chartId);
-    //TODO: quick and dirt to replot
-    plotChart(chartId, plot._chartOptions, plot._chartType);
+    return uiKit.replotChart(chartId);
 }
 
 
 /**
- * Plot chart. Used with FreeMarker macro pieChart, lineChart and barChart.
- * @param chartId div id of the chart
- * @param chartOptions jqPlot options with custom kuiExtraChartOptions
- * @param chartType "bar", "line", "pie"
+ * @deprecated use uiKit.plotChart
  */
 function plotChart(chartId, chartOptions, chartType) {
-    var kuiOptions = chartOptions.kuiExtraChartOptions;
-    var chartArgument = {_chartOptions: chartOptions, _chartType: chartType};
-    var $chartDiv = $('#' + chartId);
-    var chartTitle = $("#" + chartId).data('title');
-    var DISPLAY_TOOLBAR = true;
-    var prefKey = "chart_" + chartId;
-    var pref = qadPref.loadPreference(prefKey, {});
-
-    //------------------------------------------
-    // Default options for all kinds of charts
-    //------------------------------------------
-    var DEFAULT_OPTIONS = {
-        title: chartTitle,
-        legend: {
-            show: false,
-            renderer: $.jqplot.EnhancedLegendRenderer,
-            rendererOptions: {
-                numberRows: null
-            },
-            location: 'nw',
-            showSwatch: true,
-//            border: "1",
-            seriesToggle: 'fast'
-        },
-        grid: {
-            borderWidth: 0,
-            shadow: false,
-            background: 'rgba(0,0,0,0)'
-        },
-        highlighter: {
-            //LEO: undocumented property to customize tooltip, please refer to source code of jqplot.highlighter.js
-            tooltipContentEditor: jqplotTooltip,
-            show: true,
-            tooltipFadeSpeed: "fast"
-        },
-        cursor: {
-            show: false
-        },
-        seriesDefaults: {
-            shadow: false, // show shadow or not.
-            markerOptions: {
-                show: false,
-                shadow: false
-            },
-            rendererOptions: {
-                animation: {
-//                    show: true
-                }
-            }
-        },
-        axes: {
-            xaxis: {
-                tickOptions: {
-                    showGridline: false
-                }
-            },
-            yaxis: {
-                tickOptions: {
-                    showGridline: false
-                }
-            }
-        }
-    };
-
-    // Local variable allOptions is assigned to hold all plot options
-    var allOptions = chartOptions;
-
-    //------------------------------------------
-    /*--- Highlight color ---*/
-    //------------------------------------------
-    function assignHighlightColors(chartType) {
-        if (chartType === "pie") {
-            var highlightColors = [];
-            for (var index in AppRuntime.charting.colorScheme) {
-                var color = AppRuntime.charting.colorScheme[index];
-                highlightColors[index] = _colorLuminance(color, 0.15);
-            }
-
-            if (typeof allOptions.seriesDefaults !== "undefined") {
-                if (typeof allOptions.seriesDefaults.rendererOptions !== "undefined") {
-                    allOptions.seriesDefaults.rendererOptions.highlightColors = highlightColors;
-                }
-            }
-        }
-    }
-
-    assignHighlightColors(chartType);
-
-    //------------------------------------------
-    /*--- Fetch plot data ---*/
-    //------------------------------------------
-    var plotData = fetchPlotData(chartOptions);
-    if (plotData == null)
-        return;
-
-    //------------------------------------------
-    // Wrap chart div
-    //------------------------------------------
-    var wrapperId = chartId + "_wrapper";
-    var targetId = chartId + '_target';
-    var $targetDiv = $('#' + targetId).empty().css("height", "100%");
-    // Make them full height
-    $('#' + wrapperId).css("height", "100%").addClass('chart-wrapper')
-        .on({mouseenter: function () {
-//            $(this).find('.chart-controls').show();
-        }, mouseleave: function () {
-//            $(this).find('.chart-controls').hide();
-        }});
-    $('#' + chartId).css("height", "100%");
-
-    //------------------------------------------
-    // Check error or empty data
-    //------------------------------------------
-    var isEmptyChart = false;
-    var emptyChartMessage = "";
-    if (isNotBlank(plotData.error)) {
-        isEmptyChart = true;
-        emptyChartMessage = plotData.error;
-        // If no data returned, display no data
-        $targetDiv.addClass("jqplot-target").append(
-                '<div class="jqplot-title">' + chartTitle + '</div><div style="text-align: center;padding-top:1em;">' + emptyChartMessage + '</div>');
-        AppRuntime.jqPlots[chartId] = $.extend(true, {isError: true}, chartArgument);
-        return;
-    }
-
-    // Combine chart options with priority: plotData (server data) > allOptions (custom options) > DEFAULT_OPTIONS
-    allOptions = $.extend(true, {}, DEFAULT_OPTIONS, allOptions, plotData);
-    allOptions.legend.rendererOptions.numberRows = allOptions.legend.location == "s" || allOptions.legend.location == "n" ? 1 : null;
-//    console.log("plotChart.allOptions", allOptions);
-
-    //------------------------------------------
-    // Create plot and save it in global variable
-    //------------------------------------------
-    //*******************************************
-    var thePlot = $.jqplot(targetId, plotData.data, allOptions);
-    AppRuntime.jqPlots[chartId] = $.extend(true, thePlot, chartArgument);
-    //*******************************************
-
-
-    // Save original dimensions
-    if (qadUtil.isBlank($targetDiv.data("old-height")))
-        $targetDiv.data("old-height", $targetDiv.height());
-    if (qadUtil.isBlank($targetDiv.data("old-width")))
-        $targetDiv.data("old-width", $targetDiv.width());
-
-    //------------------------------------------
-    // Determine Chart Type
-    //------------------------------------------
-    var isPieChart = false, isBarChart = false, isLineChart = false;
-    var renderer = AppRuntime.jqPlots[chartId].series[0].renderer;
-    if (renderer._hiBandGridData === undefined) {
-        isPieChart = true;
-    } else if (renderer.smooth === undefined) {
-        isBarChart = true;
-    } else {
-        isLineChart = true;
-    }
-
-    //------------------------------------------
-    // Activate theme
-    //------------------------------------------
-    var chartTheme = {seriesStyles: {seriesColors: AppRuntime.charting.colorScheme}};
-    if (chartTheme != null) {
-        AppRuntime.jqPlots[chartId].themeEngine.newTheme('myStyle', chartTheme);
-        // TODO AND NOTE
-        // if not use plot.activateTheme, piechart chartTheme can not be applied
-        // if use plot.activateTheme, barchart x-axis label can not be displayed
-        if (isPieChart)
-            AppRuntime.jqPlots[chartId].activateTheme('myStyle');
-    }
-
-    /**
-     * Shorten legend labels, apply CSS styles.
-     */
-    function formatChartLegend($chartDiv, allOptions) {
-//        $chartDiv.find('td.jqplot-table-legend-label').each(function () {
-//            var text = $(this).text();
-//            $(this).html('<a href="javascript:void(0);" title="' + text + '">' + $(this).text() + '</a>');
-//        });
-        var $legendTable = $('table.jqplot-table-legend', $chartDiv);
-        if ($legendTable.length > 0) {
-            if (!allOptions.legend.show) {
-                $legendTable.hide();
-            }
-            var location = allOptions.legend.location;
-            if (location == "n" || location == "s") {
-                $legendTable.addClass("kui-chart-legend-horizontal");
-            }
-        }
-
-    }
-
-    formatChartLegend($chartDiv, allOptions);
-    //------------------------------------------
-    // Post plot: create action toolbar
-    //------------------------------------------
-    if (DISPLAY_TOOLBAR) {
-        createToolbar(chartId);
-    }
-
-    //
-    /**
-     * Now bind function to the highlight event to show the tooltip and highlight the row in the legend.
-     */
-    function processHighlight() {
-        var highlight = 'highlight';
-        var legendTds = $targetDiv.find('table.jqplot-table-legend td');
-        if (isBarChart || isPieChart) {
-            $targetDiv.bind('jqplotDataHighlight',
-                function (ev, seriesIndex, pointIndex, data, radius) {
-                    // Pie chart has only one single series
-                    legendTds.removeClass(highlight).eq(isPieChart ? pointIndex * 2 + 1 : seriesIndex * 2 + 1).addClass(highlight);
-                });
-            //Bind a function to the unhighlight event to clean up after highlighting.
-            $targetDiv.bind('jqplotDataUnhighlight',
-                function (ev, seriesIndex, pointIndex, data) {
-                    legendTds.removeClass(highlight);
-                });
-        }
-        else if (isLineChart) {
-            // Event jqplotDataHighlight does not work for line chart, use jqplotDataMouseOver instead
-            $targetDiv.bind('jqplotDataMouseOver',
-                function (ev, seriesIndex, pointIndex, data, radius) {
-                    legendTds.removeClass(highlight).eq(seriesIndex * 2 + 1).addClass(highlight);
-                });
-        }
-    }
-
-    processHighlight();
-
-    /**
-     * Create chart toolbar
-     * @param chartId
-     * @private
-     */
-    function createToolbar(chartId) {
-
-        var controlsId = chartId + "_controls";
-        var $chartDiv = $('#' + chartId);
-
-        var $controlsDiv = $('#' + controlsId);
-        if ($controlsDiv.length > 0) {
-            $controlsDiv.detach().empty();
-        }
-        var legendList = "";
-
-        // Iterate series
-        $.each(AppRuntime.jqPlots[chartId].legend._series, function (index, series) {
-            // Load user preference
-            var isShow = true;
-            if (isNotBlank(pref[series.label])) {
-                isShow = pref[series.label].show;
-                if (isNotBlank(isShow) && !isShow) {
-                    series.toggleDisplay({data: {series: series}});
-                }
-            }
-            legendList += '<li><a class="js-toggle-series jqplot-legend-label jqplot-seriesToggle ' + (!isShow ? "jqplot-series-hidden" : "") + '" href="#" data-series-index="' + index + '">' +
-                '<span class="label" style="width:1em;display:inline-block;background:' + series.color + ';margin-right:5px">&nbsp;</span>' + series.label + '</a></li>';
-        });
-
-        if (uiKit.getUiType() === "desktop") {
-            $chartDiv.prepend
-//            $('.jqplot-title',$targetDiv).append
-            ('<div id="' + controlsId + '" class="chart-controls" style="sdisplay:none">' +
-                '<div class="btn-group">' +
-                '<a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="#">' +
-                '<i class="text-muted fa fa-bars"></i></a>' +
-                '<ul class="dropdown-menu dropdown-menu-right">' +
-                '<li><a class="js-chart-legend" href="#">显示图标</a></li>' +
-                '<li><a class="js-chart-image" href="#">保存图片</a></li>' +
-                '<li><a class="js-chart-refresh" href="#"><i class="icomoon-refresh"></i> 刷新</a></li>' +
-                '<li><a class="js-chart-enlarge" href="#"><i class="icomoon-zoom-in"></i> 放大</a></li>' +
-                '<li class="divider"></li>' + legendList +
-                '</ul>' +
-                '</div></div>');
-            $('.dropdown-toggle').dropdown();
-        }
-
-        //------------------------------------------
-        // Event: toggle legend
-        // Use off() to remove possible registered event during refresh
-        //------------------------------------------
-        $chartDiv.off('click.kui', '.js-toggle-series').on('click.kui', '.js-toggle-series', function (e) {
-            var series = AppRuntime.jqPlots[chartId].legend._series[$(this).data('series-index')];
-            series.toggleDisplay({data: {series: series}});
-
-            var isHidden = series.canvas._elem.hasClass('jqplot-series-hidden');
-            if (isHidden) {
-                $(this).addClass('jqplot-series-hidden');
-            }
-            else {
-                $(this).removeClass('jqplot-series-hidden');
-            }
-            // Update preference
-            pref[series.label] = {show: !isHidden};
-            qadPref.savePreference(prefKey, pref);
-
-            e.preventDefault();
-            return false; // Prevent dropdown menu from closing
-        });
-
-        //------------------------------------------
-        // Event: toggle legend
-        //------------------------------------------
-        $chartDiv.on('click.kui', '.js-chart-legend', function (e) {
-            $(this).data("show", $(this).data("show") !== true);
-            var show = $(this).data("show");
-            var plot = _getPlot(chartId);
-            plot.legend.show = show;
-            plot.replot();
-            // NOTE: replot does not work for Pie chart. Use following toggle() as workaround for pie chart.
-            $chartDiv.find('table.jqplot-table-legend').toggle(show);
-            e.preventDefault();
-            return false;
-        });
-
-        //------------------------------------------
-        // Event: save image
-        //------------------------------------------
-        $chartDiv.off('click.kui', '.js-chart-image').on('click.kui', '.js-chart-image', {chart: $targetDiv}, function (e) {
-            var imgelem = e.data.chart.jqplotToImageElem();
-            var $imgDialog = $('<div></div>').css('display', "none");
-            $imgDialog.html("<img src='" + imgelem.src + "'/>").appendTo($('body'));
-            $imgDialog.kuiDialog({title: "点右键保存图片", modal: true, width: "auto", height: "auto", position: "center",
-                close: function (event, ui) {
-                    $imgDialog.remove();
-                }
-            });
-            e.preventDefault();
-            return false;
-        });
-
-        //------------------------------------------
-        // Event: enlarge
-        //------------------------------------------
-        $chartDiv.off('click.kui', '.js-chart-enlarge').on('click.kui', '.js-chart-enlarge', function (e) {
-            var $chartDialog = $('<div></div>');
-            $('body').append($chartDialog);
-
-            // Move chart to dialog
-            $chartDiv.detach().prependTo($chartDialog);
-
-            $chartDialog.addClass("resizable-container");
-            $chartDialog.kuiDialog({resizable: true, position: "center",
-                width: 800, height: 500,
-                modal: false,
-                dialogClass: "",
-                close: function () {
-                    $chartDialog.remove();
-                },
-                resizeStop: function (event, ui) {
-                    resizeChart(chartId);
-                    replotChart(chartId);
-                },
-                afterMaximize: function (event, ui) {
-                    resizeChart(chartId);
-                    replotChart(chartId);
-                },
-                afterUnmaximize: function (event, ui) {
-                    resizeChart(chartId);
-                    replotChart(chartId);
-                },
-                beforeClose: function (event, ui) {
-                    // Put chart back
-                    $chartDiv.detach().prependTo($('#' + wrapperId));
-                    $targetDiv.height($targetDiv.data('old-height')).width($targetDiv.data('old-width'));
-                    replotChart(chartId);
-                    $chartDialog.removeClass("resizable-container");
-                }
-            });
-            resizeChart(chartId);
-            replotChart(chartId);
-            //LEO@2012/11/14: do not return false, otherwise the dropdown menu will not close after clicking
-            e.preventDefault();
-        });
-
-        //------------------------------------------
-        // Event: refresh
-        //------------------------------------------
-        $chartDiv.off('click.kui', '.js-chart-refresh').on('click.kui', '.js-chart-refresh', function (e) {
-            replotChart(chartId);
-            e.preventDefault();
-        });
-
-//        $chartDiv.find('table.jqplot-table-legend').hide();
-//    $('table.jqplot-table-legend', $chartDiv).appendTo($('#' + controlsId));
-    }
-
-    /**
-     * Fetch plot data from AJAX
-     * @param options contains KUI enhanced options kuiExtraChartOptions
-     * @return {*} null if program error
-     */
-    function fetchPlotData(options) {
-        var kuiOptions = options.kuiExtraChartOptions;
-        // Prepare AJAX arguments
-        var ajaxUrl = kuiOptions.chartAjaxUrl;
-        var ajaxParam = kuiOptions.chartAjaxParam;
-        var ajaxForm = kuiOptions.chartAjaxForm;
-
-        if (qadUtil.isBlank(ajaxUrl) && qadUtil.isBlank(ajaxForm)) {
-            alert("Program Error. Parameter 'ajaxUrl' or 'ajaxForm' must be specified");
-            return null;
-        }
-        if (!qadUtil.isBlank(ajaxForm)) {
-            if ($(ajaxForm).length == 0) {
-                alert("Program Error: Cannot find form element '" + ajaxForm + "'");
-                return null;
-            }
-            ajaxUrl = $(ajaxForm).attr("action");
-            ajaxParam = $(ajaxForm).serialize();
-        }
-
-        // Call AJAX and process data
-        var jsonData = null;
-        callAjax({
-            url: ajaxUrl, type: "POST", data: ajaxParam, dataType: "json",
-            async: false, /* Have to use synchronous here, else the function will return before the data is fetched */
-            success: function (xhr) {
-                jsonData = xhr;
-            }
-        });
-
-        /**
-         * Process return json data.
-         * TODO: rename plotData to plot in Java accordingly?
-         * @param jsonData
-         * <pre>
-         * - plotData: Array of object, each object is a series legend and its data
-         *     - dataPoints: Array of 2-D array (x value, y value)
-         *     - legendLabel: String
-         * </pre>
-         * JSON format: {"plotData":[{"dataPoints":[[x1,y1],[x2,y2],...,[xn,yn]],"legendLabel":"series1_legend"},...,{"dataPoints":...,"legendLabel:...}]}
-         * @return plotData
-         */
-        function processJson(jsonData) {
-            var plotData = {series: [], data: [], error: ""};
-
-            if (qadUtil.isBlank(jsonData) || qadUtil.isBlank(jsonData['plotData']) || jsonData['plotData'].length == 0) {
-                plotData.error = "没有数据";
-                return plotData;
-            }
-
-            var chartSeries = [];
-            var chartData = [];
-//        var theme = {seriesStyles:{seriesColors:AppRuntime.charting.colorScheme}};
-            var seriesColors = AppRuntime.charting.colorScheme;
-
-            // Iterate all series
-            $.each(jsonData['plotData'], function (i, item) {
-                if (chartType === "pie") {
-                    i = 0; // Pie chart has only one series
-                }
-                // For on series (legend + data)
-                chartData[i] = item['dataPoints'];
-                var color = null;
-                if (!qadUtil.isBlank(seriesColors)) {
-                    color = seriesColors[i % (seriesColors.length)];
-                }
-                if (isNotBlank(color)) {
-                    chartSeries.push({label: item['legendLabel'], color: color});
-                } else {
-                    chartSeries.push({label: item['legendLabel']});
-                }
-                if (chartData[i].length == 0) {
-                    plotData.error = "没有数据点";
-                }
-            });
-            plotData.series = chartSeries;
-            plotData.data = chartData;
-            return plotData;
-        }
-
-        return processJson(jsonData);
-    }
-
-    /**
-     * Resize a chart to its parent <code>.resizable-container</code> element
-     * @param chartId
-     */
-    function resizeChart(chartId) {
-        var $targetDiv = $('#' + chartId + "_target");
-        var $container = $targetDiv.closest('.resizable-container');
-        var margin = 20;
-        if ($container.length > 0 && $container.height() > margin) {
-            $targetDiv.height($container.height() - margin);
-            $targetDiv.width($container.width() - margin);
-        }
-    }
-
-    /**
-     * Customize tooltip
-     * @param str default tooltip
-     * @param seriesIndex
-     * @param pointIndex
-     * @param plot
-     * @return {String}
-     * @private
-     */
-    function jqplotTooltip(str, seriesIndex, pointIndex, plot) {
-//        console.debug('chartOptions.kuiShowSeriesInTooltip',chartOptions.kuiShowSeriesInTooltip);
-        if (kuiOptions.showSeriesInTooltip)
-            return "<strong>" + plot.series[seriesIndex]["label"] + "</strong> " + str;//plot.data[seriesIndex][pointIndex];
-        return str;
-    }
+    return uiKit.plotChart(chartId, chartOptions, chartType);
 }
 
 
-//==============================================================================
-//                                DATATABLES
-//==============================================================================
+/**
+ * @deprecated use uiKit.refreshDataTable
+ */
 function refreshDataTable(tableId) {
-    try {
-        AppRuntime.oTables[tableId].fnReloadAjax();
-    } catch (err) {
-        alert(err);
-    }
+    return uiKit.refreshDataTable(tableId)
 }
 /**
  * Update a cell in DataTable
@@ -753,9 +745,8 @@ function dtUpdateCell(tableId, cellSelector, dataField, newValue) {
 }
 
 //==============================================================================
-//                            DIALOG AND FORM
+// jQuery Plugins
 //==============================================================================
-
 (function ($) {
     var pluginName = 'kuiDialog',
         defaults = {
@@ -893,21 +884,10 @@ function dtUpdateCell(tableId, cellSelector, dataField, newValue) {
     };
 })(jQuery);
 /**
- * Close a jQuery UI dialog where the element resides
- * @param element
+ * @deprecated use uiKit.closeDialog
  */
 function closeDialog(element) {
-    var dialog;
-    dialog = $(element).parents('.ui-dialog-content:first');
-    if (dialog.length > 0) {
-        dialog.dialog("close");
-    } else {
-        if (window.history.length > 1) {
-            window.history.go(-1);
-        } else {
-            location.href = "/home";
-        }
-    }
+    return uiKit.closeDialog(element);
 }
 
 
@@ -982,15 +962,9 @@ $.fn.kuiActionTabs = function (option) {
 };
 
 /**
- * Extends jQuery UI tabs.
- * It will change tab URL to embed mode.
- * @param settings jQuery UI tabs settings
- * @deprecated
+ * @deprecated use KuiTabs
  */
 $.fn.myTabs = function (settings) {
-    var allSettings = {};
-    if (settings != null)
-        $.extend(true, allSettings, settings);
     return $(this).kuiTabs(allSettings);
 };
 
@@ -1005,13 +979,12 @@ $.fn.myTabsWithActionTabs = function (settings) {
         $.extend(true, allSettings, settings);
     var $div = $(this);
     $div.find('.action-tabs').kuiActionTabs(allSettings);
-    $div.myTabs();
-    return $div;
+    return $div.kuiTabs(allSettings);
 };
 
-//==============================================================================
-//                               TREE
-//==============================================================================
+/**
+ * @deprecated use KuiListTree
+ */
 $.fn.myTree = function (settings) {
     return $(this).tree(settings);
 };
@@ -1249,32 +1222,610 @@ $.widget("ui.dialog", $.ui.dialog, {
 });
 
 //==============================================================================
-//                               CALENDAR
+//                               FORM
 //==============================================================================
-jQuery.fn.collapsibleForm = function (options) {
-    var defaults = {
-        closed: false
-    };
-    settings = jQuery.extend({}, defaults, options);
+//jQuery.fn.collapsibleForm = function (options) {
+//    var defaults = {
+//        closed: false
+//    };
+//    settings = jQuery.extend({}, defaults, options);
+//
+//    return this.each(function () {
+//        var obj = jQuery(this);
+//        obj.find("legend:first").addClass('collapsible').click(function () {
+//            if (obj.hasClass('collapsed'))
+//                obj.removeClass('collapsed').addClass('collapsible');
+//
+//            jQuery(this).removeClass('collapsed');
+//
+//            obj.children().not('legend').toggle(function () {
+//                if (jQuery(this).is(":visible"))
+//                    obj.find("legend:first").addClass('collapsible');
+//                else
+//                    obj.addClass('collapsed').find("legend").addClass('collapsed');
+//            });
+//        });
+//        if (settings.closed) {
+//            obj.addClass('collapsed').find("legend:first").addClass('collapsed');
+//            obj.children().not("legend:first").css('display', 'none');
+//        }
+//    });
+//};
 
-    return this.each(function () {
-        var obj = jQuery(this);
-        obj.find("legend:first").addClass('collapsible').click(function () {
-            if (obj.hasClass('collapsed'))
-                obj.removeClass('collapsed').addClass('collapsible');
+(function ($) {
+    var pluginName = 'kuiAjaxNav',
+        defaults = {};
 
-            jQuery(this).removeClass('collapsed');
+    function KuiAjaxNav(element, options) {
+        this.element = element;
+        this.options = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init();
+    }
 
-            obj.children().not('legend').toggle(function () {
-                if (jQuery(this).is(":visible"))
-                    obj.find("legend:first").addClass('collapsible');
-                else
-                    obj.addClass('collapsed').find("legend").addClass('collapsed');
-            });
+    $.fn.kuiAjaxNav = function (options) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                    new KuiAjaxNav(this, options));
+            }
         });
-        if (settings.closed) {
-            obj.addClass('collapsed').find("legend:first").addClass('collapsed');
-            obj.children().not("legend:first").css('display', 'none');
+    };
+
+    KuiAjaxNav.prototype.init = function () {
+//        logger.debug("kuiAjaxNav:begin");
+        var self = this;
+        var $navUl = $(this.element);
+        if (!$navUl.is('ul')) {
+            logger.error("Element '" + $navUl.selector + "' should be 'ul', but it is '" + $navUl.tagName + "'");
+            return;
         }
-    });
-};
+
+        $navUl.on('click.kui', 'li > a', function (e) {
+            var $a = $(this);
+            if ($a.data("kui-toggle") === "ajaxSubMenu")
+                return true;
+            //For bootstrap dropdown
+            if ($a.data('toggle') === 'dropdown')
+                return true;
+
+            var container = self.options.target || $a.closest('[data-kui-target]').data('kui-target');
+//            logger.debug("nav container=" + container);
+            var $tabContainer = $(container), $tabPane, tabLink = $a.attr('href');
+            if (isValidAjaxUrl(tabLink)) {
+                if ($tabContainer.length == 0) {
+                    logger.error("Cannot find tab container '" + container + "'");
+                    return false;
+                } else {
+                    $tabPane = $($a.data('kui-tab-pane'));
+                    if ($tabPane.length == 0) {
+                        $tabPane = $('<div class="tab-pane active"></div>').uniqueId().appendTo($tabContainer);
+                        $a.attr('data-kui-tab-pane', '#' + $tabPane.attr('id'));
+                    }
+                    if (!$a.data('ajax-loaded')) {
+                        $tabPane.html(showLoading("bar"));
+                        $.get(tabLink, function (jqxhr) {
+                            $tabPane.html(jqxhr);
+                        });
+                        $a.data('ajax-loaded', true);
+                    }
+                }
+            } else {
+                $tabPane = $(getUrlHash(tabLink));
+            }
+            $a.parent("li").addClass("active").siblings('.active').removeClass("active");
+            $tabPane.addClass('active').siblings('.tab-pane.active').removeClass('active');
+            var $actionTabs = $('.action-tabs', $tabPane).not('.action-tabs .action-tabs');
+            if ($actionTabs.length > 0) {
+                $actionTabs.kuiActionTabs();
+            }
+            return false;
+        });
+        $navUl.find('li.active:first a').trigger('click');
+    };
+})(jQuery);
+
+(function ($) {
+    var pluginName = 'kuiTabs',
+        defaults = {};
+
+    function KuiTabs(element, options) {
+        this.element = element;
+        this.options = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.init();
+    }
+
+    $.fn.kuiTabs = function (options) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                    new KuiTabs(this, options));
+            }
+        });
+    };
+
+    KuiTabs.prototype.init = function () {
+        var $wrapperDiv = $(this.element).addClass('tabbable-custom');
+        // Format nav list
+        var $tabNav = $wrapperDiv.children('ul');
+        if ($tabNav.length == 0) {
+            logger.error("Cannot find div.ul for element '" + $wrapperDiv.selector() + "'");
+            return;
+        }
+        $tabNav.addClass('nav nav-tabs')
+            .children('li').children('a').attr('data-toggle', 'tab').attr('data-pjax-disabled', 'disabled');
+        if ($tabNav.children('li.active').length == 0) {
+            //Default make first active
+            $tabNav.children('li:first').addClass('active');
+        }
+        // Move jUI tab pane divs to a tab-content div
+        var $tabContent = $tabNav.next('.tab-content');
+        if ($tabContent.length == 0)
+            $tabContent = $('<div class="tab-content"></div>').uniqueId()
+                .append($tabNav.siblings('div').addClass('tab-pane'))
+                .insertAfter($tabNav);
+        // Make nav supports ajax
+        $tabNav.kuiAjaxNav({target: $tabContent});
+    };
+})(jQuery);
+
+
+(function ($) {
+    // Create the defaults once
+    var portalPluginName = 'kuiPortal',
+        portalPluginDefaults = {
+        };
+    var portletPluginName = 'kuiPortlet',
+        portletPluginDefaults = {
+            containerId: null
+        };
+    var m_sContent = ".panel-body";
+    var m_sHeader = ".panel-heading";
+    var m_sFooter = ".panel-footer";
+    var DEFAULT_PORTLET_CONFIG = {
+        theme: 'default',
+        style: '',
+        minimized: false
+    };
+    var PREF_CONFIG_KEY = "portletConfig";
+    var DEFAULT_CONTAINER_CONFIG = {orders: [], portlets: {}};
+
+    // The actual plugin constructor
+    function KuiPortlet(element, options) {
+        var that = this;
+        this.element = element;
+        this.options = $.extend({}, portletPluginDefaults, options);
+        this.portletId = $(element).attr('id');
+        this.portletConfig = {};
+        this.containerId = this.options.containerId;
+        if (qadUtil.isBlank(this.portletId)) {
+            logger.error("KuiPortlet: Portlet need 'id' attribute to store configuration data");
+            return;
+        }
+        if (qadUtil.isBlank(this.containerId)) {
+            logger.error("KuiPortlet: Need specify containerId");
+            return;
+        }
+        // Load portlet preference
+        var savedConfig = loadContainerConfig(this.containerId).portlets[this.portletId];
+        $.extend(true, this.portletConfig, DEFAULT_PORTLET_CONFIG, savedConfig);
+        /**
+         * Calculate dimension of components
+         */
+        this.resize = function () {
+            var $portlet = $(element);
+            var all = $portlet.height();
+            var $header = $(m_sHeader + ':visible', $portlet);
+            var $footer = $(m_sFooter + ':visible', $portlet);
+            var $content = $(m_sContent, $portlet);
+            var hh = $header.length == 0 ? 0 : $header.outerHeight(true);
+            var fh = $footer.length == 0 ? 0 : $footer.outerHeight(true);
+            var ch = all - hh - fh;
+            var padding = $content.padding();
+            var margin = $content.margin();
+            var border = $content.border();
+            var pmb = padding.top + padding.bottom + margin.top + margin.bottom + border.top + border.bottom;
+            $content.height(ch - pmb);
+            $('.jqplot-target', $content).css("height", "100%").css("width", "100%");
+        };
+        this.saveConfig = function (key, value) {
+            if (key == "*" && value == null)
+                that.portletConfig = {};
+            else
+                that.portletConfig[key] = value;
+            var obj = {};
+            obj[that.containerId] = {portlets: {}};
+            obj[that.containerId].portlets[that.portletId] = that.portletConfig;
+            qadPref.savePreference(PREF_CONFIG_KEY, obj);
+        };
+        this.init();
+    }
+
+    var CSS_MINIMIZED_CLASS = "minimized";
+    var CSS_THEME_CLASS_PREFIX = "panel-";
+
+    /**
+     * Place initialization logic in init().
+     * You already have access to the DOM element and the options via the instance,
+     * e.g. this.element and this.options
+     */
+    KuiPortlet.prototype.init = function () {
+        var that = this;
+        var $portlet = $(that.element);
+        // Validate and generate layout component
+        var $portletContent = $(m_sContent, $portlet);
+        var $portletHeader = $(m_sHeader, $portlet).disableSelection();
+        createHeaderControls();
+        initStyles();
+        loadContent();
+        createEditBox();
+        initEventListener();
+
+        function createHeaderControls() {
+            var $headerBtnGroup = $('.btn-group.btn-group-xs', $portletHeader);
+            if ($headerBtnGroup.length == 0) {
+                $headerBtnGroup = $('<div class="btn-group btn-group-sm"></div>').appendTo($portletHeader);
+            }
+            $headerBtnGroup.hide();
+            if (!$portlet.hasClass("not-editable")) {
+                $headerBtnGroup.append('<button class="btn btn-default js-action-edit"><i class="fa fa-cog"></i></button>' +
+                    ' <button class="btn btn-default js-action-size"><i class="fa ' + (that.portletConfig.minimized ? 'fa-plus' : 'fa-minus') + '"></i></button> ');
+            }
+            $portletHeader.on({mouseenter: function () {
+                $headerBtnGroup.show();
+            }, mouseleave: function () {
+                $headerBtnGroup.hide();
+            }});
+            return $headerBtnGroup;
+        }
+
+        /**
+         * Calculate title, theme, dimension and other styles
+         */
+        function initStyles() {
+            $portlet.alterClass(CSS_THEME_CLASS_PREFIX + '*', CSS_THEME_CLASS_PREFIX + that.portletConfig.theme).attr("style", that.portletConfig.style);
+            that.resize();
+            if (that.portletConfig.minimized) {
+                $portlet.addClass(CSS_MINIMIZED_CLASS).css("height", "auto");
+            }
+        }
+
+        /**
+         * Load AJAX content if `data-kui-content-url` specified
+         */
+        function loadContent() {
+            var url = $portlet.data('kui-content-url');//||$portlet.data('url');
+            if (isValidAjaxUrl(url)) {
+                $portletContent.html(showLoading("inline"));//.load(url);
+                $.ajax(url, {global: false,
+                    success: function (xhr) {
+                        $portletContent.html(xhr);
+                    },
+                    error: function (xhr) {
+                        $portletContent.html('<div class="text-danger">' + xhr.statusText + '</div>');
+                    }});
+            }
+        }
+
+        function createEditBox() {
+            var $editBox = $('.kui-portlet-edit-box', $portletHeader);
+            $portletHeader
+                .on('click.kui', ".js-action-size", function () {
+                    var $icon = $('.fa', $(this));
+                    $icon.toggleClass("fa-minus").toggleClass("fa-plus");
+                    $portlet.toggleClass(CSS_MINIMIZED_CLASS);
+                    var isMinimized = $portlet.hasClass(CSS_MINIMIZED_CLASS);
+                    if (isMinimized) {
+                        $portlet.data("old-height", $portlet.height()).css('height', 'auto');
+                    } else {
+                        $portlet.css('height', $portlet.data('old-height'));
+                    }
+                    that.saveConfig("minimized", isMinimized);
+                })
+                .on('click.kui', ".js-action-edit", function () {
+                    $portletHeader.toggleClass("open");
+                    if ($editBox.length == 0) {
+                        var themes = ['default', 'success', 'primary', 'info', 'warning', 'danger'];
+                        var colorBtns = '';
+                        $(themes).each(function (index, value) {
+                            colorBtns += '<button class="btn btn-' + value + '" title="' + value + '" value="' + value + '">&nbsp;</button>';
+                        });
+                        var html = '<div class="form-horizontal">' +
+//                            '<div class="form-group"><label class="control-label">标题:</label><input class="form-control" value="' + portletConfig.title + '"/></div>' +
+                            '<div class="form-group"><label class="control-label">颜色:</label><div class="colors btn-group btn-group-sm">' + colorBtns + '</div></div>' +
+                            '<div class="text-right">' +
+//                            '<button class="btn btn-default btn-sm js-action-save">保存</button> ' +
+                            '<button class="btn btn-default btn-sm js-action-reset">重置</button></div>' +
+                            '</div>';
+                        $editBox = $('<div class="kui-portlet-edit-box" style="display:none;"/>')
+                            .append(html).insertAfter($portletHeader)
+                            .on('click', '.colors button', function (e) {
+                                var t = $(this).val();
+                                $portlet.alterClass(CSS_THEME_CLASS_PREFIX + '*', CSS_THEME_CLASS_PREFIX + t);
+                                that.saveConfig("theme", t);
+                                e.preventDefault();
+                            })
+                            .on('click', '.js-action-reset', function (e) {
+                                $editBox.slideUp();
+                                that.saveConfig("*", null);
+                                e.preventDefault();
+                            });
+                    }
+                    $editBox.slideToggle();
+                    return false;
+                });
+        }
+
+        function initEventListener() {
+            // Resizable
+            if (!$portlet.hasClass("not-resizable")) {
+                $portlet.resizable({
+                    stop: function (event, ui) {
+                        that.resize();
+                        that.saveConfig("style", $portlet.attr('style'));
+                    }
+                });
+            }
+            // Handle links in portlet
+            $portletContent.on('click.kui', 'a:not([data-dialog]):not([data-kui-target])', function (e) {
+                var href = this.href;
+                var $container = $(this).closest(".portlet-content");
+                if (isValidAjaxUrl(href)) {
+                    callAjax({
+                        url: href,
+                        success: function (xhr) {
+                            $container.html(xhr);
+                        }
+                    });
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        }
+    };
+
+    /**
+     * Portlet class:
+     * - not-resizable:
+     * - not-moveable:
+     * - not-editable:
+     * <div class="portlet panel not-resizable not-moveable not-editable" data-kui-content-url="/ajax/some-link-to-content">
+     *     <div class="panel-heading"><h3 class="panel-title">portlet-title</h3></div>
+     *     <div class="panel-body">static or ajax content loaded by data-kui-content-url</div>
+     * </div>
+     * @param options
+     * @returns {*}
+     */
+    $.fn.kuiPortlet = function (options) {
+        // A really lightweight plugin wrapper around the constructor, preventing against multiple instantiations
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + portletPluginName)) {
+                $.data(this, 'plugin_' + portletPluginName,
+                    new KuiPortlet(this, options));
+            }
+        });
+    };
+
+    // The actual plugin constructor
+    function KuiPortal(element, options) {
+        this.element = element;
+        this.options = $.extend({}, portalPluginDefaults, options);
+        this.init();
+    }
+
+    function loadContainerConfig(containerId) {
+        return qadPref.loadPreference(PREF_CONFIG_KEY, {})[containerId] || DEFAULT_CONTAINER_CONFIG;
+    }
+
+    function saveContainerConfig(containerId, containerPref) {
+        var obj = {};
+        obj[containerId] = containerPref;
+        qadPref.savePreference(PREF_CONFIG_KEY, obj);
+    }
+
+    /**
+     * Generate portlet widgets. It need work with bootstrap3 panel.
+     * .portlet-container: containers to hold portlets, such as columns
+     * .portlet.panel: a portlet contains header and content.
+     * .panel-heading: portlet header, default is draggable
+     * .panel-body: portlet content, support <code>data-kui-content-url</code> to auto load AJAX
+     * It persists user preference as a JSON string in <code>localStorage</code>.
+     * JSON setting
+     * ````
+     * {
+     *   containerId(string):{
+     *     "orders":[portletId(string)],
+     *     "portlets":{
+     *       portletId(string):{
+     *         "title":string,
+     *         "style":string,
+     *         "theme":string
+     *       }
+     *     }
+     *   }
+     * }
+     * ````
+     * @author Leo Liao, 2012/11/17
+     */
+    KuiPortal.prototype.init = function () {
+        var $container = $(this.element);
+        var containerId = $container.attr('id');
+        if (qadUtil.isBlank(containerId)) {
+            logger.error("KuiPortal:Need unique id to build portal");
+            return false;
+        }
+
+        // Define selectors
+        var m_sPortlet = ".panel.portlet";
+        var sortableDisabledCss = "kui-init-disable-sort";
+
+        // Load portlet preference,
+        var containerPref = loadContainerConfig(containerId);
+
+        // Sort portlets
+        sortPortlets(containerPref);
+
+        // Make element sortable
+        $container.sortable({
+            disabled: $container.hasClass(sortableDisabledCss),
+            connectWith: $container, revert: 100, delay: 100, opacity: 0.8,
+            cancel: ".panel-body,.kui-portlet-edit-box,.not-moveable",
+            start: function (event, ui) {
+                $container.addClass("kui-portal-in-sort");
+            },
+            stop: function (event, ui) {
+                $container.removeClass("kui-portal-in-sort");
+                $container.each(function (index, item) {
+                    containerPref.orders = $(item).sortable('toArray');
+                });
+                saveContainerConfig(containerId, containerPref);
+            }
+        });
+
+        // Customize each portlet
+        $(m_sPortlet + ":visible", $container).kuiPortlet({containerId: containerId});
+
+        /**
+         * Sort portlets in container
+         */
+        function sortPortlets() {
+            var portletIds = containerPref.orders || [];
+            //For compatibility with old String data format
+            if (typeof portletIds == "string") {
+                portletIds = portletIds.split(",");
+            }
+            $.each(portletIds, function (index, item) {
+                if (qadUtil.isNotBlank(item)) {
+                    $container.append($('#' + item));
+                }
+            });
+        }
+    };
+
+
+    $.fn.kuiPortal = function (options) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + portalPluginName)) {
+                $.data(this, 'plugin_' + portalPluginName,
+                    new KuiPortal(this, options));
+            }
+        });
+    }
+})(jQuery);
+
+(function ($) {
+    var pluginName = 'kuiSidebar',
+        defaults = {
+            useMmenu: true
+        };
+
+    $.fn.kuiSidebar = function (options) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName,
+                    new KuiSidebar(this, options));
+            }
+        });
+    };
+
+    // The actual plugin constructor
+    function KuiSidebar(element, options) {
+        this.element = element;
+        this.options = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this.init();
+    }
+
+    KuiSidebar.prototype.init = function () {
+        var $this = $(this.element);
+        if (this.options.useMmenu) {
+            buildMmenuSidebar($this)
+        } else {
+            buildHomeMadeSidebar($this);
+        }
+        function buildMmenuSidebar($sidebar) {
+            var $body = $('body');
+            $sidebar.mmenu({slidingSubmenus: false})
+                .on("closed.mm", function () {
+                    $body.addClass("kui-sidebar-closed");
+                })
+                .on("opened.mm", function () {
+                    $body.removeClass("kui-sidebar-closed");
+                });
+            var toggleSidebar = function (e) {
+                if ($sidebar.hasClass('mm-opened')) {
+                    $sidebar.trigger('close.mm');
+                } else {
+                    $sidebar.trigger('open.mm');
+                }
+            };
+            $('.sidebar-toggler').on('click', toggleSidebar);
+            toggleSidebar();
+            console.debug("mmenu initialized");
+        }
+
+        function buildHomeMadeSidebar(selector) {
+            console.debug("buildHomeMadeSidebar");
+//            $('.nav-list-tree', $sidebar).kuiListTree();
+            var $navTree = $(selector);
+            var $body = $("body");
+            var SIDEBAR_CLOSED_CLASS = "kui-sidebar-closed";
+            var SIDEBAR_OPEN_CLASS = "kui-sidebar-opened";
+            if ($navTree.not('ul')) {
+                $navTree = $('ul', selector).first();
+                if ($navTree.length == 0) {
+                    alert("buildHomeMadeSidebar: Need list 'ul' element to build sidebar menu");
+                    return;
+                }
+                $navTree.addClass('nav nav-list-tree dark');
+            }
+            $navTree.kuiListTree();
+
+            sbHighlightMatch();
+            sbRegisterEvents();
+            sbToggleSidebar(qadPref.loadPreference("sidebarOpen", true));
+
+            function sbToggleSidebar(toOpen) {
+                $(".sidebar-search").toggleClass("open", toOpen);
+                $body.toggleClass(SIDEBAR_CLOSED_CLASS, !toOpen).toggleClass(SIDEBAR_OPEN_CLASS, toOpen);
+            }
+
+            function sbRegisterEvents() {
+                // handle sidebar show/hide
+                $('.sidebar-toggler').on('click.kui', function (e) {
+                    var toOpen = $body.hasClass(SIDEBAR_CLOSED_CLASS);
+                    qadPref.savePreference("sidebarOpen", toOpen);
+                    sbToggleSidebar(toOpen);
+                    e.preventDefault();
+                });
+            }
+
+            function sbHighlightMatch() {
+                var matched = null;
+                $('li a', $navTree).each(function (index) {
+                    var key = $(this).data("kui-menu-key");
+                    if (qadUtil.isBlank(key))
+                        key = $(this).attr("href");
+                    var loc = decodeURIComponent(document.location.href);
+                    if (loc.indexOf(key) > 0) {
+                        if (matched == null) {
+                            matched = $(this);
+                        } else if (key.length > matched.attr("href").length) {
+                            matched = $(this); // Longest match
+                        }
+                    }
+                });
+                if (matched != null) {
+                    $navTree.kuiListTree("activateItem", matched.closest("li"));
+                }
+            }
+        }
+    };
+})(jQuery);
+
+$(function () {
+    uiKit.uiBuildSidebar('#page-sidebar-left');
+});

@@ -413,7 +413,7 @@ function showProgressbar(v) {
 // Functions: List
 //==============================================================================
 /**
- * @deprecated user qadUtil
+ * @deprecated use qadUtil
  */
 function sortBy(field, reverse, primer) {
     var key = function (x) {

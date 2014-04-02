@@ -10,7 +10,7 @@
 @list_item_height: 32px;
 
 @closed_main_item_width: @kui-sidebar-width + 30;
-@closed_sub_item_width: @closed_main_item_width - @page-sidebar-closed-width - 1;
+@closed_sub_item_width: @closed_main_item_width - @page-kui-sidebar-closed-width - 1;
 
 //------------------------------------------------
 // Menu Tree Levels
@@ -28,15 +28,6 @@
   font-weight: bold;
 }
 
-// Only for page-sidebar, other nav-list-tree's padding are specified by underlying ul.nav-tabs or ul.nav-pills
-.page-sidebar .nav-list-tree > li > a {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.page-sidebar.navbar-collapse {
-  padding: 0;
-}
 
 //------------------------------------------------
 // Menu Item

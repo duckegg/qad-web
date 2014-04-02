@@ -17,7 +17,7 @@
     </script>
 ${head}
 </head>
-<body data-pjax>
+<body data-pjax class="page-fixed-header">
 <div class="page-wrapper">
     <div class="page-header navbar navbar-inverse navbar-fixed-top">
     <#include "navbar-qadweb.ftl"/>

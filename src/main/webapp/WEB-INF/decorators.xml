@@ -20,7 +20,7 @@
     <decorator name="mobile" page="layout-mobile.ftl">
         <!--<pattern>/m/*</pattern>-->
     </decorator>
-    <decorator name="main" page="layout-main.ftl">
+    <decorator name="main" page="layout-bs3.ftl">
         <!--<pattern>/*</pattern>-->
     </decorator>
     <decorator name="qadweb" page="layout-qadweb.ftl">

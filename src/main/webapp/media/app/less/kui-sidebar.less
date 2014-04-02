@@ -1,0 +1,120 @@
+// Sidebar hide
+.kui-sidebar-closed {
+  .page-sidebar {
+    display: none;
+  }
+  .page-content {
+    margin-left: 0 !important;
+  }
+}
+
+// Only for page-sidebar, other nav-list-tree's padding are specified by underlying ul.nav-tabs or ul.nav-pills
+.page-sidebar .nav-list-tree > li > a {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+// In sm and xs screen, we use sliding drawer sidebar.
+// In this case, the sidebar is closed by default and the content is 100% wide.
+@media (max-width: @screen-sm-max) {
+  .kui-sidebar-opened .page-container {
+    overflow-x: hidden;
+  }
+
+  .page-content, #body-content {
+    width: 100%;
+  }
+}
+
+@kui-sidebar-width-in-percent: 80%;
+.page-sidebar.mm-menu {
+  width: @kui-sidebar-width-in-percent;
+}
+
+//Sidebar for jQuery.mmenu widescreen extension CSS
+@media (min-width: @screen-md-min) {
+  #mm-blocker {
+    display: none !important;
+  }
+
+  .mm-page {
+    //    box-shadow: none;// !important;
+    background: inherit;
+    min-height: 100%; // !important;
+    height: auto; // !important;
+    margin: 0; // !important;
+    top: 0; // !important;
+    position: relative; // !important;
+    z-index: 1;
+  }
+
+  html.mm-opened, html.mm-opening {
+    .mm-page {
+      left: 20%; // !important;
+      width: 80%; // !important;
+      //      left: @kui-sidebar-width !important;
+    }
+    .mm-menu {
+      width: 20%; // !important;
+      //      width: @kui-sidebar-width !important;
+    }
+  }
+
+  .kui-sidebar-closed {
+    .mm-page {
+      width: 100%;
+      left: 0;
+    }
+    .mm-menu {
+      display: none;
+    }
+  }
+
+  .mm-menu {
+    position: fixed;
+    z-index: 0;
+    padding: 0;
+  }
+
+  .mm-menu.mm-top, .mm-menu.mm-right, .mm-menu.mm-bottom {
+    top: 0; // !important;
+    right: auto; // !important;
+    bottom: auto; // !important;
+    left: 0; // !important;
+  }
+
+  .mm-menu:first-child, .mm-menu.mm-current {
+    display: block;
+  }
+}
+
+.mm-menu .mm-list > li.mm-selected {
+  > a:not(.mm-subopen), > span {
+    border-right: 4px solid @primary_back_color_highlight;
+  }
+}
+
+@kui-sidebar-item-height: 42px;
+.mm-menu.mm-vertical .mm-list {
+  .mm-panel {
+    padding: 0 0 0 10px;
+  }
+  > li.mm-opened > a.mm-subopen {
+    height: @kui-sidebar-item-height;
+    &:after {
+      top: 20px;
+    }
+  }
+}
+
+// Dividend line between menu items
+.mm-list > li:not(.mm-subtitle):not(.mm-label):not(.mm-noresults):after {
+  margin-left: 0;
+}
+
+.mm-list > li {
+  > a, > span {
+    line-height: @kui-sidebar-item-height;
+    padding: 0 16px;
+  }
+}

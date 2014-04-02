@@ -75,41 +75,40 @@
             </div>
         </#if>
         <p>${cleanHtml(jpost.content!"")}</p>
-
-        <div class="js-tag-and-action row">
-            <div class="<#if type!="summary">col-md-6<#else>col-md-12</#if>">
-                <#if (jpost.tagLabels?size > 0)>
-                    <ul class="list-unstyled list-inline kui-tag-list">
-                        <li>
-                            <#list jpost.tagLabels as tagLabel>
-                                <span>${tagLabel}</span>
-                            </#list>
-                        </li>
-                    </ul>
-                </#if>
-            </div>
-            <#if type!="summary">
-                <div class="col-md-6 text-right">
-                    <div class="btn-group btn-group-xs">
-                        <a href="${base}/jpost/${postType}/update?id=${jpost.id}"
-                           class="btn btn-default"
-                           <#if !_canUpdate>disabled="disabled" title="没有编辑权限"</#if>
-                           data-ajax-link data-kui-target="#${pageId}">
-                            <i class="fa fa-edit"></i> 编辑</a>
-                        <#if jpost.isThread()>
-                            <a onclick="$('.js-jpost-reply','#${pageId}').toggle()"
-                               class="btn btn-default"
-                                <#if !jpost.isReplyEnabled()>
-                               title="作者关闭了回复功能"
-                                <#else>
-                               <@shiro.guest>title="登录后才可以回复"</@shiro.guest>
-                                </#if>><i
-                                    class="fa fa-share"></i> 回复</a>
-                        </#if>
-                    </div>
-                </div>
+    </div>
+    <div class="row js-media-tag-and-action">
+        <div class="<#if type!="summary">col-md-6<#else>col-md-12</#if>">
+            <#if (jpost.tagLabels?size > 0)>
+                <ul class="list-unstyled list-inline kui-tag-list">
+                    <li>
+                        <#list jpost.tagLabels as tagLabel>
+                            <span>${tagLabel}</span>
+                        </#list>
+                    </li>
+                </ul>
             </#if>
         </div>
+        <#if type!="summary">
+            <div class="col-md-6 text-right">
+                <div class="btn-group btn-group-xs">
+                    <a href="${base}/jpost/${postType}/update?id=${jpost.id}"
+                       class="btn btn-default"
+                       <#if !_canUpdate>disabled="disabled" title="没有编辑权限"</#if>
+                       data-ajax-link data-kui-target="#${pageId}">
+                        <i class="fa fa-edit"></i> 编辑</a>
+                    <#if jpost.isThread()>
+                        <a onclick="$('.js-jpost-reply','#${pageId}').toggle()"
+                           class="btn btn-default"
+                            <#if !jpost.isReplyEnabled()>
+                           title="作者关闭了回复功能"
+                            <#else>
+                           <@shiro.guest>title="登录后才可以回复"</@shiro.guest>
+                            </#if>><i
+                                class="fa fa-share"></i> 回复</a>
+                    </#if>
+                </div>
+            </div>
+        </#if>
     </div>
 </div>
 </#macro>
