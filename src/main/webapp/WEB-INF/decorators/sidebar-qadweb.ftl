@@ -19,7 +19,7 @@
     <li><a href="${base}/my">My Dashboard</a>
     </li>
     <li>
-        <a href="#"><i class="imgicon-rs6000"></i> <span class="title">Sample</span></a>
+        <a href="javascript:;"><i class="imgicon-rs6000"></i> <span class="title">Sample</span></a>
         <ul>
             <li><a href="${base}/sample/stock/list"><i class="fa fa-cash"></i>
                 Stock</a>

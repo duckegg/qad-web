@@ -20,7 +20,7 @@ function UiKit() {
      * @param pageSelector jquery page selector
      */
     this.initPage = function (pageSelector) {
-        if (qadUtil.isBlank(pageSelector)) {
+        if (k$.isBlank(pageSelector)) {
             logger.error("Argument 'pageSelector' cannot be empty for function initPage()");
             return;
         }
@@ -31,9 +31,18 @@ function UiKit() {
         }
 //        this.uiBuildCollapsibleForm($page);
         this.uiBuildCollapsible($page);
-        this.uiBuildPortlet($page);
+//        this.uiBuildPortlet($page);
         this.uiLoadPanelContent($page);
         this.uiBuildDateTimeRange($page);
+        function initHoverToolbar($page) {
+            $('.kui-toolbar-container', $page).on({mouseenter: function () {
+                $(this).find('.kui-hover-toolbar').show();
+            }, mouseleave: function () {
+                $(this).find('.kui-hover-toolbar').hide();
+            }});
+        }
+
+        initHoverToolbar($page);
         $('select.select2', $page).select2();
         $('.action-tabs:visible', $page).kuiActionTabs();
         $('.nav[data-ajax],.nav[data-ajax-nav]', $page).kuiAjaxNav();
@@ -44,7 +53,7 @@ function UiKit() {
         $('.panel[data-kui-content-url]:not(.portlet)', selector).each(function () {
             var $this = $(this);
             var url = $this.data('kui-content-url');
-            if (qadUtil.isNotBlank(url) && isValidAjaxUrl(url)) {
+            if (k$.isNotBlank(url) && isValidAjaxUrl(url)) {
                 $('.panel-body', $this).load(url);
             }
         });
@@ -112,8 +121,8 @@ function UiKit() {
             }
         });
     };
-    this.uiBuildPortlet = function (key) {
-        $('.portlet-container').addClass("clearfix").kuiPortal();
+    this.uiBuildPortlet = function (page) {
+        $('.portlet-container:visible', page).addClass("clearfix").kuiPortal();
     };
     /**
      * Close a jQuery UI dialog where the element resides
@@ -139,7 +148,7 @@ function UiKit() {
     this.replotChart = function (chartId) {
         var plot = _getPlot(chartId);
         //TODO: quick and dirt to replot
-        plotChart(chartId, plot._chartOptions, plot._chartType);
+        uiKit.plotChart(chartId, plot._chartOptions, plot._chartType);
     };
     this.refreshDataTable = function (tableId) {
         try {
@@ -295,9 +304,9 @@ function UiKit() {
 
 
         // Save original dimensions
-        if (qadUtil.isBlank($targetDiv.data("old-height")))
+        if (k$.isBlank($targetDiv.data("old-height")))
             $targetDiv.data("old-height", $targetDiv.height());
-        if (qadUtil.isBlank($targetDiv.data("old-width")))
+        if (k$.isBlank($targetDiv.data("old-width")))
             $targetDiv.data("old-width", $targetDiv.width());
 
         //------------------------------------------
@@ -507,26 +516,26 @@ function UiKit() {
                     },
                     resizeStop: function (event, ui) {
                         resizeChart(chartId);
-                        replotChart(chartId);
+                        uiKit.replotChart(chartId);
                     },
                     afterMaximize: function (event, ui) {
                         resizeChart(chartId);
-                        replotChart(chartId);
+                        uiKit.replotChart(chartId);
                     },
                     afterUnmaximize: function (event, ui) {
                         resizeChart(chartId);
-                        replotChart(chartId);
+                        uiKit.replotChart(chartId);
                     },
                     beforeClose: function (event, ui) {
                         // Put chart back
                         $chartDiv.detach().prependTo($('#' + wrapperId));
                         $targetDiv.height($targetDiv.data('old-height')).width($targetDiv.data('old-width'));
-                        replotChart(chartId);
+                        uiKit.replotChart(chartId);
                         $chartDialog.removeClass("resizable-container");
                     }
                 });
                 resizeChart(chartId);
-                replotChart(chartId);
+                uiKit.replotChart(chartId);
                 //LEO@2012/11/14: do not return false, otherwise the dropdown menu will not close after clicking
                 e.preventDefault();
             });
@@ -535,7 +544,7 @@ function UiKit() {
             // Event: refresh
             //------------------------------------------
             $chartDiv.off('click.kui', '.js-chart-refresh').on('click.kui', '.js-chart-refresh', function (e) {
-                replotChart(chartId);
+                uiKit.replotChart(chartId);
                 e.preventDefault();
             });
 
@@ -555,11 +564,11 @@ function UiKit() {
             var ajaxParam = kuiOptions.chartAjaxParam;
             var ajaxForm = kuiOptions.chartAjaxForm;
 
-            if (qadUtil.isBlank(ajaxUrl) && qadUtil.isBlank(ajaxForm)) {
+            if (k$.isBlank(ajaxUrl) && k$.isBlank(ajaxForm)) {
                 alert("Program Error. Parameter 'ajaxUrl' or 'ajaxForm' must be specified");
                 return null;
             }
-            if (!qadUtil.isBlank(ajaxForm)) {
+            if (!k$.isBlank(ajaxForm)) {
                 if ($(ajaxForm).length == 0) {
                     alert("Program Error: Cannot find form element '" + ajaxForm + "'");
                     return null;
@@ -593,7 +602,7 @@ function UiKit() {
             function processJson(jsonData) {
                 var plotData = {series: [], data: [], error: ""};
 
-                if (qadUtil.isBlank(jsonData) || qadUtil.isBlank(jsonData['plotData']) || jsonData['plotData'].length == 0) {
+                if (k$.isBlank(jsonData) || k$.isBlank(jsonData['plotData']) || jsonData['plotData'].length == 0) {
                     plotData.error = "没有数据";
                     return plotData;
                 }
@@ -611,7 +620,7 @@ function UiKit() {
                     // For on series (legend + data)
                     chartData[i] = item['dataPoints'];
                     var color = null;
-                    if (!qadUtil.isBlank(seriesColors)) {
+                    if (!k$.isBlank(seriesColors)) {
                         color = seriesColors[i % (seriesColors.length)];
                     }
                     if (isNotBlank(color)) {
@@ -655,7 +664,6 @@ function UiKit() {
          * @private
          */
         function jqplotTooltip(str, seriesIndex, pointIndex, plot) {
-//        console.debug('chartOptions.kuiShowSeriesInTooltip',chartOptions.kuiShowSeriesInTooltip);
             if (kuiOptions.showSeriesInTooltip)
                 return "<strong>" + plot.series[seriesIndex]["label"] + "</strong> " + str;//plot.data[seriesIndex][pointIndex];
             return str;
@@ -778,7 +786,7 @@ function dtUpdateCell(tableId, cellSelector, dataField, newValue) {
         $dialog.dialog(this.options);
         $dialog.closest('.ui-dialog-content');
         // Custom style options
-        if (!qadUtil.isBlank(this.options.style)) {
+        if (!k$.isBlank(this.options.style)) {
             var $obj = $(this).closest('.ui-dialog');
             $obj.attr('style', $obj.attr('style') + ";" + this.options.style);
         }
@@ -796,7 +804,6 @@ function dtUpdateCell(tableId, cellSelector, dataField, newValue) {
         defaults = {};
 
     $.fn.kuiListTree = function (options, args) {
-//        console.debug("kuiListTree", "constructor called");
         return this.each(function () {
             var data = $.data(this, 'plugin_' + pluginName);
             if (!data)
@@ -831,7 +838,6 @@ function dtUpdateCell(tableId, cellSelector, dataField, newValue) {
         regEvents(selector);
 
         function initData(ul) {
-//            console.debug("kuiListTree", "initData");
             var arrow = '<span class="arrow"></span>';
             $('li', ul).each(function (index, obj) {
                 var $li = $(this);
@@ -845,7 +851,6 @@ function dtUpdateCell(tableId, cellSelector, dataField, newValue) {
 
         function regEvents(ul) {
             ul.on('click.kui', 'li > a', function (e) {
-//                logger.debug("kuiListTree.onClick: begin");
                 var $a = $(this);
                 var $li = $a.parent();
                 var $ulSub = $a.next();
@@ -903,7 +908,6 @@ $.fn.kuiAjaxForm = function (settings) {
     $form.validate({ignore: ""}); // Default ignore :hidden, but we need validate hidden fields in inactive tabs
     var ajaxFormOpts = {
         beforeSubmit: function (event, ui) {
-//            logger.debug("kuiAjaxForm:beforeSubmit");
             return  $(ui).valid(); //jquery validate plugin
         },
         success: function (xhr) {
@@ -928,13 +932,10 @@ $.fn.kuiAjaxForm = function (settings) {
  * @author Leo
  */
 $.fn.kuiActionTabs = function (option) {
-//    logger.debug('kuiActionTabs:begin');
     return this.each(function (idx, el) {
         var $this = $(this);
         var $ul = $this.is('ul') ? $this : $this.children('ul');
         var $div = $ul.parent();
-//        logger.debug($div);
-//        $ul.addClass('nav nav-pills').kuiAjaxNav({target: $div.siblings('.tab-content')});
         if ($ul.hasClass('listing-scrollable')) {
             $ul.carouFredSel({
                 circular: false,
@@ -1274,7 +1275,6 @@ $.widget("ui.dialog", $.ui.dialog, {
     };
 
     KuiAjaxNav.prototype.init = function () {
-//        logger.debug("kuiAjaxNav:begin");
         var self = this;
         var $navUl = $(this.element);
         if (!$navUl.is('ul')) {
@@ -1291,7 +1291,6 @@ $.widget("ui.dialog", $.ui.dialog, {
                 return true;
 
             var container = self.options.target || $a.closest('[data-kui-target]').data('kui-target');
-//            logger.debug("nav container=" + container);
             var $tabContainer = $(container), $tabPane, tabLink = $a.attr('href');
             if (isValidAjaxUrl(tabLink)) {
                 if ($tabContainer.length == 0) {
@@ -1400,15 +1399,20 @@ $.widget("ui.dialog", $.ui.dialog, {
         this.options = $.extend({}, portletPluginDefaults, options);
         this.portletId = $(element).attr('id');
         this.portletConfig = {};
-        this.containerId = this.options.containerId;
-        if (qadUtil.isBlank(this.portletId)) {
+        var containerId = this.options.containerId;
+        if (k$.isBlank(this.portletId)) {
             logger.error("KuiPortlet: Portlet need 'id' attribute to store configuration data");
             return;
         }
-        if (qadUtil.isBlank(this.containerId)) {
-            logger.error("KuiPortlet: Need specify containerId");
-            return;
+        if (k$.isBlank(containerId)) {
+            containerId = $(element).closest('.portlet-container').attr('id');
+            if ($(containerId).length == 0) {
+                logger.error('KuiPortlet: Cannot find portlet container "#' + containerId +
+                    '". You need provide "containerId" or enclose portlets within ".portlet-container" element');
+                return;
+            }
         }
+        this.containerId = containerId;
         // Load portlet preference
         var savedConfig = loadContainerConfig(this.containerId).portlets[this.portletId];
         $.extend(true, this.portletConfig, DEFAULT_PORTLET_CONFIG, savedConfig);
@@ -1457,12 +1461,14 @@ $.widget("ui.dialog", $.ui.dialog, {
         var $portlet = $(that.element);
         // Validate and generate layout component
         var $portletContent = $(m_sContent, $portlet);
-        var $portletHeader = $(m_sHeader, $portlet).disableSelection();
+        var $portletHeader = $(m_sHeader, $portlet);
+        $portletHeader.disableSelection();
         createHeaderControls();
         initStyles();
         loadContent();
         createEditBox();
         initEventListener();
+        that.loadContent = loadContent;
 
         function createHeaderControls() {
             var $headerBtnGroup = $('.btn-group.btn-group-xs', $portletHeader);
@@ -1474,7 +1480,9 @@ $.widget("ui.dialog", $.ui.dialog, {
                 $headerBtnGroup.append('<button class="btn btn-default js-action-edit"><i class="fa fa-cog"></i></button>' +
                     ' <button class="btn btn-default js-action-size"><i class="fa ' + (that.portletConfig.minimized ? 'fa-plus' : 'fa-minus') + '"></i></button> ');
             }
+            console.debug("createHeaderControls");
             $portletHeader.on({mouseenter: function () {
+                console.debug("mouseenter");
                 $headerBtnGroup.show();
             }, mouseleave: function () {
                 $headerBtnGroup.hide();
@@ -1497,7 +1505,10 @@ $.widget("ui.dialog", $.ui.dialog, {
          * Load AJAX content if `data-kui-content-url` specified
          */
         function loadContent() {
-            var url = $portlet.data('kui-content-url');//||$portlet.data('url');
+            // LEO@20140403: Do not use data('kui-content-url') since jquery data() is cached
+            // It will not reflect dynamically changed attribute 'data-kui-content-url'
+            // http://stackoverflow.com/questions/8414343/jquery-data-and-dynamically-changing-html5-custom-attributes
+            var url = $portlet.attr('data-kui-content-url');
             if (isValidAjaxUrl(url)) {
                 $portletContent.html(showLoading("inline"));//.load(url);
                 $.ajax(url, {global: false,
@@ -1513,6 +1524,7 @@ $.widget("ui.dialog", $.ui.dialog, {
         function createEditBox() {
             var $editBox = $('.kui-portlet-edit-box', $portletHeader);
             $portletHeader
+                .off('click.kui', '*')
                 .on('click.kui', ".js-action-size", function () {
                     var $icon = $('.fa', $(this));
                     $icon.toggleClass("fa-minus").toggleClass("fa-plus");
@@ -1562,6 +1574,7 @@ $.widget("ui.dialog", $.ui.dialog, {
         function initEventListener() {
             // Resizable
             if (!$portlet.hasClass("not-resizable")) {
+                logger.debug("init resizable");
                 $portlet.resizable({
                     stop: function (event, ui) {
                         that.resize();
@@ -1570,7 +1583,7 @@ $.widget("ui.dialog", $.ui.dialog, {
                 });
             }
             // Handle links in portlet
-            $portletContent.on('click.kui', 'a:not([data-dialog]):not([data-kui-target])', function (e) {
+            $portletContent.on('click.kui', 'a:not([data-dialog]):not([data-kui-dialog]):not([data-kui-target])', function (e) {
                 var href = this.href;
                 var $container = $(this).closest(".portlet-content");
                 if (isValidAjaxUrl(href)) {
@@ -1596,15 +1609,21 @@ $.widget("ui.dialog", $.ui.dialog, {
      *     <div class="panel-heading"><h3 class="panel-title">portlet-title</h3></div>
      *     <div class="panel-body">static or ajax content loaded by data-kui-content-url</div>
      * </div>
-     * @param options
+     * @param options {"containerId":string} default use closest `.portlet-container`
      * @returns {*}
      */
     $.fn.kuiPortlet = function (options) {
         // A really lightweight plugin wrapper around the constructor, preventing against multiple instantiations
         return this.each(function () {
-            if (!$.data(this, 'plugin_' + portletPluginName)) {
-                $.data(this, 'plugin_' + portletPluginName,
-                    new KuiPortlet(this, options));
+            var dataKey = 'plugin_' + portletPluginName;
+            if (!$.data(this, dataKey)) {
+                logger.debug("call $.fn.kuiPortlet");
+                $.data(this, dataKey,
+                    new KuiPortlet(this, options)
+                );
+            }
+            if (typeof options == "string") {
+                $.data(this, dataKey)[options]();
             }
         });
     };
@@ -1617,7 +1636,8 @@ $.widget("ui.dialog", $.ui.dialog, {
     }
 
     function loadContainerConfig(containerId) {
-        return qadPref.loadPreference(PREF_CONFIG_KEY, {})[containerId] || DEFAULT_CONTAINER_CONFIG;
+        var pref = qadPref.loadPreference(PREF_CONFIG_KEY, {});
+        return pref[containerId] || DEFAULT_CONTAINER_CONFIG;
     }
 
     function saveContainerConfig(containerId, containerPref) {
@@ -1653,7 +1673,7 @@ $.widget("ui.dialog", $.ui.dialog, {
     KuiPortal.prototype.init = function () {
         var $container = $(this.element);
         var containerId = $container.attr('id');
-        if (qadUtil.isBlank(containerId)) {
+        if (k$.isBlank(containerId)) {
             logger.error("KuiPortal:Need unique id to build portal");
             return false;
         }
@@ -1698,7 +1718,7 @@ $.widget("ui.dialog", $.ui.dialog, {
                 portletIds = portletIds.split(",");
             }
             $.each(portletIds, function (index, item) {
-                if (qadUtil.isNotBlank(item)) {
+                if (k$.isNotBlank(item)) {
                     $container.append($('#' + item));
                 }
             });
@@ -1764,12 +1784,9 @@ $.widget("ui.dialog", $.ui.dialog, {
             };
             $('.sidebar-toggler').on('click', toggleSidebar);
             toggleSidebar();
-            console.debug("mmenu initialized");
         }
 
         function buildHomeMadeSidebar(selector) {
-            console.debug("buildHomeMadeSidebar");
-//            $('.nav-list-tree', $sidebar).kuiListTree();
             var $navTree = $(selector);
             var $body = $("body");
             var SIDEBAR_CLOSED_CLASS = "kui-sidebar-closed";
@@ -1807,7 +1824,7 @@ $.widget("ui.dialog", $.ui.dialog, {
                 var matched = null;
                 $('li a', $navTree).each(function (index) {
                     var key = $(this).data("kui-menu-key");
-                    if (qadUtil.isBlank(key))
+                    if (k$.isBlank(key))
                         key = $(this).attr("href");
                     var loc = decodeURIComponent(document.location.href);
                     if (loc.indexOf(key) > 0) {

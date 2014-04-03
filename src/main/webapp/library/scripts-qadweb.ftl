@@ -12,6 +12,7 @@
 <script type="text/javascript" src="${base}/media/jquery/jquery.cookie.js"></script>
 <script type="text/javascript" src="${base}/media/jquery/jquery.ba-bbq.js"></script>
 <script type="text/javascript" src="${base}/media/jquery/jquery.pjax.js"></script>
+<script type="text/javascript" src="${base}/media/angularjs/angular.min.js"></script>
 <#-- Make IE8 support CSS media query -->
 <!--[if lt IE 9]>
 <script type="text/javascript" src="${base}/media/ie/css3-mediaqueries.js"></script>
@@ -119,7 +120,7 @@
 <link rel='stylesheet' type='text/css' href='${base}/media/app/lib/kui.css'/>
 <link rel='stylesheet' type='text/css' href='${base}/media/app/css/app.css'/>
 <script type="text/javascript">
-    window.qadContextPath="${base}";
+    window.qadServerContextPath="${base}";
 </script>
 <script type="text/javascript" src="${base}/media/app/js/qad-util.js"></script>
 <script type="text/javascript" src="${base}/media/app/js/app-global.js"></script>

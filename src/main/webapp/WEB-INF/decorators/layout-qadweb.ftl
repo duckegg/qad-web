@@ -18,7 +18,7 @@
 ${head}
 </head>
 <body data-pjax class="page-fixed-header">
-<div class="page-wrapper">
+<#--<div class="page-wrapper">-->
     <div class="page-header navbar navbar-inverse navbar-fixed-top">
     <#include "navbar-qadweb.ftl"/>
     </div>
@@ -32,6 +32,6 @@ ${head}
         </div>
     </div>
     <div class="page-footer"><#include "footer-qadweb.ftl"/></div>
-</div>
+<#--</div>-->
 </body>
 </html>

@@ -426,11 +426,11 @@ $(function () {
 
             // Determine if auto create dialog div
             var selector = $linker.data("kui-dialog");
-            if (qadUtil.isBlank(selector))
+            if (k$.isBlank(selector))
                 selector = $linker.data("dialog");
-            var isInline = !!(qadUtil.isNotBlank($linker.data("dialog-inline")) || qadUtil.isNotBlank($linker.data("kui-dialog-inline")));
+            var isInline = !!(k$.isNotBlank($linker.data("dialog-inline")) || k$.isNotBlank($linker.data("kui-dialog-inline")));
             var contentType = $linker.data("kui-dialog-content-type");
-            if (qadUtil.isBlank(contentType))
+            if (k$.isBlank(contentType))
                 contentType = $linker.data("dialog-content-type");
             var isIframe = contentType == "iframe";
             var $content = $(selector);
@@ -452,7 +452,7 @@ $(function () {
 
             // Dialog option: buttons
             var buttons = $linker.data("kui-dialog-buttons") || $linker.data("dialog-buttons");
-            if (qadUtil.isNotBlank(buttons)) {
+            if (k$.isNotBlank(buttons)) {
                 options.buttons = [
                     { "text": "关闭", "class": "btn",
                         "click": function () {
@@ -462,17 +462,17 @@ $(function () {
                 ];
             }
             var optModal = $linker.data("kui-dialog-modal") || $linker.data("dialog-modal");
-            if (qadUtil.isNotBlank(optModal))
+            if (k$.isNotBlank(optModal))
                 options.modal = optModal;
             var optResizable = $linker.data("kui-dialog-resizable") || $linker.data("dialog-resizable");
-            if (qadUtil.isNotBlank(optResizable))
+            if (k$.isNotBlank(optResizable))
                 options.resizable = optResizable;
 
             // Dialog option: title
             var title = $linker.data("kui-dialog-title") || $linker.data("dialog-title");
-            if (qadUtil.isBlank(title)) {
+            if (k$.isBlank(title)) {
                 title = $linker.attr("title");
-                if (qadUtil.isBlank(title) && $linker.is("a")) // Only work for link
+                if (k$.isBlank(title) && $linker.is("a")) // Only work for link
                     title = $linker.html();
             }
             options.title = title;

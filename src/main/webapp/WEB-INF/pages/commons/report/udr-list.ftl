@@ -13,7 +13,7 @@
 </div>
 <div class="list-group">
     <#list reportList as report>
-        <div class="list-group-item">
+        <div class="list-group-item kui-toolbar-container">
             <h3 class="list-group-item-heading">${report.title}</h3>
             <#if report.createdUser??>
                 <ul class="list-unstyled list-inline">
@@ -40,6 +40,8 @@
                         </#if>
                     </#list>
                 </div>
+                </div>
+            <div class="btn-toolbar kui-hover-toolbar">
                 <div class="btn-group btn-group-sm">
                     <a href="${base}/udr/update?id=${report.id}"
                        class="btn btn-default">编辑</a>

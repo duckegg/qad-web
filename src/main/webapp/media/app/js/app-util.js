@@ -29,31 +29,31 @@ function isFormSubmitted() {
 //==============================================================================
 
 /**
- * @deprecated use qadUtil
+ * @deprecated use k$
  */
 function stripHtmlTags(input, allowed) {
-    return qadUtil.stripHtmlTags(input,allowed);
+    return k$.stripHtmlTags(input,allowed);
 }
 
 /**
- * @deprecated use qadUtil
+ * @deprecated use k$
  */
 function escapeHTML(source) {
-    return qadUtil.escapeHtml(source);
+    return k$.escapeHtml(source);
 }
 
 /**
- * @deprecated use qadUtil
+ * @deprecated use k$
  */
 function unescapeHTML(source) {
-    return qadUtil.unescapeHtml(source);
+    return k$.unescapeHtml(source);
 }
 
 /**
- * @deprecated use qadUtil
+ * @deprecated use k$
  */
 function shortenText(text, length, escapeHtml) {
-    return qadUtil.shortenText(text,length,escapeHtml);
+    return k$.shortenText(text,length,escapeHtml);
 }
 ///**
 // * Replace string. It handles null or undefined string.
@@ -86,22 +86,22 @@ function toSparamsJsonString(object, properties) {
 }
 
 /**
- * @deprecated use qadUtil
+ * @deprecated use k$
  */
 function isBlank(obj) {
-    return qadUtil.isBlank(obj);
+    return k$.isBlank(obj);
 }
 /**
- * @deprecated use qadUtil
+ * @deprecated use k$
  */
 function isNotBlank(obj) {
-    return !qadUtil.isBlank(obj);
+    return !k$.isBlank(obj);
 }
 /**
- * @deprecated use qadUtil
+ * @deprecated use k$
  */
 function formatDateTime(date, pattern) {
-    return qadUtil.formatDateTime(date,pattern);
+    return k$.formatDateTime(date,pattern);
 }
 
 
@@ -413,7 +413,7 @@ function showProgressbar(v) {
 // Functions: List
 //==============================================================================
 /**
- * @deprecated use qadUtil
+ * @deprecated use k$
  */
 function sortBy(field, reverse, primer) {
     var key = function (x) {

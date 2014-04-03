@@ -738,6 +738,9 @@ li > a.stat-box .number {
   overflow: hidden;
   white-space: nowrap;
 }
+.panel-heading {
+  position: relative;
+}
 .ui-sortable .panel-heading {
   cursor: move;
 }
@@ -1132,7 +1135,7 @@ table.chart caption {
   position: relative;
   /* important for positioning toolbar*/
 }
-.kui-toolbar-container .btn-toolbar {
+.kui-toolbar-container .kui-hover-toolbar {
   position: absolute;
   bottom: 0;
   right: 0px;
@@ -1669,6 +1672,7 @@ li.DTTT_button_text a:hover {
     display: none !important;
   }
   .mm-page {
+    box-shadow: none !important;
     background: inherit;
     min-height: 100%;
     height: auto;
@@ -1677,14 +1681,18 @@ li.DTTT_button_text a:hover {
     position: relative;
     z-index: 1;
   }
-  html.mm-opened .mm-page,
-  html.mm-opening .mm-page {
-    left: 20%;
-    width: 80%;
+  html.mm-opened,
+  html.mm-opened body {
+    overflow-x: visible;
   }
   html.mm-opened .mm-menu,
   html.mm-opening .mm-menu {
     width: 20%;
+  }
+  html.mm-opened .mm-page,
+  html.mm-opening .mm-page {
+    left: 20%;
+    width: 80%;
   }
   .kui-sidebar-closed .mm-page {
     width: 100%;
@@ -1713,10 +1721,11 @@ li.DTTT_button_text a:hover {
 }
 .mm-menu .mm-list > li.mm-selected > a:not(.mm-subopen),
 .mm-menu .mm-list > li.mm-selected > span {
-  border-right: 4px solid #33b5e5;
+  border-right: 8px solid #99cc00;
+  background-color: transparent;
 }
 .mm-menu.mm-vertical .mm-list .mm-panel {
-  padding: 0 0 0 10px;
+  padding: 0 0 0 0px;
 }
 .mm-menu.mm-vertical .mm-list > li.mm-opened > a.mm-subopen {
   height: 42px;

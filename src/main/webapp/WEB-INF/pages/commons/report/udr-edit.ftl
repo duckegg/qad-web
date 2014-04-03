@@ -72,7 +72,8 @@
                     </a>
                 </div>
             </#if>
-            <button type="submit" class="btn btn-primary" value="save">保存</button>
+            <button type="submit" class="btn btn-primary">保存</button>
+            <button type="reset" class="btn btn-default">取消</button>
         </@ui.buttonGroup>
     </form>
 </div>

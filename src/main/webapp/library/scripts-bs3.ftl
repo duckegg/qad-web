@@ -12,6 +12,7 @@
 <script type="text/javascript" src="${base}/media/jquery/jquery.cookie.js"></script>
 <script type="text/javascript" src="${base}/media/jquery/jquery.ba-bbq.js"></script>
 <script type="text/javascript" src="${base}/media/jquery/jquery.pjax.js"></script>
+<script type="text/javascript" src="${base}/media/angularjs/angular.min.js"></script>
 
 <#--============================   UI  FRAMEWORK  ===========================-->
 <script type="text/javascript" src="${base}/media/jquery/jquery-ui-1.10.2.custom.js"></script>

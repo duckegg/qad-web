@@ -100,12 +100,6 @@
         $('.btn-toolbar',$page).on('click', ':checkbox', function () {
             $(this).closest('.list-group-item').toggleClass('kui-with-selected');
         });
-    <#-- Inline toolbar -->
-        $('.kui-toolbar-container').on({mouseenter: function () {
-            $(this).find('.btn-toolbar').show();
-        }, mouseleave: function () {
-            $(this).find('.btn-toolbar').hide();
-        }});
     });
 </script>
 </@ui.page>

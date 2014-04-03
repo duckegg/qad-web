@@ -50,7 +50,7 @@
             <@_postMetaInfo jpost=jpost type=type pageId=containerId/>
         </div>
         <#if type=="summary">
-            <div class="btn-toolbar" style="display: none">
+            <div class="btn-toolbar kui-hover-toolbar" style="display: none">
                 <div class="btn-group" adata-toggle="buttons">
                     <label class="btn btn-default">
                         <input type="checkbox" name="id" value="${jpost.id}"

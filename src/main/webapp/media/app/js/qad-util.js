@@ -6,12 +6,10 @@
  *
  ******************************************************************************/
 'use strict';
-var qadContextPath = window.qadContextPath || '';
-//==============================================================================
-// Functions: strings
-//==============================================================================
 
-(function (window) {
+var qadServerContextPath = window.qadServerContextPath || '';
+
+(function QadUtil(window) {
     /**
      * If an object is null, undefined, or empty string ""
      * @param obj
@@ -91,9 +89,11 @@ var qadContextPath = window.qadContextPath || '';
         return out;
     }
 
-// Here's a more flexible version, which allows you to create
-// reusable sort functions, and sort by any field
-//http://stackoverflow.com/questions/979256/how-to-sort-an-array-of-javascript-objects
+    /**
+     * Here's a more flexible version, which allows you to create
+     * reusable sort functions, and sort by any field
+     * http://stackoverflow.com/questions/979256/how-to-sort-an-array-of-javascript-objects
+     */
     function sortBy(field, reverse, primer) {
         var key = function (x) {
             return primer ? primer(x[field]) : x[field]
@@ -130,7 +130,7 @@ var qadContextPath = window.qadContextPath || '';
         return date;
     }
 
-    window.qadUtil = {
+    window.k$ = {
         stripHtmlTags: stripHtmlTags,
         escapeHtml: escapeHtml,
         unescapeHtml: unescapeHtml,
@@ -145,26 +145,30 @@ var qadContextPath = window.qadContextPath || '';
 //==============================================================================
 // Functions: Preferences
 //==============================================================================
-(function (window) {
+(function (window, qu, $) {
+    /**
+     * @param url Server URL to read(GET)/save(POST) preference
+     * @constructor
+     */
     function QadPref(url) {
+        var USE_LOCAL_STORAGE = false;
         var LOCAL_PREF_KEY = "qad.pref";
         var serverUrl = null;
         var localPref = {};
-        var USE_LOCAL_STORAGE = false;
 
         function saveServerPref(prefJson) {
-            if (qadUtil.isBlank(serverUrl)) {
-                console.warn("saveServerPref: Server URL not set");
+            if (qu.isBlank(serverUrl)) {
+                logger.warn("saveServerPref: Server URL not set");
                 return;
             }
             $.ajax({type: "post", url: serverUrl, data: {myPrefJson: prefJson}});
         }
 
         function loadQadPref() {
-            if (qadUtil.isBlank(serverUrl)) {
-                console.info("loadQadPref:Server URL not set, use local storage");
+            if (qu.isBlank(serverUrl)) {
+                logger.info("loadQadPref:Server URL not set, use local storage");
                 var json = localStorage.getItem(LOCAL_PREF_KEY);
-                if (!qadUtil.isBlank(json)) {
+                if (!qu.isBlank(json)) {
                     try {
                         localPref = JSON.parse(json);
                     } catch (error) {
@@ -205,15 +209,13 @@ var qadContextPath = window.qadContextPath || '';
         }
 
         this.initServer = function (url) {
-            console.debug("initServer",url);
             serverUrl = url;
             loadQadPref();
         };
         this.savePreference = savePreference;
         this.loadPreference = loadPreference;
         this.initServer(url);
-        console.debug("localPref",localPref);
     }
 
-    window.qadPref = new QadPref(qadContextPath + "/my/pref.json");
-})(window);
+    window.qadPref = new QadPref(qadServerContextPath + "/my/pref.json");
+})(window, k$, jQuery);

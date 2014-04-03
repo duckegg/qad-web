@@ -5,10 +5,13 @@
 ********************************************************************************
 -->
 <#include "/library/taglibs.ftl" parse=true/>
-<script type="text/javascript" src="${base}/media/angularjs/angular.min.js"></script>
-<@ui.page id="index-profile" title="索引配置方案" class="webform">
-<div ng-app="indexProfile">
-    <div ng-controller="IndexProfileCtrl" class="row">
+<#--<script type="text/javascript" src="${base}/media/angularjs/angular.min.js"></script>-->
+<#assign pageId="index-profile"/>
+<@ui.page id=pageId title="索引配置方案" class="webform">
+<#--Note: You should not use the ng-app directive when manually bootstrapping your app.-->
+<#--<div ng-app="indexProfile">-->
+<div>
+    <div ng-controller="IndexProfileCtrl">
         <button class="btn btn-default pull-right" ng-click="actionNew()"
                 ng-disabled="activeProfile.id==null"><i class="fa fa-plus"></i> 新建
         </button>
@@ -26,7 +29,8 @@
                     <label class="control-label" for="indexProfileName">名称: </label>
 
                     <div class="controls">
-                        <input id="indexProfileName" type="text" name="activeProfile.name" class="form-control"
+                        <input id="indexProfileName" type="text" name="activeProfile.name"
+                               class="form-control"
                                ng-model="activeProfile.name"/>
                     </div>
                 </div>
@@ -34,7 +38,8 @@
                     <label class="control-label" for="indexProfileDefinition">定义: </label>
 
                     <div class="controls">
-                        <textarea id="indexProfileDefinition" name="activeProfile.definition" class="form-control"
+                        <textarea id="indexProfileDefinition" name="activeProfile.definition"
+                                  class="form-control"
                                   style='height: 15em; font-family: "Courier New"'
                                   ng-model="activeProfile.definition"></textarea>
 
@@ -58,7 +63,8 @@
                     <label class="control-label" for="indexDesc">增加描述字段 </label>
 
                     <div class="controls">
-                        <textarea id="indexDesc" name="activeProfile.description"  class="form-control"
+                        <textarea id="indexDesc" name="activeProfile.description"
+                                  class="form-control"
                                   ng-model="activeProfile.description"></textarea>
                     </div>
                 </div>
@@ -74,9 +80,6 @@
 </div>
 <script type="text/javascript">
     angular.module('indexProfile', [])
-//            .config(function ($routeProvider) {
-//                $routeProvider.when('/edit/:id', {controller: 'IndexProfileCtrl'})
-//            })
             .controller('IndexProfileCtrl', function ($scope, $http) {
                 $scope.actionList = function (refreshCurrent) {
                     $http.get('${base}/admin/config/search/profile/list.json')
@@ -99,10 +102,8 @@
                     $scope.activeProfile = angular.copy(profile);
                 };
                 $scope.actionNew = function () {
-//                    if ($scope.activeProfile.id == null) {
-                        $scope.activeProfile = {"name": "未命名方案"};
-                        $scope.indexProfiles.push($scope.activeProfile);
-//                    }
+                    $scope.activeProfile = {"name": "未命名方案"};
+                    $scope.indexProfiles.push($scope.activeProfile);
                 };
                 $scope.actionDelete = function () {
                     if (confirm("确认删除该配置方案吗")) {
@@ -114,5 +115,9 @@
                 };
                 $scope.actionList();
             });
+    //Manually bootstrap angularjs
+    angular.element(document).ready(function() {
+        angular.bootstrap('#${pageId}', ['indexProfile']);
+    });
 </script>
 </@ui.page>
