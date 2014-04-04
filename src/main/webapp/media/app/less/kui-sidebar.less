@@ -97,7 +97,7 @@
   }
 }
 
-.mm-menu .mm-list > li.mm-selected {
+.mm-menu .mm-list > li.mm-selected:not(.mm-opened) {
   > a:not(.mm-subopen), > span {
     border-right: 8px solid @kui-color-green;
     background-color: transparent;
@@ -111,6 +111,10 @@
     //      border-color: transparent #fff transparent transparent;
     //    }
   }
+}
+
+.mm-opened.mm-selected > a {
+  border-right: 0;
 }
 
 @kui-sidebar-item-height: 42px;

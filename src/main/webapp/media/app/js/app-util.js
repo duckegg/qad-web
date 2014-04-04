@@ -32,7 +32,7 @@ function isFormSubmitted() {
  * @deprecated use k$
  */
 function stripHtmlTags(input, allowed) {
-    return k$.stripHtmlTags(input,allowed);
+    return k$.stripHtmlTags(input, allowed);
 }
 
 /**
@@ -53,7 +53,7 @@ function unescapeHTML(source) {
  * @deprecated use k$
  */
 function shortenText(text, length, escapeHtml) {
-    return k$.shortenText(text,length,escapeHtml);
+    return k$.shortenText(text, length, escapeHtml);
 }
 ///**
 // * Replace string. It handles null or undefined string.
@@ -101,7 +101,7 @@ function isNotBlank(obj) {
  * @deprecated use k$
  */
 function formatDateTime(date, pattern) {
-    return k$.formatDateTime(date,pattern);
+    return k$.formatDateTime(date, pattern);
 }
 
 
@@ -299,7 +299,7 @@ function callPjax(url, successMessage) {
 var logger = {
     alertOn: ["error"],
     debug: function (msg, locator) {
-        this.log(msg, locator);
+        console.debug(msg, locator);
     },
     warn: function (msg) {
         this.log("WARN: " + msg);

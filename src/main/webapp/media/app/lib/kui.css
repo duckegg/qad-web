@@ -516,6 +516,11 @@ body.outlink {
   position: absolute;
   width: 220px;
 }
+.kui-action-at-page-right {
+  position: absolute;
+  right: 8px;
+  top: 46px;
+}
 /**************************************/
 /*       ARTICLE, POST AND BULLETIN   */
 /**************************************/
@@ -1719,10 +1724,13 @@ li.DTTT_button_text a:hover {
     display: block;
   }
 }
-.mm-menu .mm-list > li.mm-selected > a:not(.mm-subopen),
-.mm-menu .mm-list > li.mm-selected > span {
+.mm-menu .mm-list > li.mm-selected:not(.mm-opened) > a:not(.mm-subopen),
+.mm-menu .mm-list > li.mm-selected:not(.mm-opened) > span {
   border-right: 8px solid #99cc00;
   background-color: transparent;
+}
+.mm-opened.mm-selected > a {
+  border-right: 0;
 }
 .mm-menu.mm-vertical .mm-list .mm-panel {
   padding: 0 0 0 0px;

@@ -106,7 +106,7 @@ Textarea
  TODO: remove fontColor please. Use class
 -->
 <#macro textarea name id="" label="" style="" class="" size="middle" dataAttribute=""
-maxlength=""
+maxlength="" onchange=""
 title="" help=""  placeholder=""
 readonly=false disabled=false required=false
 fontColor="">
@@ -120,6 +120,7 @@ fontColor="">
     <div class="controls">
         <textarea name="${name}" id="${id}" style="${style}"
                   class="form-control ${class} kui-${size}"
+                  <#if onchange!="">oninput="${onchange}"</#if>
                   title="${title}" ${dataAttribute}
                   maxlength="${maxlength}" <#if placeholder!="">placeholder="${placeholder}"</#if>
                   <#if readonly>readonly="readonly"</#if>

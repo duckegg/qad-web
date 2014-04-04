@@ -1480,9 +1480,7 @@ $.widget("ui.dialog", $.ui.dialog, {
                 $headerBtnGroup.append('<button class="btn btn-default js-action-edit"><i class="fa fa-cog"></i></button>' +
                     ' <button class="btn btn-default js-action-size"><i class="fa ' + (that.portletConfig.minimized ? 'fa-plus' : 'fa-minus') + '"></i></button> ');
             }
-            console.debug("createHeaderControls");
             $portletHeader.on({mouseenter: function () {
-                console.debug("mouseenter");
                 $headerBtnGroup.show();
             }, mouseleave: function () {
                 $headerBtnGroup.hide();
@@ -1548,13 +1546,14 @@ $.widget("ui.dialog", $.ui.dialog, {
                         var html = '<div class="form-horizontal">' +
 //                            '<div class="form-group"><label class="control-label">标题:</label><input class="form-control" value="' + portletConfig.title + '"/></div>' +
                             '<div class="form-group"><label class="control-label">颜色:</label><div class="colors btn-group btn-group-sm">' + colorBtns + '</div></div>' +
-                            '<div class="text-right">' +
+//                            '<div class="text-right">' +
 //                            '<button class="btn btn-default btn-sm js-action-save">保存</button> ' +
-                            '<button class="btn btn-default btn-sm js-action-reset">重置</button></div>' +
+//                            '<button class="btn btn-default btn-sm js-action-reset">重置</button></div>' +
                             '</div>';
                         $editBox = $('<div class="kui-portlet-edit-box" style="display:none;"/>')
                             .append(html).insertAfter($portletHeader)
                             .on('click', '.colors button', function (e) {
+                                $editBox.slideUp();
                                 var t = $(this).val();
                                 $portlet.alterClass(CSS_THEME_CLASS_PREFIX + '*', CSS_THEME_CLASS_PREFIX + t);
                                 that.saveConfig("theme", t);
@@ -1574,7 +1573,6 @@ $.widget("ui.dialog", $.ui.dialog, {
         function initEventListener() {
             // Resizable
             if (!$portlet.hasClass("not-resizable")) {
-                logger.debug("init resizable");
                 $portlet.resizable({
                     stop: function (event, ui) {
                         that.resize();
@@ -1582,15 +1580,14 @@ $.widget("ui.dialog", $.ui.dialog, {
                     }
                 });
             }
-            // Handle links in portlet
-            $portletContent.on('click.kui', 'a:not([data-dialog]):not([data-kui-dialog]):not([data-kui-target])', function (e) {
+            // Handle portlet inline links
+            $portletContent.on('click.kui', 'a:[data-kui-inline-link]', function (e) {
                 var href = this.href;
-                var $container = $(this).closest(".portlet-content");
                 if (isValidAjaxUrl(href)) {
                     callAjax({
                         url: href,
                         success: function (xhr) {
-                            $container.html(xhr);
+                            $portletContent.html(xhr);
                         }
                     });
                     e.preventDefault();
