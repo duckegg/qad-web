@@ -403,15 +403,16 @@ $(function () {
 
         /**
          * data-kui-dialog
-         * data-kui-dialog-title="View"
-         * data-kui-dialog-aftersubmit="refreshTable"
-         * data-kui-dialog-afterclose="refreshTable"
-         * data-kui-dialog-inline="true" | "false"(default)
-         * data-kui-dialog-content-type="" (default) | "iframe"
-         * data-kui-dialog-resizable="true"
-         * data-kui-dialog-modal="false"
-         * data-kui-dialog-title="A Dialog Title"
-         * data-kui-dialog-style="width:200px"
+         * data-kui-dialog-title: string, "View"
+         * data-kui-dialog-aftersubmit: string, "refreshTable"
+         * data-kui-dialog-afterclose: "refreshTable"
+         * data-kui-dialog-class: "kui-webform-lg"
+         * data-kui-dialog-inline: "true" | "false"(default)
+         * data-kui-dialog-content-type: "" (default) | "iframe"
+         * data-kui-dialog-resizable: "true"
+         * data-kui-dialog-modal: "false"
+         * data-kui-dialog-title: "A Dialog Title"
+         * data-kui-dialog-style: "width:200px"
          * data-kui-dialog-error
          * data-kui-dialog-buttons
          *
@@ -428,13 +429,18 @@ $(function () {
             var selector = $linker.data("kui-dialog");
             if (k$.isBlank(selector))
                 selector = $linker.data("dialog");
+            var cssClass = $linker.data('kui-dialog-class');
+            if (k$.isNotBlank(cssClass)) {
+                options.dialogClass = cssClass;
+            }
+
             var isInline = !!(k$.isNotBlank($linker.data("dialog-inline")) || k$.isNotBlank($linker.data("kui-dialog-inline")));
             var contentType = $linker.data("kui-dialog-content-type");
             if (k$.isBlank(contentType))
                 contentType = $linker.data("dialog-content-type");
             var isIframe = contentType == "iframe";
             var $content = $(selector);
-            var isAutoDiv = isBlank(selector);
+            var isAutoDiv = k$.isBlank(selector);
 //        logger.debug("createSmartDialog: isAutoDiv=" + isAutoDiv + "; selector=" + selector + " length=" + $dialogDiv.length);
             if (isAutoDiv) {
                 $content = $('<div class="auto-dialog"></div>').uniqueId();
@@ -489,20 +495,20 @@ $(function () {
                 if (isAutoDiv) {
                     $content.remove();
                 }
-                if (!isBlank(aftersubmit)) {
+                if (!k$.isBlank(aftersubmit)) {
                     if (isFormSubmitted()) {
                         try {
                             eval(aftersubmit);
                         } catch (err) {
-                            logger.error("Error handling data-dialog-aftersubmit code: " + aftersubmit + "\n" + err);
+                            logger.error("Error handling dialog-aftersubmit code: " + aftersubmit + "\n" + err);
                         }
                     }
                 }
-                if (!isBlank(afterclose)) {
+                if (!k$.isBlank(afterclose)) {
                     try {
                         eval(afterclose);
                     } catch (err) {
-                        logger.error("Error handling data-dialog-afterclose code: " + afterclose + "\n" + err);
+                        logger.error("Error handling dialog-afterclose code: " + afterclose + "\n" + err);
                     }
                 }
             };
@@ -514,7 +520,7 @@ $(function () {
                 var $iframe = $('<iframe src="" class="iframe"></iframe>').appendTo($content);
                 $iframe.attr("src", url);
 
-            } else if (isNotBlank(content)) {
+            } else if (k$.isNotBlank(content)) {
                 $content.html(content);
             } else if (isValidAjaxUrl(url)) {
                 $content.html(showLoading("inline"));
@@ -525,7 +531,7 @@ $(function () {
                     success: function (xhr) {
                         $content.html(xhr);
                     }, error: function (xhr) {
-                        if (isBlank(errorMsg)) {
+                        if (k$.isBlank(errorMsg)) {
 //                            errorMsg = _findErrorMessageFromErrorPage(xhr);
                             _generateAjaxErrorMessage(xhr, $content);
                         } else {
@@ -544,7 +550,7 @@ $(function () {
 
             // Custom dialog option: css
             var style = $linker.data("kui-dialog-style") || $linker.data("dialog-style");
-            if (!isBlank(style)) {
+            if (!k$.isBlank(style)) {
                 var $dialog = $content.closest('.ui-dialog');
                 $dialog.attr('style', $dialog.attr('style') + ';' + style);
             }

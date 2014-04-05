@@ -300,7 +300,7 @@ html.mm-opening .mm-fixed-bottom {
   html.mm-opening #mm-blocker,
   html.mm-opening .mm-fixed-top,
   html.mm-opening .mm-fixed-bottom {
-    left: 440px; } }
+    /*left: 440px;*/ } }
 /*
 	jQuery.mmenu counters addon CSS
 */

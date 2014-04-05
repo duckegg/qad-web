@@ -760,7 +760,7 @@ function dtUpdateCell(tableId, cellSelector, dataField, newValue) {
         defaults = {
             dialogClass: "webform",
             modal: true,
-            minWidth: 600,
+//            minWidth: 600,
 //            minHeight: 300,
 //            maxHeight: 600,
             resizable: false
@@ -1781,6 +1781,26 @@ $.widget("ui.dialog", $.ui.dialog, {
             };
             $('.sidebar-toggler').on('click', toggleSidebar);
             toggleSidebar();
+            highlightMatch();
+            function highlightMatch() {
+                var matched = null;
+                $('li a', $this).each(function (index) {
+                    var key = $(this).data("kui-menu-key");
+                    if (k$.isBlank(key))
+                        key = $(this).attr("href");
+                    var loc = decodeURIComponent(document.location.href);
+                    if (loc.indexOf(key) > 0) {
+                        if (matched == null) {
+                            matched = $(this);
+                        } else if (key.length > matched.attr("href").length) {
+                            matched = $(this); // Longest match
+                        }
+                    }
+                });
+                if (matched != null) {
+                    (matched.closest('li').addClass('mm-selected')).parentsUntil($this,'li').addClass('mm-opened');
+                }
+            }
         }
 
         function buildHomeMadeSidebar(selector) {

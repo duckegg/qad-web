@@ -46,9 +46,15 @@
   max-width: 600px;
   padding-bottom: 1em;
   &.ui-dialog {
-    background-color: #fff;
+    min-width: 600px;
+    //    width: 600px;
     max-width: 100%;
+    background-color: #fff;
     padding-bottom: 0;
+  }
+  &.kui-webform-lg.ui-dialog {
+    //    width: 800px;
+    min-width: 800px;
   }
 }
 
@@ -76,7 +82,8 @@
 // SELECT2
 //------------------------------------------------
 .select2-container {
-  min-width: 10em;
+//  min-width: 10em;
+  width:100% !important;
 }
 
 .select2-choices, .select2-container-multi .select2-choices,

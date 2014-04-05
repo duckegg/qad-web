@@ -219,5 +219,15 @@
     <!-- =================================================================== -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index</welcome-file>
+        <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+
+    <!-- Need this locale mapping for Jetty, not necessary for Tomcat -->
+    <locale-encoding-mapping-list>
+        <locale-encoding-mapping>
+            <locale>zh</locale>
+            <encoding>UTF-8</encoding>
+        </locale-encoding-mapping>
+    </locale-encoding-mapping-list>
 </web-app>

@@ -6,7 +6,6 @@
 @dark_back_color: @kui-primary-back-color;
 @dark_back_color_secondary: lighten(@dark_back_color, 5%);
 
-@list_level_indent: 20px;
 @list_item_height: 32px;
 
 @closed_main_item_width: @kui-sidebar-width + 30;
@@ -15,6 +14,27 @@
 //------------------------------------------------
 // Menu Tree Levels
 //------------------------------------------------
+
+.kui-tree-indent-link {
+  // Level 1
+  & > li > a {
+    padding-left: @kui-list-level-indent*1;
+  }
+  // Level 2
+  & > li > ul > li > a {
+    padding-left: @kui-list-level-indent*2;
+  }
+
+  // Level 3
+  & > li > ul > li > ul > li > a {
+    padding-left: @kui-list-level-indent*3;
+  }
+
+  // Level 4
+  & > li > ul > li > ul > li > ul > li > a {
+    padding-left: @kui-list-level-indent*4;
+  }
+}
 
 .nav.nav-list-tree ul {
   margin-left: 0;
@@ -28,10 +48,14 @@
   font-weight: bold;
 }
 
-
 //------------------------------------------------
 // Menu Item
 //------------------------------------------------
+
+.nav.nav-list-tree {
+  .kui-tree-indent-link();
+}
+
 .nav.nav-list-tree li ul {
   padding-left: 0;
 }
@@ -44,21 +68,6 @@
 
 .nav.nav-list-tree > li > a {
   font-size: 1.1em;
-}
-
-// Level 2
-.nav.nav-list-tree > li > ul > li > a {
-  padding-left: @list_level_indent*1;
-}
-
-// Level 3
-.nav.nav-list-tree > li > ul > li > ul > li > a {
-  padding-left: @list_level_indent*2;
-}
-
-// Level 4
-.nav.nav-list-tree > li > ul > li > ul > li > ul > li > a {
-  padding-left: @list_level_indent*3 - 10;
 }
 
 .nav.nav-list-tree a > .arrow:before {

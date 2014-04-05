@@ -1,1 +1,5 @@
 /target
+/secret.json
+/.idea
+/node_modules
+/app-patch.zip

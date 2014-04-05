@@ -1123,9 +1123,13 @@ table.chart caption {
   padding-bottom: 1em;
 }
 .webform.ui-dialog {
-  background-color: #fff;
+  min-width: 600px;
   max-width: 100%;
+  background-color: #fff;
   padding-bottom: 0;
+}
+.webform.kui-webform-lg.ui-dialog {
+  min-width: 800px;
 }
 .webform textarea {
   height: 8em;
@@ -1147,7 +1151,7 @@ table.chart caption {
   padding: 4px 5px;
 }
 .select2-container {
-  min-width: 10em;
+  width: 100% !important;
 }
 .select2-choices,
 .select2-container-multi .select2-choices,
@@ -1485,6 +1489,18 @@ table.no-border {
 li.DTTT_button_text a:hover {
   cursor: pointer;
 }
+.kui-tree-indent-link > li > a {
+  padding-left: 20px;
+}
+.kui-tree-indent-link > li > ul > li > a {
+  padding-left: 40px;
+}
+.kui-tree-indent-link > li > ul > li > ul > li > a {
+  padding-left: 60px;
+}
+.kui-tree-indent-link > li > ul > li > ul > li > ul > li > a {
+  padding-left: 80px;
+}
 .nav.nav-list-tree ul {
   margin-left: 0;
 }
@@ -1493,6 +1509,18 @@ li.DTTT_button_text a:hover {
 }
 .nav.nav-list-tree li.open > a {
   font-weight: bold;
+}
+.nav.nav-list-tree > li > a {
+  padding-left: 20px;
+}
+.nav.nav-list-tree > li > ul > li > a {
+  padding-left: 40px;
+}
+.nav.nav-list-tree > li > ul > li > ul > li > a {
+  padding-left: 60px;
+}
+.nav.nav-list-tree > li > ul > li > ul > li > ul > li > a {
+  padding-left: 80px;
 }
 .nav.nav-list-tree li ul {
   padding-left: 0;
@@ -1503,15 +1531,6 @@ li.DTTT_button_text a:hover {
 }
 .nav.nav-list-tree > li > a {
   font-size: 1.1em;
-}
-.nav.nav-list-tree > li > ul > li > a {
-  padding-left: 20px;
-}
-.nav.nav-list-tree > li > ul > li > ul > li > a {
-  padding-left: 40px;
-}
-.nav.nav-list-tree > li > ul > li > ul > li > ul > li > a {
-  padding-left: 50px;
 }
 .nav.nav-list-tree a > .arrow:before {
   float: right;

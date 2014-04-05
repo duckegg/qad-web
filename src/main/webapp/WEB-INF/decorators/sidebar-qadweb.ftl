@@ -8,7 +8,7 @@
 <#include "/library/functions.ftl" parse=true/>
 <#-- TODO: do not put cur_month here! -->
 <#assign cur_month=timeOffset(.now, -1, "month", "yyyy-MM")/>
-<ul>
+<ul class="kui-tree-indent-link">
     <li class="visible-xs">
         <form action="${base}/search" method="get"
               data-pjax style="padding:8px;">

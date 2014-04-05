@@ -11,7 +11,8 @@
 <div class="kui-action-at-page-right">
 <#--<button class="btn btn-default js-edit-mode js-hide-in-edit-mode">修改布局</button>-->
     <a class="btn btn-info js-add-portlet"
-       data-kui-dialog="#${pageId}-new-portlet-dialog"><i class="fa fa-plus"></i> 添加 Portlet
+       data-kui-dialog="#${pageId}-new-portlet-dialog" data-kui-dialog-class="webform kui-webform-lg"><i
+            class="fa fa-plus"></i> 添加 Portlet
     </a>
 </div>
 <div class="portlet-container akui-init-disable-sort horizontal" id="${pageId}-portlets"></div>

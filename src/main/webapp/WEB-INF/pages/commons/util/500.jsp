@@ -1,3 +1,6 @@
+<%@ page import="com.opensymphony.xwork2.ActionContext" %>
+<%@ page import="com.opensymphony.xwork2.util.ValueStack" %>
+<%@ page import="org.apache.commons.lang3.StringEscapeUtils" %>
 <%--
 This page to handle both Struts2 and JSP exception mechanism
 Exception is not normal operation error and is not supposed to be resolved by end user.
@@ -55,24 +58,24 @@ Exception is not normal operation error and is not supposed to be resolved by en
                 错误信息
             </h3>
 
-            <pre id="error-message"><%=StringEscapeUtils.escapeHtml(message)%>
+            <pre id="error-message"><%=StringEscapeUtils.escapeHtml4(message)%>
             </pre>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-5"></div>
-        <div class="col-md-7">
-            <button type="button" class="btn btn-default" onclick="$('#js-error-detail').toggle();">错误详细信息
-            </button>
-        </div>
-    </div>
-    <div id="js-error-detail" style="display: none; padding:1em;">
-        <h3>诊断信息[<%=exSource%>]</h3>
+    <%--<div class="row">--%>
+    <%--<div class="col-md-5"></div>--%>
+    <%--<div class="col-md-7">--%>
+    <%--<button type="button" class="btn btn-default" onclick="$('#js-error-detail').toggle();">错误详细信息--%>
+    <%--</button>--%>
+    <%--</div>--%>
+    <%--</div>--%>
+    <%--<div id="js-error-detail" style="display: none; padding:1em;">--%>
+    <%--<h3>诊断信息[<%=exSource%>]</h3>--%>
 
-        <div style="height:40em;overflow:auto;background-color: white">
-            <%--<%@ include file="/WEB-INF/pages/commons/util/env.jsp" %>--%>
-        </div>
-    </div>
+    <%--<div style="height:40em;overflow:auto;background-color: white">--%>
+    <%--&lt;%&ndash;<%@ include file="/WEB-INF/pages/commons/util/env.jsp" %>&ndash;%&gt;--%>
+    <%--</div>--%>
+    <%--</div>--%>
 </div>
 </body>
 </html>
