@@ -1,6 +1,6 @@
 <#--
 /*
- * $Id: controlheader.ftl 720258 2008-11-24 19:05:16Z musachy $
+ * $Id: text.ftl 590812 2007-10-31 20:32:54Z apetrelli $
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,11 +20,7 @@
  * under the License.
  */
 -->
-<#include "/${parameters.templateDir}/agileworks/controlheader-core.ftl">
-<#if parameters.labelposition?default("top") == 'top'>
-<div <#rt/>
-<#else>
-<span <#rt/>
-</#if>
-<#if parameters.id??>id="wwctrl_${parameters.id}"<#rt/></#if> class="controls">
-    
+<#--include "/${parameters.templateDir}/css_xhtml/controlheader.ftl" / -->
+<#include "/${parameters.templateDir}/${parameters.theme}/controlheader.ftl" />
+<#include "/${parameters.templateDir}/simple/text.ftl" />
+<#include "/${parameters.templateDir}/bootstrap/controlfooter.ftl" />

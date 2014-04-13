@@ -25,10 +25,10 @@
 	This will be done if ActionSupport is used.
 -->
 <#assign hasFieldErrors = parameters.name?? && fieldErrors?? && fieldErrors[parameters.name]??/>
-<div <#rt/><#if parameters.id??>id="wwgrp_${parameters.id}"<#rt/></#if> class="control-group">
+<div <#rt/><#if parameters.id??>id="wwgrp_${parameters.id}"<#rt/></#if> class="form-group">
 
 <#if hasFieldErrors>
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label"></label>
 
         <div class="controls">
