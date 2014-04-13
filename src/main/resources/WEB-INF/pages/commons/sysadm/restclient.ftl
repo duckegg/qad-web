@@ -4,7 +4,7 @@
 @author Leo Liao, 13-5-13, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 
 <@ui.page id="restclient" title="REST Client" class="webform">
 <form action="${base}/admin/devel/restclient" class="form-horizontal" data-ajax-form

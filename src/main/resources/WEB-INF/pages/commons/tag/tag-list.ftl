@@ -4,7 +4,7 @@
 @author Leo Liao, 2012/08/18, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <title>标签管理</title>
 <#--====== Task Toolbar ======-->
 <div class="btn-toolbar">

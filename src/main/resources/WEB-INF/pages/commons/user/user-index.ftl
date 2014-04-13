@@ -4,7 +4,7 @@
 @author Leo Liao, 2012/06/26, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl"/>
+<#include "/library/ftl/taglibs.ftl"/>
 <div class="row">
     <div class="col-md-10">
     <#include "user-list.ftl" parse=true/>

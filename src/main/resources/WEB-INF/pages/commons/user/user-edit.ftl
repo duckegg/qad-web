@@ -4,9 +4,8 @@
 @author Leo Liao, 2012/06/26, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/functions.ftl" parse=true/>
-<#include "/library/ui-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
+<#include "/library/ftl/functions.ftl" parse=true/>
 <#assign isNew = !user.id??/>
 <#assign pageId="user-edit"/>
 <@ui.page id=pageId title="编辑用户" class="webform">

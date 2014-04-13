@@ -4,7 +4,7 @@
 @author Leo Liao, 2014/3/27, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign isLogin=false/>
 <@shiro.user>
     <#assign isLogin=true/>

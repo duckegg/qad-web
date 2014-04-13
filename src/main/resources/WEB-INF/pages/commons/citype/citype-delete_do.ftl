@@ -4,7 +4,7 @@
 @author Leo Liao, 2013/03/26, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <div id="citype-delete_do">
     <script type="text/javascript">
         $(function(){

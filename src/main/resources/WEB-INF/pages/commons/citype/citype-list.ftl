@@ -4,8 +4,7 @@
 @author Leo Liao, 2013/03/26, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/table-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#--<#include "../appsec/people-helper.ftl" parse=true/>-->
 <#assign tableId="domainList"/>
 <@ui.page id="citype-list" title="CI类型">
@@ -50,5 +49,5 @@
         }
     ];
 </script>
-    <@ajaxTable tableId="${tableId}" ajaxForm="#${tableId}-qform" toolbarElement="#citype-list-toolbar"/>
+    <@ui.ajaxTable tableId="${tableId}" ajaxForm="#${tableId}-qform" toolbarElement="#citype-list-toolbar"/>
 </@ui.page>

@@ -4,8 +4,7 @@
 @author Leo Liao, 2012/04/26, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/table-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <@ui.page id="sql-console" title="SQL Console">
     <#if (sql!"")=="">
     <div>

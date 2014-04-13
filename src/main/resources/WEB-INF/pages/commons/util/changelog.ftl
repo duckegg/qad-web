@@ -4,7 +4,7 @@
 @author Leo Liao, 2012/05/28, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <title>Change Log</title>
 <pre>
 <#include "/CHANGELOG.md"/>

@@ -4,8 +4,8 @@
 @author Leo Liao, 2012/07/02, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/functions.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
+<#include "/library/ftl/functions.ftl" parse=true/>
 <#assign pageId="permission-edit"/>
 <@ui.page id=pageId  title="编辑权限" class="webform">
 <form id="permission-edit-form" action="${base}/admin/people/permission/${iif(permission.id??,'update_do','create_do')}"

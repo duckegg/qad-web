@@ -4,8 +4,7 @@
 @author Leo Liao, 2012/06/26, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/table-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#include "../appsec/people-helper.ftl" parse=true/>
 <#assign tableId="sysUser"/>
 <#--===== Report Title =====-->
@@ -49,5 +48,5 @@
         }
     ];
 </script>
-    <@ajaxTable tableId="${tableId}" ajaxForm="#${tableId}QueryForm" printable=false toolbarElement="#user-list-toobar"/>
+    <@ui.ajaxTable tableId="${tableId}" ajaxForm="#${tableId}QueryForm" printable=false toolbarElement="#user-list-toobar"/>
 </@ui.page>

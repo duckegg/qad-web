@@ -4,9 +4,7 @@
 @author Leo Liao, 2012/07/02, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/table-builder.ftl" parse=true/>
-<#--<#include "people-helper.ftl" parse=true/>-->
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign tableId="permList"/>
 <@ui.page id="permission-list" title="权限定义">
 <#--<@userNavbar level="perm"/>-->
@@ -55,5 +53,5 @@
         }
     ];
 </script>
-    <@ajaxTable tableId="${tableId}" ajaxForm="#${tableId}-qform" toolbarElement="#permission-list-toolbar"/>
+    <@ui.ajaxTable tableId="${tableId}" ajaxForm="#${tableId}-qform" toolbarElement="#permission-list-toolbar"/>
 </@ui.page>

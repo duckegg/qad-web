@@ -4,7 +4,7 @@
 @author Leo Liao, 2012/08/31, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <@s.action name="jpost/${postType}/list" namespace="/" var="postListAction" rethrowException=true>
     <@s.param name="so.sort">createdAt</@s.param>
 </@s.action>

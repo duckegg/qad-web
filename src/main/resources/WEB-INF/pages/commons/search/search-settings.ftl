@@ -4,7 +4,7 @@
 @author Leo Liao, 13-5-26, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign pageId="search-settings"/>
 <@ui.page id=pageId title="搜索参数">
     <@ui.alert level="danger" textOnly=true>下面列出了系统中可配置参数，请咨询开发人员。</@ui.alert>

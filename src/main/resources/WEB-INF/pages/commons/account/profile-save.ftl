@@ -4,7 +4,7 @@
 @author Leo Liao, 2013/03/21, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <div id="user-save">
     <div class="alert alert-success hero-unit">
         已更新用户信息 ${user.fullName} (${user.loginName})

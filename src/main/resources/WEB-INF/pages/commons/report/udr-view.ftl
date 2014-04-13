@@ -4,7 +4,7 @@
 @author Leo Liao, 14-2-28, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign pageId="udr-view"/>
 <@ui.page id=pageId title="${userDefinedReport.title}">
 <#if displayFormat=='table'>

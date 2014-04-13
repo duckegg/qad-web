@@ -4,8 +4,7 @@
 @author Leo Liao, 2013/03/21, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/ui-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <div id="user-delete" data-title="删除确认">
     <title>删除确认</title>
     <form action="${base}/user/delete_do" class="form-horizontal"

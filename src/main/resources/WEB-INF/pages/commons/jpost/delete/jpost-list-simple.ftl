@@ -4,8 +4,7 @@
 @author tom, 2012/07/12, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/table-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign tableId="jpost"/>
 <div id="jpost-list" data-role="page">
     <a href="${base}/jpost/${postType}/list?style=fancy" class="btn btn-info">Fancy</a>
@@ -47,7 +46,7 @@
             }
         ];
     </script>
-<@ajaxTable tableId="${tableId}" ajaxForm="#${tableId}-query-form" printable=false/>
+<@ui.ajaxTable tableId="${tableId}" ajaxForm="#${tableId}-query-form" printable=false/>
     <div id="${tableId}-dialog" style="display: none"></div>
     <script type="text/javascript">
         $(function () {

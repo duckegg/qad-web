@@ -4,8 +4,7 @@
 @author Leo Liao, 2012/07/13, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/table-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign pageId="audit-log"/>
 <#assign tableId="audit-log-table"/>
 <@ui.page id=pageId title="看板使用日志">
@@ -35,5 +34,5 @@
         { "mData": "host", "sTitle": "来访地址" }
     ]);
 </script>
-    <@ajaxTable tableId="${tableId}" ajaxForm="#${pageId}-qform" serverSide=true toolbarElement="#${pageId}-qdiv"/>
+    <@ui.ajaxTable tableId="${tableId}" ajaxForm="#${pageId}-qform" serverSide=true toolbarElement="#${pageId}-qdiv"/>
 </@ui.page>

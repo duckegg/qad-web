@@ -4,7 +4,7 @@
 @author Leo Liao, 13-12-8, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign pageId="sysparam-index"/>
 <@ui.page id=pageId title="系统参数">
 <div class="tabbable tabbable-custom">

@@ -4,7 +4,7 @@
 @author Leo Liao, 2012/05/28, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <@ui.page id="export-file-result">
 <div class="text-center alert alert-success">
     <h4>数据导出成功</h4>

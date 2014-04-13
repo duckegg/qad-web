@@ -4,7 +4,7 @@
 @author Leo Liao, 14-3-3, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign pageId="udr-delete"/>
 <@ui.page id=pageId title="删除">
 <form action="${base}/udr/delete_do" method="post" data-kui-ajax-form data-kui-target="#${pageId}">

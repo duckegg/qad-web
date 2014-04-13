@@ -4,8 +4,8 @@
 @author Leo Liao, 2012/06/27, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/functions.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
+<#include "/library/ftl/functions.ftl" parse=true/>
 <#assign pageId="role-edit"/>
 <@ui.page id=pageId title="编辑角色" class="webform">
 <form id="role-edit-form" action="${base}/admin/people/role/${iif(role.id??,'update_do','create_do')}"

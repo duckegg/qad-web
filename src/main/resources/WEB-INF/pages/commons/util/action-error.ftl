@@ -4,7 +4,7 @@
 @author Leo Liao, 2013/03, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <div class="alert alert-warning">
 <@s.if test="hasActionErrors()">
     <#list action.errorMessages as msg >

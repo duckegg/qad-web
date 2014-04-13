@@ -4,8 +4,7 @@
 @author Leo Liao, 2012/08/18, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/ui-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <title><#if tag.id??>修改<#else>新建</#if>标签</title>
 <div id="tag-edit" class="webform">
 <@s.form id="editTagForm" action="/admin/content/tag/save?actionResult=defaultResult" cssClass="form-horizontal" theme="bootstrap">

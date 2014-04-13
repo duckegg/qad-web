@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************************************
+Global level (not package level) configuration
+
+@author leo.liao@hp.com, 2014/04/13, extract from struts.xml
+********************************************************************************
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <bean type="com.opensymphony.xwork2.UnknownHandler" name="unknownHandler"
+          class="hpps.qad.base.struts.CustomUnknownHandler"/>
+    <!-- =================================================================== -->
+    <!-- Constants -->
+    <!-- =================================================================== -->
+    <constant name="struts.custom.i18n.resources" value="lang/global"/>
+    <constant name="struts.freemarker.manager.classname" value="hpps.qad.base.struts.CustomFreemarkerManager"/>
+    <constant name="struts.devMode" value="false"/>
+    <constant name="struts.ui.theme" value="bootstrap"/>
+    <constant name="struts.ui.templateDir" value="template"/>
+    <!-- To use parameters in the URL, after the action name, make sure this is set -->
+    <!--<constant name="struts.enable.SlashesInActionNames" value="true"/>-->
+    <!--<constant name="struts.mapper.alwaysSelectFullNamespace" value="false"/>-->
+    <!-- From 2.1.9+ regular expressions can be defined defined in the action name. To use this form of wild card, the following constants must be set -->
+    <!-- http://struts.apache.org/2.3.4.1/docs/wildcard-mappings.html -->
+    <constant name="struts.enable.SlashesInActionNames" value="true"/>
+    <constant name="struts.mapper.alwaysSelectFullNamespace" value="false"/>
+    <!--<constant name="struts.patternMatcher" value="namedVariable"/>-->
+    <constant name="struts.patternMatcher" value="regex"/>
+    <!--
+    LEO@2012/11/07: Do NOT use {method} in action name because method is an attribute in com.opensymphony.xwork2.ActionChainResult
+    Use {function} instead
+    -->
+
+    <!-- For RESTful-->
+    <constant name="struts.action.extension" value="xhtml,,xml,json,action"/>
+
+    <unknown-handler-stack>
+        <unknown-handler-ref name="unknownHandler"/>
+    </unknown-handler-stack>
+</struts>

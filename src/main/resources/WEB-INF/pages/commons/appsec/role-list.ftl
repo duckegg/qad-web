@@ -4,8 +4,7 @@
 @author Leo Liao, 2012/06/27, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/table-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#include "people-helper.ftl" parse=true/>
 <#assign tableId="userRole"/>
 <#--===== Report Title =====-->

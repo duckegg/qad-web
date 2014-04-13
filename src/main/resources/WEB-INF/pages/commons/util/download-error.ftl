@@ -5,7 +5,7 @@
 TODO: use 404 instead
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <div id="download-error">
     找不到文件${file}
 </div>

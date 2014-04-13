@@ -10,7 +10,7 @@ We have to set ignoreContextParams=true to avoid it.
 @author Leo Liao, 2012/08/18, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#--
 ================================================================================
 @desc Build tagging control with select2

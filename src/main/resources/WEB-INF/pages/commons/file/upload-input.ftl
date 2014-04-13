@@ -4,8 +4,7 @@
 @author Leo Liao, 2012/12/17, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/ui-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <div id="upload-input">
     <div id="upload-input-result"></div>
     <form action="${base}/system/upload" method="POST" enctype="multipart/form-data" class="form-vertical" data-ajax-form data-kui-target="#upload-input">

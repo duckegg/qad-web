@@ -4,7 +4,7 @@
 @author Leo Liao, 2012/07/02, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <@ui.page id="profile-edit" title="用户信息">
 <div id="profile" class="webform">
     <@ui.strutsErrors/>

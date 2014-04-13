@@ -4,6 +4,6 @@
 @author Leo Liao, 13-6-21, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 
 

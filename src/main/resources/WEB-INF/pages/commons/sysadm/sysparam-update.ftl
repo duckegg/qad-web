@@ -4,7 +4,7 @@
 @author Leo Liao, 13-5-26, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign pageId="sysparam-update"/>
 <@ui.page id=pageId title="修改系统参数" class="webform">
 <form action="${base}/admin/config/${moduleName}/settings/update_do" method="POST" class="form-vertical"

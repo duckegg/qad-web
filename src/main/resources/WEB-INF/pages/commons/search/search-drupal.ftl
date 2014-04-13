@@ -4,7 +4,7 @@
 @author Leo Liao, 13-12-19, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" />
+<#include "/library/ftl/taglibs.ftl" />
 <#assign pageId="search-drupal"/>
 <@ui.page id=pageId>
 <h1 class="page-title">搜索Drupal</h1>

@@ -4,8 +4,7 @@
 @author Leo Liao, 2013/03/21, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/ui-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <div id="role-delete" data-title="删除确认">
     <form action="${base}/admin/people/role/delete_do" class="form-horizontal"
           data-ajax-form data-kui-target="#role-delete" method="POST">

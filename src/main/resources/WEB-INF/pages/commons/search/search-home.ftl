@@ -4,7 +4,7 @@
 @author Leo Liao, 13-5-6, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" />
+<#include "/library/ftl/taglibs.ftl" />
 <#--<#import "/library/json.ftl" as json>-->
 <#assign pageId="search-home"/>
 <@ui.page id=pageId title="看板搜索">

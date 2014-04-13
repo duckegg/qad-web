@@ -4,7 +4,7 @@
 @author Leo Liao, 2012/06/12, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#include "post-helper.ftl" parse=true/>
 <#assign pageId="jpost-view-${jpost.id}"/>
 <@ui.page id=pageId class="media" title="查看${postType}">

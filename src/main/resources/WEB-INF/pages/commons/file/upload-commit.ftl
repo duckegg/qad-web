@@ -4,7 +4,7 @@
 @author Leo Liao, 2012/12/17, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <div id="upload-result">
     <ul id="upload-result-filelist">
         <li>

@@ -4,5 +4,5 @@
 @author Leo Liao, 2013/03/29, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl"/>
+<#include "/library/ftl/taglibs.ftl"/>
 <@ui.afterCreate link="user" id="${id}"/>

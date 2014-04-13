@@ -4,8 +4,7 @@
 @author Leo Liao, 14-2-28, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/table-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#include "../udr-lib.ftl" parse=true/>
 <#assign pageId="report-table-${userDefinedReport.id!'unknown'}"/>
 <#assign tableId="udr-table"/>
@@ -33,5 +32,5 @@
             kui.setTableColumns("${tableId}",columns);
         })();
     </script>
-        <@ajaxTable tableId="${tableId}" ajaxForm="#${tableId}QueryForm"/>
+        <@ui.ajaxTable tableId="${tableId}" ajaxForm="#${tableId}QueryForm"/>
 </@ui.page>

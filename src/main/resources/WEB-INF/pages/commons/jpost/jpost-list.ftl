@@ -5,8 +5,8 @@
 @author Leo Liao, 2012/04/12, rewrite
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/functions.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
+<#include "/library/ftl/functions.ftl" parse=true/>
 <#include "post-helper.ftl" parse=true/>
 <#assign pageId="jpost-list"/>
 <@ui.page id=pageId>

@@ -4,7 +4,7 @@
 @author Leo Liao, 2014/3/27, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign pageId="my-portal"/>
 <@ui.page id=pageId title="My">
 <div class="kui-action-at-page-right">

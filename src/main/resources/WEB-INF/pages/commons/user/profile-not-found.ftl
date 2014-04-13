@@ -4,7 +4,7 @@
 @author Leo Liao, 2012/07/02, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <title>用户信息</title>
 <div>
     您还没有在看板系统中注册。可能的原因是：

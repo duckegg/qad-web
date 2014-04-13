@@ -4,8 +4,8 @@
 @author Leo Liao, 2012/06/27, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/functions.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
+<#include "/library/ftl/functions.ftl" parse=true/>
 <#assign pageId="citype-edit"/>
 <@ui.page id=pageId class="webform" title=iif(ciType??,"新建","修改")>
 <form id="${pageId}-form"

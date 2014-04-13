@@ -4,7 +4,7 @@
 @author Leo Liao, 2012/06/12, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <title>键盘快捷键</title>
 <div id="shortcuts" class="webform">
     <h4>所有页面</h4>

@@ -4,7 +4,7 @@
 @author Leo Liao, 2013/04/02, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#include "people-helper.ftl" parse=true/>
 <@ui.page id="permission-codes" title="权限代码">
     <@userNavbar level="permcode"/>

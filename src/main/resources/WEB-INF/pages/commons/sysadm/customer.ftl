@@ -4,9 +4,7 @@
 @author Leo Liao, 2012/11/29, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/ui-builder.ftl" parse=true/>
-<#include "/library/table-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <title>室组管理</title>
 <style type="text/css">
     #customer {

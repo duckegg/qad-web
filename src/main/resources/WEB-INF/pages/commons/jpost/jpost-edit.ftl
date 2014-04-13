@@ -4,8 +4,8 @@
 @author Leo Liao, 2012/05/06, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/functions.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
+<#include "/library/ftl/functions.ftl" parse=true/>
 <#include "post-helper.ftl" parse=true/>
 <#include "/WEB-INF/pages/commons/tag/tag-controls.ftl" parse=true/>
 <#assign pageId="jpost-edit"/>

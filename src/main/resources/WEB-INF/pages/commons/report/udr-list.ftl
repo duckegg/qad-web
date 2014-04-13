@@ -4,7 +4,7 @@
 @author Leo Liao, 14-3-2, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#include "udr-lib.ftl" parse=true/>
 <#assign pageId="udr-list"/>
 <@ui.page id=pageId title="用户定义报表">

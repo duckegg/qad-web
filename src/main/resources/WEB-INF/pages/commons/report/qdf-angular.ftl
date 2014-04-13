@@ -4,7 +4,7 @@
 @author Leo Liao, 2014/4/11, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign pageId="qdf-angular"/>
 <#--<script type="text/javascript" src="${base}/media/angularjs/angular-route.min.js"></script>-->
 <@ui.page id=pageId title="查询定义">

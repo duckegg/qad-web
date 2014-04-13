@@ -4,8 +4,7 @@
 @author Leo Liao, 13-5-26, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/table-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign pageId="search-mgmt"/>
 <#assign tableId="search_mgmt"/>
 <@ui.page id=pageId title="搜索管理">

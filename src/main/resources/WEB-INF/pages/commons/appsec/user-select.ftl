@@ -4,9 +4,7 @@
 @author Leo Liao, 2012/08/24, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/table-builder.ftl" parse=true/>
-<#include "/library/ui-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign tableId="userSelector${Parameters.token!''}"/>
 <@ui.page id="user-select">
 <div class="alert">如果没有找到你要的人员，请通知管理员将其登记入看板系统。</div>
@@ -28,7 +26,7 @@
     ];
 </script>
 <form action="#" method="post" id="js-user-select-form">
-    <@ajaxTable tableId="${tableId}" ajaxForm="#${tableId}Qform" autoWidth=false />
+    <@ui.ajaxTable tableId="${tableId}" ajaxForm="#${tableId}Qform" autoWidth=false />
     <@buttonGroup>
         <button type="submit" class="btn btn-primary">确定</button>
         <button type="reset" class="btn">取消</button>

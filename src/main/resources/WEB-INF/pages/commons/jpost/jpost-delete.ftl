@@ -4,8 +4,7 @@
 @author Leo Liao, 2013/03/23, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/ui-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <div id="jpost-delete">
     <form action="${base}/jpost/${postType}/delete_do" class="form-horizontal"
           data-ajax-form data-kui-target="#jpost-delete" method="POST">

@@ -4,8 +4,7 @@
 @author Leo Liao, 14-3-3, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
-<#include "/library/chart-builder.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#include "../udr-lib.ftl" parse=true/>
 <#assign FORMAT=displayFormat/>
 <#assign pageId="report-${userDefinedReport.id!'unknown'}-${FORMAT!''}"/>
@@ -32,11 +31,11 @@
     value="${(format.seriesField)!''}" isHidden=true/>
 </form>
     <#if FORMAT=='barchart'>
-        <@barChart id="${chartId}" title="${userDefinedReport.title!''}" ajaxForm="#${pageId}-qform"/>
+        <@chart.barChart id="${chartId}" title="${userDefinedReport.title!''}" ajaxForm="#${pageId}-qform"/>
     <#elseif FORMAT=="linechart">
-        <@lineChart id="${chartId}" title="${userDefinedReport.title!''}" ajaxForm="#${pageId}-qform" xAxisFormat="${(format.xAxisFormat)!'%y-%m'}"
+        <@chart.lineChart id="${chartId}" title="${userDefinedReport.title!''}" ajaxForm="#${pageId}-qform" xAxisFormat="${(format.xAxisFormat)!'%y-%m'}"
         markerShow=true markerSize=4 />
     <#elseif FORMAT=="piechart">
-        <@pieChart id="${chartId}" title="${userDefinedReport.title!''}" ajaxForm="#${pageId}-qform" />
+        <@chart.pieChart id="${chartId}" title="${userDefinedReport.title!''}" ajaxForm="#${pageId}-qform" />
     </#if>
 </@ui.page>

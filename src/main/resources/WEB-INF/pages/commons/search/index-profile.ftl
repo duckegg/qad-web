@@ -4,7 +4,7 @@
 @author Leo Liao, 13-12-5, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#--<script type="text/javascript" src="${base}/media/angularjs/angular.min.js"></script>-->
 <#assign pageId="index-profile"/>
 <@ui.page id=pageId title="索引配置方案" class="webform">

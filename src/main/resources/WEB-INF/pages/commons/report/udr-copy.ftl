@@ -4,7 +4,7 @@
 @author Leo Liao, 14-3-3, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign pageId="udr-copy"/>
 <@ui.page id=pageId title="复制">
 <form action="${base}/udr/copy_do" method="post" data-kui-ajax-form data-kui-target="#${pageId}">
