@@ -1,4 +1,0 @@
-#Indexer for uCMDB
-hpps.opshere.commons.search.indexer.UcmdbIndexer
-#Simple indexer
-hpps.opshere.commons.search.indexer.DefaultIndexer
