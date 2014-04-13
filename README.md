@@ -1,4 +1,13 @@
 
+Deployment
+========================
+## MySql user
+
+    create user 'appreader'@'localhost' identified by 'password';
+    grant select on qad_sample.stock to 'appreader'@'localhost';
+    grant select on qad_sample.stock_quote to 'appreader'@'localhost';
+
+
 UTF-8 Support
 ========================
 ## Tomcat
@@ -13,7 +22,7 @@ If your POST and GET parameters are not UTF-8 encoded when using Tomcat 5.x, try
 
 ## Jetty
 
-Modify `<jetty_home>/etc/webdefault.xml`, find
+Modify `<jetty_home>/etc/webdefault.xml` or application's `web.xml`, find or add
 
     <locale-encoding-mapping>
        <locale>zh</locale>
@@ -21,3 +30,4 @@ Modify `<jetty_home>/etc/webdefault.xml`, find
     </locale-encoding-mapping>
 
 and change `encoding` to `UTF-8`
+

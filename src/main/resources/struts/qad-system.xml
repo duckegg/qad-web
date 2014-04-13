@@ -29,14 +29,14 @@ Shared features like home, link, upload, download.
             <result name="success" type="freemarker">/WEB-INF/pages/commons/portal/my-portal.ftl</result>
         </action>
         <action name="my/portal/{function}" class="hpps.qad.core.appsec.user.ProfileAction" method="$portal_{1}">
-            <result name="json" type="json">
-                <param name="root">myPortalAndPref</param>
-            </result>
+            <!--<result name="json" type="json">-->
+                <!--<param name="root">myPortalAndPref</param>-->
+            <!--</result>-->
         </action>
         <action name="my/pref" class="hpps.qad.core.appsec.user.ProfileAction" method="$pref">
-            <result name="json" type="json">
-                <param name="root">myPrefJson</param>
-            </result>
+            <!--<result name="json" type="json">-->
+                <!--<param name="root">myPrefJson</param>-->
+            <!--</result>-->
         </action>
         <action name="help/{topic}" class="hpps.qad.base.action.HelpAction">
             <result name="success">/WEB-INF/pages/help/help-{1}.ftl</result>

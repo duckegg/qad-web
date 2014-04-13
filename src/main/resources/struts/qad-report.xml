@@ -14,6 +14,7 @@ Config file for demo only.
         <action name="udr" class="hpps.qad.core.udr.UserDefinedReportAction" method="$list">
             <result name="success" type="freemarker">/WEB-INF/pages/commons/report/udr-list.ftl</result>
         </action>
+        <!-- User defined report format -->
         <action name="udr/json/{displayFormat}" class="hpps.qad.core.udr.UserDefinedReportAction" method="$json">
             <result type="stream">
                 <param name="contentType">application/json</param>
@@ -23,6 +24,21 @@ Config file for demo only.
         <action name="udr/view/{id}/{displayFormat}" class="hpps.qad.core.udr.UserDefinedReportAction" method="$view">
             <result name="success" type="freemarker">/WEB-INF/pages/commons/report/udr-view.ftl</result>
         </action>
+        <!-- User defined query -->
+        <action name="udr/qdf">
+            <result name="success" type="freemarker">/WEB-INF/pages/commons/report/qdf-angular.ftl</result>
+        </action>
+        <action name="udr/qdf/{function}" class="hpps.qad.core.query.QueryDefAction" method="${1}">
+            <result name="success" type="freemarker">/WEB-INF/pages/commons/report/qdf-{1}.ftl</result>
+        </action>
+        <!-- User defined page -->
+        <action name="udr/page">
+            <result name="success" type="freemarker">/WEB-INF/pages/commons/report/udp-angular.ftl</result>
+        </action>
+        <action name="udr/page/{function}" class="hpps.qad.core.udr.UserDefinedPageAction" method="${1}">
+            <result name="success" type="freemarker">/WEB-INF/pages/commons/report/udp-{1}.ftl</result>
+        </action>
+        <!-- User defined report -->
         <action name="udr/{function}" class="hpps.qad.core.udr.UserDefinedReportAction" method="${1}">
             <result name="success" type="freemarker">/WEB-INF/pages/commons/report/udr-{1}.ftl</result>
         </action>
