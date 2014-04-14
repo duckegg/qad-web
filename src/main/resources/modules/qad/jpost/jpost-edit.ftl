@@ -5,9 +5,9 @@
 ********************************************************************************
 -->
 <#include "/library/ftl/taglibs.ftl" parse=true/>
-<#include "/library/ftl/functions.ftl" parse=true/>
+<#include "/library/ftl/lib-function.ftl" parse=true/>
 <#include "post-helper.ftl" parse=true/>
-<#include "/WEB-INF/pages/commons/tag/tag-controls.ftl" parse=true/>
+<#include "/modules/qad/public/tag-controls.ftl" parse=true/>
 <#assign pageId="jpost-edit"/>
 <@ui.page id=pageId class="webform">
 <form id="jpost-edit-form" method="post"

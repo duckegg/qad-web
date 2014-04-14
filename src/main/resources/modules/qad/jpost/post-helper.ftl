@@ -4,7 +4,7 @@
 @author Leo Liao, 2013/04/30, created
 ********************************************************************************
 -->
-<#include "/library/ftl/functions.ftl" parse=true/>
+<#include "/library/ftl/lib-function.ftl" parse=true/>
 <#assign postStatusCss={"wip":"warning","open":"important","closed":"inverse"}/>
 <#function postCss status>
     <#if status?? >

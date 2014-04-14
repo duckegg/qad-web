@@ -16,7 +16,7 @@ Development tools.
             <result name="json" type="json"/>
         </action>
         <action name="admin/devel/restclient" class="hpps.qad.base.rest.RestClientAction" method="execute">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/sysadm/restclient.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/sysadm/restclient.ftl</result>
         </action>
         <action name="admin/devel/webtail" class="com.opensymphony.xwork2.ActionSupport">
             <result>/WEB-INF/pages/commons/sysadm/webtail.jsp</result>
@@ -27,8 +27,8 @@ Development tools.
         </action>
         <!-- Execute arbitrary SQL and display result -->
         <action name="admin/devel/sql-console" class="hpps.qad.core.query.SqlConsoleAction" method="execute">
-            <result name="input" type="freemarker">/WEB-INF/pages/commons/sysadm/sql-console.ftl</result>
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/sysadm/sql-console.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/sysadm/sql-console.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/sysadm/sql-console.ftl</result>
         </action>
         <!-- UI Demo-->
         <action name="uidemo/{next}" class="hpps.qad.base.action.BasicAction" method="doDefault">

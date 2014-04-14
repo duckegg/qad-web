@@ -26,7 +26,7 @@ Shared features like home, link, upload, download.
         <!--</action>-->
         <!-- User Portal -->
         <action name="my">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/portal/my-portal.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/portal/my-portal.ftl</result>
         </action>
         <action name="my/portal/{function}" class="hpps.qad.core.appsec.user.ProfileAction" method="$portal_{1}">
             <!--<result name="json" type="json">-->
@@ -43,19 +43,19 @@ Shared features like home, link, upload, download.
         </action>
         <!-- Changelog -->
         <action name="changelog">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/util/changelog.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/util/changelog.ftl</result>
         </action>
         <!-- Shotcuts -->
         <action name="shortcuts">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/util/shortcuts.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/util/shortcuts.ftl</result>
         </action>
         <!-- Integration with external system -->
         <action name="outlink" class="hpps.qad.base.action.BasicAction" method="doDefault">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/util/outlink.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/util/outlink.ftl</result>
         </action>
         <action name="datex/{function}" class="hpps.qad.core.citype.DataExchangeAction" method="${1}">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/citype/datex-{1}.ftl</result>
-            <result name="input" type="freemarker">/WEB-INF/pages/commons/citype/datex-imp.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/citype/datex-{1}.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/citype/datex-imp.ftl</result>
             <interceptor-ref name="fileUpload">
                 <param name="allowedTypes">text/csv,text/txt,application/vnd.ms-excel</param>
             </interceptor-ref>
@@ -72,7 +72,7 @@ Shared features like home, link, upload, download.
         </action>
         <!-- File upload -->
         <action name="system/upload/input" class="hpps.qad.base.action.UploadAction" method="input">
-            <result name="input">/WEB-INF/pages/commons/file/upload-input.ftl</result>
+            <result name="input">/modules/qad/file/upload-input.ftl</result>
         </action>
         <action name="system/upload" class="hpps.qad.base.action.UploadAction">
             <interceptor-ref name="defaultStack"/>
@@ -80,14 +80,14 @@ Shared features like home, link, upload, download.
                 <!--<param name="allowedTypes">text/plain</param>-->
                 <!--<param name="maximumSize">5242880</param>-->
             </interceptor-ref>
-            <result name="success">/WEB-INF/pages/commons/file/upload-commit.ftl</result>
-            <result name="input">/WEB-INF/pages/commons/file/upload-input.ftl</result>
+            <result name="success">/modules/qad/file/upload-commit.ftl</result>
+            <result name="input">/modules/qad/file/upload-input.ftl</result>
         </action>
 
         <!--@deprecated, use system/upload -->
         <!-- File upload -->
         <action name="upload/input" class="hpps.qad.base.action.UploadAction" method="input">
-            <result name="input">/WEB-INF/pages/commons/file/upload-input.ftl</result>
+            <result name="input">/modules/qad/file/upload-input.ftl</result>
         </action>
         <action name="upload" class="hpps.qad.base.action.UploadAction">
             <interceptor-ref name="defaultStack"/>
@@ -95,8 +95,8 @@ Shared features like home, link, upload, download.
                 <!--<param name="allowedTypes">text/plain</param>-->
                 <!--<param name="maximumSize">5242880</param>-->
             </interceptor-ref>
-            <result name="success">/WEB-INF/pages/commons/file/upload-commit.ftl</result>
-            <result name="input">/WEB-INF/pages/commons/file/upload-input.ftl</result>
+            <result name="success">/modules/qad/file/upload-commit.ftl</result>
+            <result name="input">/modules/qad/file/upload-input.ftl</result>
         </action>
     </package>
 </struts>

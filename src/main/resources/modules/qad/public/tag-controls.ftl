@@ -20,7 +20,6 @@ We have to set ignoreContextParams=true to avoid it.
 ================================================================================
 -->
 <#macro tagging tagCategory controlName selectedValues id label="" style="width:400px" class="" allowInput=true>
-    <@func.DEPRECATED("/modules/qad/public/tag-controls.ftl")/>
     <@s.action name="utils/tag/controls" namespace="/" var="tagAction" executeResult=false rethrowException=true ignoreContextParams=true>
         <@s.param name="category" value="%{'${tagCategory}'}"/>
     </@s.action>
@@ -95,7 +94,6 @@ We have to set ignoreContextParams=true to avoid it.
 ================================================================================
 -->
 <#macro listCustomer controlName selectedValues="" label="" style="" class="">
-    <@func.DEPRECATED("/modules/qad/public/tag-controls.ftl")/>
     <#assign _currentCustomer=customer!''/>
     <@s.action name="utils/customer/list" namespace="/" var="custListAction" executeResult=false rethrowException=true ignoreContextParams=true>
     </@s.action>

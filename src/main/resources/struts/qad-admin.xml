@@ -16,44 +16,44 @@ Sub config file for system admin.
         <!-- Tag                                                                 -->
         <!-- =================================================================== -->
         <action name="admin/content/tag/{function}" class="hpps.qad.core.tag.TagAction" method="{1}">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/tag/tag-{1}.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/tag/tag-{1}.ftl</result>
             <result name="json" type="json"/>
         </action>
         <!-- =================================================================== -->
         <!-- Parameter Settings                                                  -->
         <!-- =================================================================== -->
         <action name="admin/config/{moduleName}/settings/{function}" class="hpps.qad.core.param.ConfigParamAction" method="${2}">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/sysadm/sysparam-{2}.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/sysadm/sysparam-{2}.ftl</result>
         </action>
         <!-- =================================================================== -->
         <!-- CI Types                                                            -->
         <!-- =================================================================== -->
         <action name="admin/config/citype" class="hpps.qad.core.citype.CiTypeAction" method="$index">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/citype/citype-index.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/citype/citype-index.ftl</result>
         </action>
         <!--LEO@20131209: 采用类似{function}的通配URL，method建议前面增加$成为${1},而不是{1}，这样在Action中只有$为前缀的方法才可以调用，防止通过URL调用任意的方法 -->
         <action name="admin/config/citype/{function}" class="hpps.qad.core.citype.CiTypeAction" method="${1}">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/citype/citype-{1}.ftl</result>
-            <result name="input" type="freemarker">/WEB-INF/pages/commons/citype/citype-edit.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/citype/citype-{1}.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/citype/citype-edit.ftl</result>
         </action>
         <!-- =================================================================== -->
         <!-- Customer                                                            -->
         <!-- =================================================================== -->
         <action name="admin/config/customer/{function}" class="hpps.qad.core.customer.CustomerAction" method="{1}">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/sysadm/customer.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/sysadm/customer.ftl</result>
         </action>
         <!-- =================================================================== -->
         <!-- Reports                                                            -->
         <!-- =================================================================== -->
         <action name="admin/reports/audit-log">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/admin/reports/audit-log.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/admin/reports/audit-log.ftl</result>
         </action>
 
         <!-- =================================================================== -->
         <!--@deprecated, use /admin/content/tag -->
         <!-- =================================================================== -->
         <action name="sysadm/tag/{function}" class="hpps.qad.core.tag.TagAction" method="{1}">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/tag/tag-{1}.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/tag/tag-{1}.ftl</result>
             <result name="json" type="json"/>
         </action>
     </package>

@@ -6,7 +6,7 @@
 ********************************************************************************
 -->
 <#include "/library/ftl/taglibs.ftl" parse=true/>
-<#include "/library/ftl/functions.ftl" parse=true/>
+<#include "/library/ftl/lib-function.ftl" parse=true/>
 <#include "_jpost-helper.ftl" parse=true/>
 <#assign pageId="jpost-list"/>
 <@ui.page id=pageId>

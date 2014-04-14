@@ -41,9 +41,8 @@ Basic abstract config file.
                 <!--<param name="method">execute</param>-->
                 <param name="namespace">/</param>
             </result>
-            <result name="defaultResult" type="freemarker">/WEB-INF/pages/commons/util/default-result.ftl</result>
-            <!--<result name="securityError">/WEB-INF/pages/commons/util/access-denied.jsp</result>-->
-            <result name="error" type="freemarker">/WEB-INF/pages/commons/util/action-error.ftl</result>
+            <result name="defaultResult" type="freemarker">/modules/qad/util/default-result.ftl</result>
+            <result name="error" type="freemarker">/modules/qad/util/action-error.ftl</result>
         </global-results>
 
         <global-exception-mappings>

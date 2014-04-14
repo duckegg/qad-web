@@ -10,7 +10,7 @@
 <#assign mobileView=Session?? && (Session.isMobile!false)>
 <#assign isDebugMode=Session?? && ((Session.debug!"false")=="true")>
 <#import "/library/ftl/lib-ui.ftl" as ui/>
-<#import "/library/ftl/functions.ftl" as func/>
+<#import "/library/ftl/lib-function.ftl" as func/>
 <#import "/library/ftl/lib-chart.ftl" as chart/>
 <#setting url_escaping_charset="UTF-8">
 <#setting number_format="#">

@@ -5,7 +5,7 @@
 ********************************************************************************
 -->
 <#include "/library/ftl/taglibs.ftl" parse=true/>
-<#include "/library/ftl/functions.ftl" parse=true/>
+<#include "/library/ftl/lib-function.ftl" parse=true/>
 <#assign pageId="role-edit"/>
 <@ui.page id=pageId title="编辑角色" class="webform">
 <form id="role-edit-form" action="${base}/admin/people/role/${iif(role.id??,'update_do','create_do')}"

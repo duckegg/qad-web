@@ -5,7 +5,7 @@
 ********************************************************************************
 -->
 <#include "/library/ftl/taglibs.ftl" parse=true/>
-<#include "/library/ftl/functions.ftl" parse=true/>
+<#include "/library/ftl/lib-function.ftl" parse=true/>
 <#assign pageId="citype-edit"/>
 <@ui.page id=pageId class="webform" title=iif(ciType??,"新建","修改")>
 <form id="${pageId}-form"

@@ -59,7 +59,7 @@ Core definitions for qad with code refactoring.
                 <param name="contentCharSet">UTF-8</param>
                 <param name="contentDisposition">filename="${displayFilename}"</param>
             </result>
-            <result name="file" type="freemarker">/WEB-INF/pages/commons/file/print-file-result.ftl</result>
+            <result name="file" type="freemarker">/modules/qad/file/print-file-result.ftl</result>
         </action>
 
         <!-- =================================================================== -->
@@ -127,7 +127,7 @@ Core definitions for qad with code refactoring.
                 <param name="contentDisposition">filename="${outputFile.name}"</param>
             </result>
             <!-- PDF -->
-            <result name="pdf_file" type="freemarker">/WEB-INF/pages/commons/file/pdf-result.ftl</result>
+            <result name="pdf_file" type="freemarker">/modules/qad/file/pdf-result.ftl</result>
             <result name="pdf" type="stream">
                 <param name="contentType">application/pdf</param>
                 <param name="inputName">inputStream</param>

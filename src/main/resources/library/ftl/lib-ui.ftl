@@ -233,7 +233,7 @@ Pagination.
 </#macro>
 
 <#-- Helper -->
-<#--TODO: move to functions.ftl -->
+<#--TODO: move to lib-function.ftl -->
 <#function max x y>
     <#if (x<y)><#return y><#else><#return x></#if>
 </#function>

@@ -11,28 +11,28 @@ Sub config file for search
 <struts>
     <package name="struts-search" namespace="/" extends="qad-basic">
         <action name="search" class="hpps.qad.core.search.SearchAction" method="execute">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/search/search-home.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/search/search-home.ftl</result>
             <result name="json" type="json">
                 <param name="includeWildcards">searchOutput.*</param>
             </result>
         </action>
         <action name="search/{1}" class="hpps.qad.core.search.SearchAction" method="${1}">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/search/search-{1}.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/search/search-{1}.ftl</result>
         </action>
         <action name="admin/config/search/profile" class="hpps.qad.core.search.definition.IndexProfileAction" method="$index">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/search/index-profile.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/search/index-profile.ftl</result>
         </action>
         <action name="admin/config/search/profile/{function}" class="hpps.qad.core.search.definition.IndexProfileAction" method="${1}">
             <result name="json" type="json"/>
         </action>
         <action name="admin/config/search" class="hpps.qad.core.search.SearchAdminAction" method="execute">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/search/search-admin.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/search/search-admin.ftl</result>
         </action>
         <action name="admin/config/search/index/{subact}" class="hpps.qad.core.search.SearchAdminAction" method="$index">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/search/search-admin.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/search/search-admin.ftl</result>
         </action>
         <action name="admin/config/search/server/{subact}" class="hpps.qad.core.search.SearchAdminAction" method="$server">
-            <result name="success" type="freemarker">/WEB-INF/pages/commons/search/search-admin.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/search/search-admin.ftl</result>
         </action>
     </package>
 </struts>

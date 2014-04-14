@@ -51,7 +51,7 @@ Human friendly date time. Not Work.
 ================================================================================
 -->
 <#function prettyTime time>
-    <@__deprecated/>
+    <@DEPRECATED()/>
 <#--<#assign offset=(time?date?long-(.now)?long)/>-->
 <#--<#assign pt = "org.ocpsoft.pretty.time.PrettyTime"?new()>-->
 <#--<#assign pt = new("org.ocpsoft.pretty.time.PrettyTime")/>-->
@@ -103,7 +103,7 @@ Convert collection to array represented by string
 ================================================================================
 -->
 <#function colToArrayString collection>
-    <@__deprecated/>
+    <@DEPRECATED()/>
     <#assign output="["/>
     <#list collection as item>
         <#assign output=output+'"${item}"'+iif(item_has_next,",","")/>
@@ -113,7 +113,7 @@ Convert collection to array represented by string
 </#function>
 
 <#function colToString collection>
-    <@__deprecated/>
+    <@DEPRECATED()/>
     <#assign output=""/>
     <#list collection as item>
         <#assign output=output+item+iif(item_has_next,",","")/>
@@ -132,6 +132,6 @@ Convert collection to array represented by string
     </#if>
 </#macro>
 
-<#macro __deprecated>
-    <div class="alert alert-warning">DEPRECATED</div>
-</#macro>
+<#function DEPRECATED use="">
+    <div class="alert alert-warning">DEPRECATED. Please use ${use}</div>
+</#function>

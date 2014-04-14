@@ -5,7 +5,7 @@
 ********************************************************************************
 -->
 <#include "/library/ftl/taglibs.ftl" parse=true/>
-<#include "/library/ftl/functions.ftl" parse=true/>
+<#include "/library/ftl/lib-function.ftl" parse=true/>
 <#assign pageId="datex-imp"/>
 <@ui.page id=pageId class="webform" title="导入CI类型">
     <@ui.strutsErrors/>
