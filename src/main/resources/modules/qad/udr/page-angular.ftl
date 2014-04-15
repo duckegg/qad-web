@@ -28,7 +28,8 @@
             <div class="btn-toolbar kui-hover-toolbar" kui-hover-toolbar>
                 <div class="btn-group btn-group-sm">
                     <a href="#!/update/{{udp.id}}" class="btn btn-default"><i class="fa fa-pencil"></i> 编辑</a>
-                    <a href="javascript:;" ng-click="actionDelete(udp)" class="btn btn-default"><i class="fa fa-trash-o"></i> 删除</a>
+                    <a href="javascript:;" ng-click="actionDelete(udp)" class="btn btn-default"><i
+                            class="fa fa-trash-o"></i> 删除</a>
                 </div>
             </div>
         </div>
@@ -44,7 +45,7 @@
         <#--ng-click="actionTestSql()">-->
         <#--测试SQL-->
         <#--</button>-->
-            <@ui.textarea id="js-code-mirror" label="Content" name="thisEntity.content" isNgModel=true size="large"/>
+            <@ui.textarea id="js-code-mirror" label="Content" name="thisEntity.content" isNgModel=true size="large" class="code"/>
             <@ui.buttonGroup>
                 <button type="reset" class="btn btn-default" ng-click="actionCancel()">取消</button>
                 <button type="submit" class="btn btn-primary">保存</button>
@@ -52,6 +53,9 @@
         </form>
     </div>
     <div class="well js-preview-zone"></div>
+    <div>
+        <#include "help-udr.ftl" parse=true/>
+    </div>
 </script>
 <script type="text/javascript">
     angular.module('qad.udp', ['ngRoute', 'qad.angular', 'ui.bootstrap'])

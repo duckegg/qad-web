@@ -6,4 +6,4 @@
 -->
 <#-- `previewMode` used for user debug preview, we'll use sql directly -->
 <#assign previewMode=true/>
-<#include "udr-view.ftl" parse=true/>
+<#include "query-view.ftl" parse=true/>

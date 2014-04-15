@@ -6,7 +6,7 @@
 -->
 <#include "/library/ftl/taglibs.ftl" parse=true/>
 <#assign pageId="udr-view"/>
-<@ui.page id=pageId title="${userDefinedReport.title}">
+<@ui.page id=pageId title="${userDefinedQuery.title}">
 <#if displayFormat=='table'>
     <#include "format/table.ftl"/>
 <#else>

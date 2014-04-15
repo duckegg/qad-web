@@ -6,14 +6,14 @@
 -->
 <#include "/library/ftl/taglibs.ftl" parse=true/>
 <#include "/modules/qad/public/tag-controls.ftl" parse=true/>
-<#include "udr-lib.ftl" parse=true/>
+<#include "query-lib.ftl" parse=true/>
 <#assign pageId="udr-edit"/>
-<#assign isCreate=!userDefinedReport.id??/>
-<@ui.page id=pageId title=userDefinedReport.title!'未命名报告'>
+<#assign isCreate=!userDefinedQuery.id??/>
+<@ui.page id=pageId title=userDefinedQuery.title!'未命名报告'>
 <div class="webform">
     <div id="testTabs"></div>
     <form id="${pageId}-form" class="kui-tabbable-form"
-          action="${base}/udr/<#if isCreate>create_do<#else>update_do</#if>" method="post"
+          action="${base}/udr/query/<#if isCreate>create_do<#else>update_do</#if>" method="post"
           method="post"
           data-kui-collapsible-form-options
           data-kui-ajax-form
@@ -21,19 +21,19 @@
           data-kui-target="#${pageId}-ajax-result">
         <fieldset class="active">
             <legend>基本信息</legend>
-            <input type="hidden" name="userDefinedReport.id" value="${userDefinedReport.id!''}"/>
-            <@ui.textfield name="userDefinedReport.title" label="标题" class="required" maxlength="100" required=true  value="${userDefinedReport.title!''}"/>
-            <@ui.textarea name="userDefinedReport.description" label="报表说明" class="required">${userDefinedReport.description!''}</@ui.textarea>
-        <#--<@ui.textfield name="userDefinedReport.tagLabels" label="Tag"/>-->
-            <@tagging id="udr-tags" tagCategory="report" controlName="userDefinedReport.tagLabels" label="Tag" selectedValues=userDefinedReport.tagLabels/>
+            <input type="hidden" name="userDefinedQuery.id" value="${userDefinedQuery.id!''}"/>
+            <@ui.textfield name="userDefinedQuery.title" label="标题" class="required" maxlength="100" required=true  value="${userDefinedQuery.title!''}"/>
+            <@ui.textarea name="userDefinedQuery.description" label="报表说明" class="required">${userDefinedQuery.description!''}</@ui.textarea>
+        <#--<@ui.textfield name="userDefinedQuery.tagLabels" label="Tag"/>-->
+            <@tagging id="udr-tags" tagCategory="report" controlName="userDefinedQuery.tagLabels" label="Tag" selectedValues=userDefinedQuery.tagLabels/>
         </fieldset>
         <fieldset>
             <legend>数据来源</legend>
-            <@ui.textfield name="userDefinedReport.queryDef.dbConn" label="数据库连接" class="required" value="${(userDefinedReport.queryDef.dbConn)!''}"/>
+            <@ui.textfield name="userDefinedQuery.queryDef.dbConn" label="数据库连接" class="required" value="${(userDefinedQuery.queryDef.dbConn)!''}"/>
             <button class="js-action-test-sql btn btn-info btn-sm pull-right"
                     style="margin-top:-8px;">测试SQL
             </button>
-            <@ui.textarea name="userDefinedReport.queryDef.sql" label="SQL语句" required=true size="large">${(userDefinedReport.queryDef.sql)!''}</@ui.textarea>
+            <@ui.textarea name="userDefinedQuery.queryDef.sql" label="SQL语句" required=true size="large">${(userDefinedQuery.queryDef.sql)!''}</@ui.textarea>
         </fieldset>
         <fieldset>
             <legend>展现格式</legend>
@@ -59,18 +59,18 @@
                     </div>
                 </#list>
             </div>
-            <input type="hidden" name="userDefinedReport.displayJson" class="form-control"
+            <input type="hidden" name="userDefinedQuery.displayJson" class="form-control"
                    value=""/>
         </fieldset>
         <@ui.buttonGroup>
             <#if !isCreate>
                 <div class="pull-left">
                     <a class="btn btn-default"
-                       href="${base}/udr/copy?id=${userDefinedReport.id}"
+                       href="${base}/udr/query/copy?id=${userDefinedQuery.id}"
                        data-kui-dialog>复制
                     </a>
                     <a class="btn btn-danger"
-                       href="${base}/udr/delete?id=${userDefinedReport.id}"
+                       href="${base}/udr/query/delete?id=${userDefinedQuery.id}"
                        data-kui-dialog>删除
                     </a>
                 </div>
@@ -111,9 +111,9 @@
 </script>
 <script type="text/javascript">
     $(function () {
-        var formatSettings = ${userDefinedReport.displayJson!'{}'};
+        var formatSettings = ${userDefinedQuery.displayJson!'{}'};
     <#--<#list UDR_FORMATS?keys as key>-->
-    <#--formatSettings['${key}'] = userDefinedReport.displayJson;-->
+    <#--formatSettings['${key}'] = userDefinedQuery.displayJson;-->
     <#--</#list>-->
         var $page = $('#${pageId}');
         var $form = $('#${pageId}-form', $page);
@@ -277,13 +277,13 @@
             }
             $form.ajaxSubmit({
                 beforeSerialize: fnValidateDisplayFormat,
-                url: "${base}/udr/preview?displayFormat=" + format,
+                url: "${base}/udr/query/preview?displayFormat=" + format,
                 target: "#${pageId}-preview"
             });
             e.preventDefault();
         }).on('click', '.js-action-test-sql', function (e) {
             $form.ajaxSubmit({
-                url: "${base}/udr/testsql",
+                url: "${base}/udr/query/testsql",
                 target: "#${pageId}-preview"
             });
             e.preventDefault();
@@ -291,7 +291,7 @@
 
         window.fnValidateDisplayFormat = function () {
             try {
-                $('[name="userDefinedReport.displayJson"]', $form).val(DisplayFormat.allFormatsToJsonString());
+                $('[name="userDefinedQuery.displayJson"]', $form).val(DisplayFormat.allFormatsToJsonString());
             } catch (error) {
                 $('.js-format-tab-' + error.format + ' a', $page).tab('show');
                 kui.showToast("warn", "格式错误", 20);

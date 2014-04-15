@@ -8,5 +8,5 @@
 <#assign pageId="udr-testsql"/>
 <#assign tableId="${pageId}-table"/>
 <@ui.page id=pageId title="Test SQL">
-    <@simpleStaticTable tableId=tableId dataTable="testSqlResult"/>
+    <@ui.simpleStaticTable tableId=tableId dataTable="testSqlResult"/>
 </@ui.page>

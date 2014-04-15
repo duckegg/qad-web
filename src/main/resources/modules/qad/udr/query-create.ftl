@@ -4,4 +4,4 @@
 @author Leo Liao, 14-2-28, created
 ********************************************************************************
 -->
-<#include "udr-edit.ftl" parse=true/>
+<#include "query-edit.ftl" parse=true/>

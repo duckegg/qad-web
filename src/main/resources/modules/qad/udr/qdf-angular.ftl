@@ -10,7 +10,9 @@
 <@ui.page id=pageId title="查询定义">
 <div ng-view></div>
 <script type="text/ng-template" id="index.html">
-    <a href="#!/create" class="btn btn-default">新建查询</a>
+    <div class="form-group">
+        <a href="#!/create" class="btn btn-info">新建查询</a>
+    </div>
     <div class="list-group">
         <div class="list-group-item" ng-repeat="qdf in allQueryDef">
             <span class="label label-default pull-right"><i class="fa fa-folder-o"></i> {{qdf.namespace}}</span>
@@ -28,17 +30,12 @@
                 <input type="hidden" name="queryDef.id" ng-model="queryDef.id"/>
 
                 <@ui.labelControlGroup label="名称" helpText="通过目录和名称来定位一个查询，<code>目录.名称</code>必须唯一">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <input type="text" name="queryDef.namespace" ng-model="queryDef.namespace" required="required"
-                                   class="form-control"/>
-                        </div>
-                        <span class="col-md-1">.</span>
-
-                        <div class="col-md-8">
-                            <input type="text" name="queryDef.name" ng-model="queryDef.name" required="required"
-                                   class="form-control"/>
-                        </div>
+                    <div class="input-group">
+                        <input type="text" name="queryDef.namespace" ng-model="queryDef.namespace" required="required"
+                               class="form-control"/>
+                        <span class="input-group-addon">.</span>
+                        <input type="text" name="queryDef.name" ng-model="queryDef.name" required="required"
+                               class="form-control"/>
                     </div>
                 </@ui.labelControlGroup>
                 <@ui.textfield label="数据库连接" name="queryDef.dbConn" isNgModel=true/>
@@ -46,7 +43,7 @@
                         ng-click="actionTestSql()">
                     测试SQL
                 </button>
-                <@ui.textarea label="SQL" name="queryDef.sql" isNgModel=true size="large"/>
+                <@ui.textarea label="SQL" name="queryDef.sql" isNgModel=true size="large" class="code"/>
             </fieldset>
             <fieldset>
                 <legend>其它信息</legend>
