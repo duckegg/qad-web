@@ -9,7 +9,7 @@
 <#include "/library/ftl/lib-function.ftl" parse=true/>
 <#include "post-helper.ftl" parse=true/>
 <#assign pageId="jpost-list"/>
-<@ui.page id=pageId>
+<@ui.page id=pageId title="系统公告">
     <#assign sortCss="fa-angle-up"/>
     <#if so.dir=="desc">
         <#assign sortCss="fa-angle-down"/>

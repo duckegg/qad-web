@@ -68,7 +68,7 @@ $(function () {
     };
 
     function markdownPreview() {
-        var html = marked(input.val(), markedOptions);
+        var html = mdToHtml(input.val());
         preview.html(html);
     }
 
@@ -81,6 +81,15 @@ $(function () {
 
     function genPortletId() {
         return new Date().getTime();
+    }
+
+    function mdToHtml(text) {
+        try {
+            return marked(text, markedOptions);
+        } catch (error) {
+            console.warn(error.message);
+            return text;
+        }
     }
 
     function initEvent($page) {
@@ -162,7 +171,7 @@ $(function () {
                 content = '${base}' + content;
             }
         } else {
-            content = marked(content, markedOptions);
+            content = mdToHtml(content);
         }
         var heading = '<div class="panel-heading"><h3 class="panel-title" title="ID: ' + portlet.id + '">' + portlet.title + '</h3>' +
                 '<div class="btn-group btn-group-xs">' +

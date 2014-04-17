@@ -18,10 +18,10 @@
             </#list>
             </ul>
         </div>
-    <@buttonGroup>
+    <@ui.buttonGroup>
         <button type="submit" class="btn btn-danger"><i class="fa fa-times"></i> 确认删除
         </button>
         <button type="reset" class="btn btn-default"><i class="fa fa-check"></i> 取消</button>
-    </@buttonGroup>
+    </@ui.buttonGroup>
     </form>
 </div>

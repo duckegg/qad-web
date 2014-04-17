@@ -8,7 +8,7 @@
     <script type="text/javascript">
         $(function () {
             closeDialog($('#jpost-delete_do'));
-            flashMessage("success","已删除", 5);
+            kui.showToast("success","已删除", 5);
         });
     </script>
 </div>

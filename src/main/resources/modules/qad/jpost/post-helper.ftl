@@ -32,7 +32,7 @@
         <div class="media-heading">
             <#if isThread>
                 <#if jpost.status?? >
-                    <span class="js-jpost-${jpost.id}-status label label-default kui-label-${jpost.status} pull-right">${jpost.status}</span>
+                    <span id="js-jpost-${jpost.id}-status" class="label label-default kui-status-${jpost.status} pull-right">${jpost.status}</span>
                 </#if>
                 <h3>
                     <#if type=="summary">

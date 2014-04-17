@@ -12,7 +12,7 @@ Development tools.
 <struts>
     <package name="devel" namespace="/" extends="qad-basic">
         <action name="admin/devel/debug" class="hpps.qad.base.action.DebugAction">
-            <result name="success">/WEB-INF/pages/commons/util/debug-result.jsp</result>
+            <result name="success" type="freemarker">/modules/qad/sysadm/debug-result.ftl</result>
             <result name="json" type="json"/>
         </action>
         <action name="admin/devel/restclient" class="hpps.qad.base.rest.RestClientAction" method="execute">
