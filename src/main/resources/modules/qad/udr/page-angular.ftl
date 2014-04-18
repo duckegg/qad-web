@@ -36,26 +36,28 @@
     </div>
 </script>
 <script type="text/ng-template" id="edit.html">
-    <div class="webform">
-        <form ng-submit="actionSave()" kui-tabbable-form>
-            <input type="hidden" name="thisEntity.id" ng-model="thisEntity.id"/>
+    <div class="row">
+        <div class="col-md-7">
+            <form ng-submit="actionSave()" kui-tabbable-form>
+                <input type="hidden" name="thisEntity.id" ng-model="thisEntity.id"/>
 
-            <@ui.textfield label="Title" name="thisEntity.title" isNgModel=true/>
-        <#--<button type="button" class="btn btn-info btn-sm pull-right" style="margin-top:-8px;"-->
-        <#--ng-click="actionTestSql()">-->
-        <#--测试SQL-->
-        <#--</button>-->
-            <@ui.textarea id="js-code-mirror" label="Content" name="thisEntity.content" isNgModel=true size="large" class="code"/>
-            <@ui.buttonGroup>
-                <button type="reset" class="btn btn-default" ng-click="actionCancel()">取消</button>
-                <button type="submit" class="btn btn-primary">保存</button>
-            </@ui.buttonGroup>
-        </form>
+                <@ui.textfield label="Title" name="thisEntity.title" isNgModel=true/>
+            <#--<button type="button" class="btn btn-info btn-sm pull-right" style="margin-top:-8px;"-->
+            <#--ng-click="actionTestSql()">-->
+            <#--测试SQL-->
+            <#--</button>-->
+                <@ui.textarea id="js-code-mirror" label="Content" name="thisEntity.content" isNgModel=true size="large" class="code"/>
+                <@ui.buttonGroup>
+                    <button type="reset" class="btn btn-default" ng-click="actionCancel()">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </@ui.buttonGroup>
+            </form>
+        </div>
+        <div class="col-md-5">
+            <a href="${base}/help/qad/udr">帮助</a>
+        </div>
     </div>
-    <div class="well js-preview-zone"></div>
-    <div>
-        <#include "help-udr.ftl" parse=true/>
-    </div>
+    <#--<div class="well js-preview-zone" ng-show="showPreview"></div>-->
 </script>
 <script type="text/javascript">
     angular.module('qad.udp', ['ngRoute', 'qad.angular', 'ui.bootstrap'])
@@ -104,12 +106,13 @@
                 };
 //                CodeMirror.fromTextArea(document.getElementById("js-code-mirror"),{lineNumbers: true,
 //                    mode: "htmlmixed"});
-                $scope.actionTestSql = function () {
-                    var page = $('#${pageId}');
-                    $('form', page).ajaxSubmit({
-                        url: '${base}/udr/page/testsql',
-                        target: $(".js-preview-zone", page)});
-                };
+                <#--$scope.actionTestSql = function () {-->
+                    <#--var page = $('#${pageId}');-->
+                    <#--$scope.showPreview = true;-->
+                    <#--$('form', page).ajaxSubmit({-->
+                        <#--url: '${base}/udr/page/testsql',-->
+                        <#--target: $(".js-preview-zone", page)});-->
+                <#--};-->
                 $scope.actionCancel = function () {
                     $location.path("/index");
                 };

@@ -27,10 +27,10 @@
 </script>
 <form action="#" method="post" id="js-user-select-form">
     <@ui.ajaxTable tableId="${tableId}" ajaxForm="#${tableId}Qform" autoWidth=false />
-    <@buttonGroup>
+    <@ui.buttonGroup>
         <button type="submit" class="btn btn-primary">确定</button>
         <button type="reset" class="btn btn-default">取消</button>
-    </@buttonGroup>
+    </@ui.buttonGroup>
 </form>
 <script type="text/javascript">
     <#-- A global variable -->

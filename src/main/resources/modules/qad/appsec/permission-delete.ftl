@@ -15,10 +15,10 @@
             权限删除后，系统中被该权限限制的内容将 *无法* 访问。请事先与熟悉系统权限设置的开发人员联系。
             坚持要删除权限 <strong>${permission.permkey}</strong> 吗？
         </div>
-    <@buttonGroup>
+    <@ui.buttonGroup>
         <button type="submit" class="btn btn-danger"><i class="fa fa-times"></i> 确认删除
         </button>
         <button type="reset" class="btn btn-default"><i class="fa fa-check"></i> 取消</button>
-    </@buttonGroup>
+    </@ui.buttonGroup>
     </form>
 </div>

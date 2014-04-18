@@ -101,7 +101,7 @@
         </div>
     </div>
 </div>
-    <@staticTable tableId="${pageId}-index-list" toolbarElement="#${pageId}-toolbar"/>
+    <@ui.staticTable tableId="${pageId}-index-list" toolbarElement="#${pageId}-toolbar"/>
 <script type="text/javascript">
     function submitSubact(name, msg) {
         if (!confirm(msg))

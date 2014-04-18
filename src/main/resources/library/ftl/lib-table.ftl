@@ -561,5 +561,5 @@ Build static table with data from {@link DataTable}
         </@s.iterator>
     </tbody>
 </table>
-    <@staticTable tableId=tableId/>
+    <@ui.staticTable tableId=tableId/>
 </#macro>

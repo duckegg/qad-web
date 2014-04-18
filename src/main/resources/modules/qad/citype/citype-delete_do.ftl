@@ -9,7 +9,7 @@
     <script type="text/javascript">
         $(function(){
             closeDialog('#citype-delete_do');
-            flashMessage("success","对象已删除");
+            kui.showToast("success","对象已删除");
         });
     </script>
 </div>

@@ -71,7 +71,7 @@
                     <@s.checkboxlist label="角色" name="roleIdsInUser" multiple="true" list="%{#roleListAction.roles}" listKey="id" listValue="name" value="user.roleIds" cssClass="checkbox-inline"/>
                 </fieldset>
             </div>
-            <@buttonGroup>
+            <@ui.buttonGroup>
                 <#if user.id??>
                     <div style="float:left">
                         <a href="${base}/user/delete?id=${user.id}"
@@ -83,7 +83,7 @@
                 <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> 保存
                 </button>
                 <button type="reset" class="btn btn-default">取消</button>
-            </@buttonGroup>
+            </@ui.buttonGroup>
         </div>
     </div>
 </form>

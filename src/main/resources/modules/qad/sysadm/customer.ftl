@@ -35,12 +35,12 @@
             <@s.hidden key="customer.id"/>
             <@textfield name="customer.keyword" value="${customer.keyword!''}" label="室组Key" title="室组的唯一标识，请用英文和字母" class="required"/>
             <@textfield name="customer.name" value="${customer.name!''}" label="室组名称" title="室组的名称" class="required"/>
-            <@buttonGroup>
+            <@ui.buttonGroup>
                 <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> 保存
                 </button>
                 <button type="reset" class="btn btn-default">取消</button>
 
-            </@buttonGroup>
+            </@ui.buttonGroup>
         </form>
         <script type="text/javascript">
             $(function () {

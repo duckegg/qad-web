@@ -68,9 +68,8 @@
                            class="btn btn-danger" tabindex="-1"><i class="fa fa-times"></i> 删除</a>
                     </div>
                 </#if>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> 保存
-                </button>
                 <button type="reset" class="btn btn-default">取消</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> 保存</button>
             </div>
         </div>
     </div>

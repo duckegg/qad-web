@@ -16,17 +16,16 @@
         <ul class="list-unstyled">
         <#list ciTypes as ciType>
             <li>
-                <label class="checkbox-inline"><input type="checkbox" name="id"
+                <label class="checkbox-inline"><input type="checkbox" name="ids"
                                                       value="${ciType.id}" checked="checked"/>
                 ${ciType.key!''} ${ciType.name!''}</label>
             </li>
         </#list>
         </ul>
 
-    <@buttonGroup>
-        <button type="submit" class="btn btn-danger"><i class="fa fa-times"></i> 确认删除
-        </button>
-        <button type="reset" class="btn btn-default"><i class="fa fa-check"></i> 取消</button>
-    </@buttonGroup>
+    <@ui.buttonGroup>
+        <button type="reset" class="btn btn-default">取消</button>
+        <button type="submit" class="btn btn-danger">确认删除</button>
+    </@ui.buttonGroup>
     </form>
 </div>

@@ -7,16 +7,18 @@
 <#include "/library/ftl/taglibs.ftl" />
 <#--<#import "/library/json.ftl" as json>-->
 <#assign pageId="search-home"/>
-<@ui.page id=pageId title="看板搜索">
+<@ui.page id=pageId title="搜索">
 <div class="alert alert-info">
     <form action="${base}/search" method="GET" class="form-inline"
           data-pjax>
-        <div class="input-append">
-            <@ui.textfield id="${pageId}-input" name="query" class="input-xxlarge" value="${query?html}"/>
-            <@ui.button class="btn-primary"><i class="fa fa-search"></i> </@ui.button><br/>
+        <div class="input-group">
+            <input type="text" class="form-control" id="${pageId}-input" name="query" value="${query?html}"/>
+            <span class="input-group-btn">
+            <button class="btn btn-primary"><i class="fa fa-search"></i></button>
+            </span>
         </div>
-        <p class="muted" style="margin-left:5px">
-            搜索技巧："" 全字匹配，* 通配符，AND 与，OR 或
+        <p class="small muted" style="margin-top:0.5em">
+            搜索技巧 <code>""</code> 全字匹配，<code>*</code> 通配符，<code>AND</code> 与，<code>OR</code> 或
         </p>
 
         <div class="form-group">
@@ -65,13 +67,13 @@
                 <div class="col-md-4">
                     <@ui.alert level="warning">
                         搜索功能还在调试，如有搜索不到的情况，请 <a href="${base}/jpost/feedback/create" data-kui-dialog><i
-                                class="fa fa-comment-o"></i> 联系我们</a>
-                        <#--有以下已知问题，我们正在修复：-->
-                        <#--<ol>-->
-                            <#--<li class="fixed">搜索结果的字段名用中文显示</li>-->
-                            <#--<li class="fixed">搜索结果很大的时候，分页数字太多</li>-->
-                            <#--<li class="fixed">中文显示搜索范围和CI类型</li>-->
-                        <#--</ol>-->
+                            class="fa fa-comment-o"></i> 联系我们</a>
+                    <#--有以下已知问题，我们正在修复：-->
+                    <#--<ol>-->
+                    <#--<li class="fixed">搜索结果的字段名用中文显示</li>-->
+                    <#--<li class="fixed">搜索结果很大的时候，分页数字太多</li>-->
+                    <#--<li class="fixed">中文显示搜索范围和CI类型</li>-->
+                    <#--</ol>-->
                     </@ui.alert>
                 </div>
             </div>
@@ -119,6 +121,7 @@
                 var indexTypeCit = ${toJson(definedCiTypes)};
                 var hits = searchResult.hits.hits;
                 var $list = $('#search-result-list');
+                $('#${pageId}-input').focus();
                 var html = "";
                 for (var i = 0, j = hits.length; i < j; i++) {
                     html += '<li id="search-result-"' + i + '>';
@@ -152,7 +155,7 @@
 
                 function translateField(type, field) {
                     var translation = ${translationJson!'{}'};
-                    console.debug(type,translation[type]);
+                    console.debug(type, translation[type]);
                     if (translation[type])
                         return translation[type][field.toLowerCase()] || field;
                     return field;

@@ -13,10 +13,10 @@
             <p>删除角色不会删除该角色所拥有的用户，但可能会对用户的权限造成影响。</p>
             确认删除角色 <strong>${role.name}</strong> 么？
         </div>
-    <@buttonGroup>
+    <@ui.buttonGroup>
         <button type="submit" class="btn btn-danger"><i class="fa fa-times"></i> 确认删除
         </button>
         <button type="reset" class="btn btn-default"><i class="fa fa-check"></i> 取消</button>
-    </@buttonGroup>
+    </@ui.buttonGroup>
     </form>
 </div>

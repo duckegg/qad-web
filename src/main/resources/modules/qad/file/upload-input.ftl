@@ -15,9 +15,9 @@
         <input type="hidden" name="attach.category" value="${attach.category!''}"/>
         <#--<input type="hidden" name="attach.name" value=""/>-->
         <#--<input type="hidden" name="attach.description" value=""/>-->
-    <@buttonGroup>
+    <@ui.buttonGroup>
         <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> 确定上传</button>
         <button type="reset" class="btn btn-default">取消</button>
-    </@buttonGroup>
+    </@ui.buttonGroup>
     </form>
 </div>

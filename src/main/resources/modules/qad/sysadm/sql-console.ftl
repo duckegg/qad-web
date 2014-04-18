@@ -39,6 +39,6 @@
             </@s.iterator>
         </tbody>
     </table>
-        <@staticTable tableId="sqlConsole"/>
+        <@ui.staticTable tableId="sqlConsole"/>
     </#if>
 </@ui.page>

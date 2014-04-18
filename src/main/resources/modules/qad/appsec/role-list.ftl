@@ -47,6 +47,6 @@
             </#list>
         </tbody>
     </table>
-    <@staticTable tableId="${tableId}" printable=false/>
+    <@ui.staticTable tableId="${tableId}" printable=false/>
 </div>
 </@ui.page>

@@ -12,10 +12,10 @@
         <input type="hidden" name="id" value="${user.id}"/>
 
         <div class="alert alert-danger">确认删除用户 <strong>${user.fullName}</strong> 么？</div>
-    <@buttonGroup>
+    <@ui.buttonGroup>
         <button type="submit" class="btn btn-danger"><i class="fa fa-times"></i> 确认删除
         </button>
         <button type="reset" class="btn btn-default"><i class="fa fa-check"></i> 取消</button>
-    </@buttonGroup>
+    </@ui.buttonGroup>
     </form>
 </div>
