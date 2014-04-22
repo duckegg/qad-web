@@ -4,7 +4,7 @@
 @author Leo Liao, 2012/07/14, created
 ********************************************************************************
 -->
-<#include "/library/lib-print.ftl"/>
+<#include "/library/ftl/lib-print.ftl"/>
 <@xhtml
 title="看板使用日志"
 columns=

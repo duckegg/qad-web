@@ -4,7 +4,7 @@
 @author Leo Liao, 13-5-25, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 
 <@ui.page id="help-appsec" title="系统安全管理">
     <#noparse>

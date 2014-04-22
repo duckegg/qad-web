@@ -54,7 +54,7 @@
 </#macro>
 
 <#macro xhtml_body_header title>
-<h1 style="display:inline-block">${title}</h1>
+<h1>${title}</h1>
 <#-- Image path shall be relative to report base dir "/" -->
 <div style="float:right;display: inline-block"><img src="media/images/report-logo.png"/></div>
 <div style="clear:both"/>
@@ -69,7 +69,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style type="text/css">
         body {
-            font-family: "Microsoft YaHei", Arial;
+            font-family: "FZLTH", Arial;
             font-size: 12px;
         }
 

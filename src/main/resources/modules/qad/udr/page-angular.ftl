@@ -12,23 +12,23 @@
 <div ng-view></div>
 <script type="text/ng-template" id="index.html">
     <div class="form-group">
-        <a href="#!/create" class="btn btn-info">新建页面</a>
+        <button ng-click="actionCreate()" class="btn btn-info" ng-disabled="!isUserLoggedIn">新建页面</button>
     </div>
     <pagination class="pagination-sm" total-items="so.totalRecords" page="so.page" items-per-page="so.size"
                 on-select-page="actionChangePage(page)"
                 boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
                 last-text="&raquo;"></pagination>
     <div class="list-group">
-        <div class="list-group-item kui-toolbar-container" ng-repeat="udp in allEntity">
-            <h3 class="list-group-item-heading"><a href="${base}/udr/page/view?id={{udp.id}}">{{udp.title}}</a></h3>
+        <div class="list-group-item kui-toolbar-container" ng-repeat="page in allEntity">
+            <h3 class="list-group-item-heading"><a href="${base}/udr/page/view?id={{page.id}}">{{page.title}}</a></h3>
 
-            <p class="list-group-item-text"><a href="${base}/user/view/{{udp.trace.createdUser.id}}" data-kui-dialog>{{udp.trace.createdUser.fullName}}</a>
-                {{udp.trace.createdAt}}</p>
+            <p class="list-group-item-text"><a href="${base}/user/view/{{page.trace.createdBy}}" data-kui-dialog>{{page.trace.createdUser.fullName}}</a>
+                {{page.trace.createdAt}}</p>
 
             <div class="btn-toolbar kui-hover-toolbar" kui-hover-toolbar>
                 <div class="btn-group btn-group-sm">
-                    <a href="#!/update/{{udp.id}}" class="btn btn-default"><i class="fa fa-pencil"></i> 编辑</a>
-                    <a href="javascript:;" ng-click="actionDelete(udp)" class="btn btn-default"><i
+                    <a href="#!/update/{{page.id}}" class="btn btn-default" ng-disabled="!page.isOwner"><i class="fa fa-pencil"></i> 编辑</a>
+                    <a href="javascript:;" ng-click="actionDelete(udp)" class="btn btn-default" ng-disabled="!page.isOwner"><i
                             class="fa fa-trash-o"></i> 删除</a>
                 </div>
             </div>
@@ -69,20 +69,27 @@
                         .when('/create', {controller: 'EditCtrl', templateUrl: 'edit.html'})
                         .otherwise({redirectTo: '/index'});
             }])
-            .controller('ListCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+            .controller('ListCtrl', ['$rootScope', '$scope', '$http', '$location', function ($rootScope, $scope, $http, $location) {
+                    <@shiro.user>$rootScope.isUserLoggedIn = true;</@shiro.user>
                 $scope.allEntity = [];
+                $scope.actionCreate = function () {
+                    $location.path("/create");
+                };
                 $scope.actionChangePage = function (page) {
                     $scope.so.page = page;
                     $http.post('${base}/udr/page/list.json', {so: $scope.so})
                             .success(function (data) {
                                 $scope.allEntity = data.allEntity;
+                                angular.forEach($scope.allEntity, function (value, index) {
+                                    value.isOwner = (value.trace.createdBy ==${(Session.user.id)!-100});
+                                });
                                 $scope.so = data.so;
                             });
                 };
                 $scope.actionDelete = function (udp) {
                     if (confirm("确定要删除吗?")) {
-                        $http.post('${base}/udr/page/delete_do.json?id=' + udp.id).success(function () {
-                            kui.showToast('success', '已删除' + udp.title);
+                        $http.post('${base}/udr/page/delete_do.json?id=' + page.id).success(function () {
+                            kui.showToast('success', '已删除' + page.title);
                             $scope.actionChangePage($scope.so.page);
                         });
                     }
@@ -99,20 +106,11 @@
                     $scope.loadOne(id);
                 });
                 $scope.loadOne = function (id) {
-                    $http.get('${base}/udr/page/update.json?id=' + id)
+                    $http.get(!id ? '${base}/udr/page/create.json' : '${base}/udr/page/update.json?id=' + id)
                             .success(function (data) {
                                 $scope.thisEntity = data.thisEntity;
                             });
                 };
-//                CodeMirror.fromTextArea(document.getElementById("js-code-mirror"),{lineNumbers: true,
-//                    mode: "htmlmixed"});
-                <#--$scope.actionTestSql = function () {-->
-                    <#--var page = $('#${pageId}');-->
-                    <#--$scope.showPreview = true;-->
-                    <#--$('form', page).ajaxSubmit({-->
-                        <#--url: '${base}/udr/page/testsql',-->
-                        <#--target: $(".js-preview-zone", page)});-->
-                <#--};-->
                 $scope.actionCancel = function () {
                     $location.path("/index");
                 };
@@ -123,7 +121,6 @@
                             .success(function (data) {
                                 kui.showToast("success", "已保存", 3);
                                 $location.path('/index');
-//                                $scope.thisEntity = data.thisEntity;
                             }).error(function (data) {
                                 kui.showToast("error", data.error, 15);
                             });

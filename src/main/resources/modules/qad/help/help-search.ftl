@@ -4,7 +4,7 @@
 @author Leo Liao, 13-11-13, created
 ********************************************************************************
 -->
-<#include "/library/taglibs.ftl" parse=true/>
+<#include "/library/ftl/taglibs.ftl" parse=true/>
 <@ui.page id="help-search" title="搜索">
 <div class="alert">适用于管理员</div>
 <h2>术语和概念</h2>
