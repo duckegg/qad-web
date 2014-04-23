@@ -84,7 +84,7 @@
                     $scope.loadOne(id);
                 });
                 $scope.loadOne = function (id) {
-                    $http.get('${base}/udr/qdf/update.json?id=' + id)
+                    $http.get(klib.isBlank(id) ? '${base}/udr/qdf/create.json' : ('${base}/udr/qdf/update.json?id=' + id))
                             .success(function (data) {
                                 $scope.queryDef = data.queryDef;
                             });

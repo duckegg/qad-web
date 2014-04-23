@@ -340,15 +340,11 @@ Pagination.
 </div>
 </#macro>
 
+<#-- DEPRECATED -->
 <#macro portlet id title="" url="" class="" style="" type="">
 <#--<#if type=="box">-->
 <#--<div id="${id}" class="${class}" style="${style}">-->
 <#--</div>-->
-<#--<script type="text/javascript">-->
-<#--$(function () {-->
-<#--$('#${id}').load("${url}");-->
-<#--});-->
-<#--</script>-->
 <#--<#else>-->
 <div id="${id}" class="portlet panel panel-default ${class}" <#if url!="">data-kui-content-url="${url}"</#if>
      style="${style}">
@@ -357,6 +353,13 @@ Pagination.
         <#nested />
     </div>
 </div>
+    <#if url!="">
+    <script type="text/javascript">
+        $(function () {
+            $('#${id} .panel-body').load("${url}");
+        });
+    </script>
+    </#if>
 <#--</#if>-->
 </#macro>
 

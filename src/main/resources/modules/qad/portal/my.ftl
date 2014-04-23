@@ -143,6 +143,8 @@ $(function () {
     }
 
     function buildPortlets(portlets) {
+        if (klib.isBlank(portlets))
+            return;
         for (var i = 0; i < portlets.length; i++) {
             if (klib.isBlank(portlets[i].id))
                 portlets[i].id = i;

@@ -27,8 +27,10 @@
 
             <div class="btn-toolbar kui-hover-toolbar" kui-hover-toolbar>
                 <div class="btn-group btn-group-sm">
-                    <a href="#!/update/{{page.id}}" class="btn btn-default" ng-disabled="!page.isOwner"><i class="fa fa-pencil"></i> 编辑</a>
-                    <a href="javascript:;" ng-click="actionDelete(udp)" class="btn btn-default" ng-disabled="!page.isOwner"><i
+                    <a href="#!/update/{{page.id}}" class="btn btn-default" ng-disabled="!page.isOwner"><i
+                            class="fa fa-pencil"></i> 编辑</a>
+                    <a href="javascript:;" ng-click="actionDelete(udp)" class="btn btn-default"
+                       ng-disabled="!page.isOwner"><i
                             class="fa fa-trash-o"></i> 删除</a>
                 </div>
             </div>
@@ -117,7 +119,7 @@
                 $scope.actionSave = function () {
                     var isCreate = $scope.thisEntity.id == null;
                     var url = isCreate ? '${base}/udr/page/create_do.json' : '${base}/udr/page/update_do.json';
-                    $http.post(url, {"thisEntity": $scope.thisEntity})
+                    $http.post(url, {id: $scope.thisEntity.id, "thisEntity": $scope.thisEntity})
                             .success(function (data) {
                                 kui.showToast("success", "已保存", 3);
                                 $location.path('/index');

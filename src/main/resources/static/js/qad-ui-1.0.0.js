@@ -142,7 +142,8 @@ function UiKit(key) {
 //        $('.kui-collapsible-form fieldset', selector).collapsibleForm();
 //    };
     this.uiBuildSidebar = function (selector) {
-        $(selector).kuiSidebar({useMmenu: true});
+        var useMmenu = ($(selector).data('kui-usemmenu') == true);
+        $(selector).kuiSidebar({useMmenu: useMmenu});
     };
     function uiBuildCollapsible(selector) {
         var $container = $('[data-role="collapsible"],.accordion', $(selector))

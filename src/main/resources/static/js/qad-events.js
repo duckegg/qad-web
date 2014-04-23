@@ -393,10 +393,11 @@ $(function () {
             $(document).ajaxError(function (e, jqxhr, settings, exception) {
                 _generateAjaxErrorMessage(jqxhr);
             });
-            $(document).on('pjax:error', function () {
-                console.debug("Got pjax:error");
+            $(document).on('pjax:error', function (xhr, textStatus, errorThrown, options) {
+                // Some error is abort: errorThrown=abort, options=abort,textStatus.status=0,textStatus.statusText=abort
+                console.warn("pjax:error", xhr, textStatus, errorThrown, options);
                 // Returning false will prevent the the fallback redirect
-                return false;
+                // return false;
             })
         }
 
