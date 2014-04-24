@@ -29,7 +29,7 @@
                 <div class="btn-group btn-group-sm">
                     <a href="#!/update/{{page.id}}" class="btn btn-default" ng-disabled="!page.isOwner"><i
                             class="fa fa-pencil"></i> 编辑</a>
-                    <a href="javascript:;" ng-click="actionDelete(udp)" class="btn btn-default"
+                    <a href="javascript:;" ng-click="actionDelete(page)" class="btn btn-default"
                        ng-disabled="!page.isOwner"><i
                             class="fa fa-trash-o"></i> 删除</a>
                 </div>
@@ -90,8 +90,8 @@
                 };
                 $scope.actionDelete = function (udp) {
                     if (confirm("确定要删除吗?")) {
-                        $http.post('${base}/udr/page/delete_do.json?id=' + page.id).success(function () {
-                            kui.showToast('success', '已删除' + page.title);
+                        $http.post('${base}/udr/page/delete_do.json?id=' + udp.id).success(function () {
+                            kui.showToast('success', '已删除' + udp.title);
                             $scope.actionChangePage($scope.so.page);
                         });
                     }
