@@ -5,14 +5,14 @@
 ********************************************************************************
 -->
 <#include "/library/ftl/taglibs.ftl" parse=true/>
-<#assign pageId="qdf-angular"/>
+<#assign pageId="page-angular"/>
 <#--<script type="text/javascript" src="${base}/media/angularjs/angular-route.min.js"></script>-->
 <@ui.page id=pageId title="页面定义">
 
 <div ng-view></div>
 <script type="text/ng-template" id="index.html">
     <div class="form-group">
-        <button ng-click="actionCreate()" class="btn btn-info" ng-disabled="!isUserLoggedIn">新建页面</button>
+        <button ng-click="actionCreate()" class="btn btn-info js-action-create-page" ng-disabled="!isUserLoggedIn">新建页面</button>
     </div>
     <pagination class="pagination-sm" total-items="so.totalRecords" page="so.page" items-per-page="so.size"
                 on-select-page="actionChangePage(page)"
@@ -40,7 +40,7 @@
 <script type="text/ng-template" id="edit.html">
     <div class="row">
         <div class="col-md-7">
-            <form ng-submit="actionSave()" kui-tabbable-form>
+            <form ng-submit="actionSave()" kui-tabbable-form id="${pageId}-edit-form">
                 <input type="hidden" name="thisEntity.id" ng-model="thisEntity.id"/>
 
                 <@ui.textfield label="Title" name="thisEntity.title" isNgModel=true/>
@@ -51,7 +51,7 @@
                 <@ui.textarea id="js-code-mirror" label="Content" name="thisEntity.content" isNgModel=true size="large" class="code"/>
                 <@ui.buttonGroup>
                     <button type="reset" class="btn btn-default" ng-click="actionCancel()">取消</button>
-                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="submit" class="btn btn-primary js-action-save-edit">保存</button>
                 </@ui.buttonGroup>
             </form>
         </div>

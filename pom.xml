@@ -10,7 +10,7 @@
     <!--=====================================================================-->
     <groupId>hpps</groupId>
     <artifactId>qad-web</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,22 +21,15 @@
     <!--=====================================================================-->
     <name>qad-web</name>
     <description>Web pages and configuration of qad</description>
-    <inceptionYear>2012</inceptionYear>
-    <organization>
-        <name>HP Software Professional Service</name>
-    </organization>
+    <inceptionYear>2014</inceptionYear>
 
     <dependencies>
         <dependency>
             <groupId>hpps</groupId>
             <artifactId>qad-core</artifactId>
-            <version>2.0.0</version>
+            <version>[2.0.0,)</version>
             <type>jar</type>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
-
-    <!--<build>-->
-        <!-- Default is ${project.name}-${project.version} -->
-        <!--<finalName>${project.name}</finalName>-->
-    <!--</build>-->
 </project>

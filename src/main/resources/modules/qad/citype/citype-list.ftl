@@ -15,9 +15,9 @@
     </@ui.alert>
 <div class="btn-toolbar" id="citype-list-toolbar">
     <div class="btn-group">
-        <a class="btn btn-default" data-dialog data-dialog-aftersubmit="refreshDataTable('${tableId}')"
+        <a class="btn btn-default" data-dialog data-dialog-aftersubmit="kui.refreshDataTable('${tableId}');"
            href="${base}/admin/config/citype/create"><i class="fa fa-plus"></i> 新建CI类型</a>
-        <a class="btn btn-default" data-dialog data-dialog-aftersubmit="refreshDataTable('${tableId}')"
+        <a class="btn btn-default" data-dialog data-dialog-aftersubmit="kui.refreshDataTable('${tableId}');"
            href="${base}/datex/imp?target=ciType&sourceFormat=tsv"><i class="fa fa-upload"></i> 导入CI类型</a>
         <button class="btn btn-default" onclick='$("#${pageId}-form").submit();return false;'>删除</button>
     </div>
