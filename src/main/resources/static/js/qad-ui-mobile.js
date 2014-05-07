@@ -15,5 +15,5 @@ function MobileUiKit() {
     this.type = "mobile";
 }
 
-Mobilekui.prototype = new UiKit();
+MobileUiKit.prototype = new QadUi();
 var uiKit = new MobileUiKit();

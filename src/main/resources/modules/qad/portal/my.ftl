@@ -46,29 +46,9 @@ $(function () {
     input.on('keyup', function () {
         markdownPreview();
     });
-    var renderer = new marked.Renderer();
-    renderer.table = function (header, body) {
-        return '<table class="table table-bordered table-condensed">\n'
-                + '<thead>\n'
-                + header
-                + '</thead>\n'
-                + '<tbody>\n'
-                + body
-                + '</tbody>\n'
-                + '</table>\n';
-    };
-    var markedOptions = {
-        gfm: true,
-        pedantic: false,
-        sanitize: false,
-        tables: true,
-        smartLists: true,
-        breaks: true,
-        renderer: renderer
-    };
 
     function markdownPreview() {
-        var html = mdToHtml(input.val());
+        var html = ktl.markdownToHtml(input.val());
         preview.html(html);
     }
 
@@ -81,15 +61,6 @@ $(function () {
 
     function genPortletId() {
         return new Date().getTime();
-    }
-
-    function mdToHtml(text) {
-        try {
-            return marked(text, markedOptions);
-        } catch (error) {
-            console.warn(error.message);
-            return text;
-        }
     }
 
     function initEvent($page) {
@@ -134,7 +105,7 @@ $(function () {
                     allPortlets = xhr.myPortal;
                     var id = genPortletId();
                     allPortlets = _.forEach(allPortlets, function (p) {
-                        if (klib.isBlank(p.id)) {
+                        if (ktl.isBlank(p.id)) {
                             p.id = id++;
                         }
                     });
@@ -143,10 +114,10 @@ $(function () {
     }
 
     function buildPortlets(portlets) {
-        if (klib.isBlank(portlets))
+        if (ktl.isBlank(portlets))
             return;
         for (var i = 0; i < portlets.length; i++) {
-            if (klib.isBlank(portlets[i].id))
+            if (ktl.isBlank(portlets[i].id))
                 portlets[i].id = i;
             buildOnePortlet(portlets[i]);
         }
@@ -173,7 +144,7 @@ $(function () {
                 content = '${base}' + content;
             }
         } else {
-            content = mdToHtml(content);
+            content = ktl.markdownToHtml(content);
         }
         var heading = '<div class="panel-heading"><h3 class="panel-title" title="ID: ' + portlet.id + '">' + portlet.title + '</h3>' +
                 '<div class="btn-group btn-group-xs">' +

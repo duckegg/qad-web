@@ -20,7 +20,7 @@ module.exports = function (grunt) {
         // SSH
         secret: grunt.file.readJSON('secret.json'),
         sftp: {
-            update_remote:{
+            update_remote: {
                 files: {
                     "./": "./target/<%=package.name%>-<%=package.version%>.jar"
                 },
@@ -32,10 +32,21 @@ module.exports = function (grunt) {
                     showProgress: true
                 }
             }
+        },
+        //Javascript doc
+        jsdoc: {
+            dist: {
+                src: ['src/main/resources/static/js/qad-*.js'],
+                options: {
+                    destination: 'target/doc/jsdoc',
+                    configure:'jsdoc.conf.json'
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-ssh');
+    grunt.loadNpmTasks('grunt-jsdoc');
 
     // Default task(s).
     grunt.registerTask('default', ['sftp:update_remote']);

@@ -9,13 +9,13 @@
 //==============================================================================
 // Global events
 //==============================================================================
-$(function () {
-    // Default body content
-    var BODY_CONTENT = $('#body-content');
-    registerGlobalEvents();
-    initControls();
+(function ($, ktl, kui, logger) {
+    "use strict";
 
-    function registerGlobalEvents() {
+    $(function () {
+        // Default body content
+        var BODY_CONTENT = $('#body-content');
+
         onToggleDisplay();
         onAjaxError();
         onFormAjaxSubmit();
@@ -25,13 +25,15 @@ $(function () {
         onPjaxLink();
         onDialogLink();
         onShortAccesskey();
+        initControls();
 
         function onToggleDisplay() {
             $(document).on('click', '[data-kui-toggle-display]', function () {
                 var $this = $(this);
                 var target = $this.data('kui-toggle-display');
-                if (isBlank(target))
+                if (ktl.isBlank(target)) {
                     return;
+                }
                 var $target = $(target);
 //                logger.debug("checked="+$this.is(':checked'));
 //                logger.debug("selected="+$this.is(':selected'));
@@ -69,16 +71,14 @@ $(function () {
                 }
 //                logger.debug($container);
                 var fnSerialize = $form.data("kui-ajax-form-serialize");
-//                console.debug(fnSerialize);
 
                 $(this).ajaxSubmit({
                     beforeSerialize: function () {
-                        if (isNotBlank(fnSerialize)) {
+                        if (ktl.isNotBlank(fnSerialize)) {
                             try {
                                 return eval(fnSerialize);
                             } catch (error) {
                                 logger.error("Program Error in ajaxSubmit.beforeSerialize: " + error.message);
-//                                console.error(error);
                                 return false;
                             }
                         }
@@ -88,24 +88,25 @@ $(function () {
                         _flashMessageBeforeSend($form);
                         var isValid = true;
                         var fnValidate = $form.data("kui-validate") || $form.data("form-validate");
-                        if (isNotBlank(fnValidate)) {
+                        if (ktl.isNotBlank(fnValidate)) {
                             isValid = _validateForm($form, ":hidden", fnValidate);
                         }
                         if (isValid) {
                             isValid = _checkConfirmation($form);
                         }
-                        if (isValid && !isDialog)
-                            $ajaxTarget.append(showLoading("inline"));
+                        if (isValid && !isDialog) {
+                            $ajaxTarget.append(kui.showLoading("inline"));
+                        }
                         return  isValid;
                     },
                     success: function (xhr) {
                         setFormSubmited(true);
-                        hideLoading();
+                        kui.hideLoading();
                         _flashMessageAfterSend($form);
                         if (isDialog) {
                             var $dialog = _createSmartDialog($form, null, xhr).closest('.ui-dialog');
                             var title = $(xhr).data('title');
-                            if ($dialog.length > 0 && isNotBlank(title)) {
+                            if ($dialog.length > 0 && ktl.isNotBlank(title)) {
                                 $('.ui-dialog-title', $dialog).html(title);
                             }
                         }
@@ -130,16 +131,23 @@ $(function () {
 //            });
 //        }
 
-        /**
-         * Find error message from error page
-         * @param jqxhr
-         * @returns {*|jQuery}
-         * @deprecated
-         */
-        function _findErrorMessageFromErrorPage(jqxhr) {
-            return $("#error-message", $(jqxhr.responseText)).text();
-        }
+//        /**
+//         * Find error message from error page
+//         * @private
+//         * @param jqxhr
+//         * @returns {*|jQuery}
+//         * @deprecated
+//         */
+//        function _findErrorMessageFromErrorPage(jqxhr) {
+//            return $("#error-message", $(jqxhr.responseText)).text();
+//        }
 
+        /**
+         * @private
+         * @param $item
+         * @returns {*|HTMLElement}
+         * @private
+         */
         function _findPjaxTarget($item) {
             var $container = $($item.closest("[data-pjax]").data("pjax"));
             if ($container.length == 0) {
@@ -165,18 +173,15 @@ $(function () {
          */
         function _findAjaxTarget($item) {
             var elem = $item.data("kui-target");
-            if (isBlank(elem)) {
-//                if (throwErrorIfNotFound)
+            if (ktl.isBlank(elem)) {
                 logger.error("No target specified for data-kui-target");
                 return null;
             }
-//            var container = elem.indexOf("#") == 0 ? $(elem) : $('#' + elem);
-            if (elem == "none") {
+            if (elem === "none") {
                 return null;
             }
             var container = $(elem);
-            if (container.length == 0) {
-//                if (throwErrorIfNotFound)
+            if (container.length === 0) {
                 logger.error("Cannot find element by id '" + elem + "'");
                 return null;
             }
@@ -185,8 +190,9 @@ $(function () {
 
         function _checkConfirmation($item) {
             var conf = $item.data("confirm");
-            if (isBlank(conf))
+            if (ktl.isBlank(conf)) {
                 return true;
+            }
             return confirm(conf);
         }
 
@@ -207,7 +213,7 @@ $(function () {
                 try {
                     isValid = eval(fnExtraValidate);
                 } catch (error) {
-                    console.error(error);
+                    logger.error(error);
                 }
             }
             return isValid;
@@ -215,7 +221,7 @@ $(function () {
 
         function onFormReset() {
             $(document).on('reset', '.ui-dialog form[data-kui-ajax-form],.ui-dialog form[data-ajax],.ui-dialog form[data-ajax-form]', function (event) {
-                closeDialog($(this));
+                kui.closeDialog($(this));
             });
         }
 
@@ -235,13 +241,15 @@ $(function () {
             $(document).on('click', PJAX_SELECTORS, function (event) {
                 var $this = $(this), url = $this.attr("href");
                 // Validate pjax request
-                if (!_checkConfirmation($this))         return false;
-                if (isNotBlank($this.attr("disabled"))) return false;
-                if (!isValidAjaxUrl(url))               return true;
-                if (isNotBlank($this.attr('target')))   return true;
+                if (!_checkConfirmation($this) || ktl.isNotBlank($this.attr("disabled"))) {
+                    return false;
+                }
+                if (!ktl.isValidAjaxUrl(url) || ktl.isNotBlank($this.attr('target'))) {
+                    return true;
+                }
                 var $container = _findPjaxTarget($this);
-                piwikTrackLink(url);
-                if ($.support.pjax == true) {
+                ktl.trackLink(url);
+                if ($.support.pjax === true) {
                     return $.pjax.click(event, $container);
                 } else {
                     var options = {
@@ -276,21 +284,21 @@ $(function () {
                     return false;
                 if (_checkConfirmation($a)) {
                     var url = this.href;
-                    callAjax({
+                    $.ajax({
                         url: url,
                         success: function (data) {
                             var container = _findAjaxTarget($a);
                             if (container != null) {
                                 var $dialog = container.closest('.ui-dialog');
                                 var title = $(data).data('title');
-                                if ($dialog.length > 0 && isNotBlank(title)) {
+                                if ($dialog.length > 0 && ktl.isNotBlank(title)) {
                                     $('.ui-dialog-title', $dialog).html(title);
                                 }
                                 container.html(data);
                             }
                         }
                     });
-                    piwikTrackLink(url);
+                    ktl.trackLink(url);
                 }
                 return false;
             });
@@ -305,7 +313,9 @@ $(function () {
         function onDialogLink() {
             $(document).on('click', 'a[data-kui-dialog],a[data-dialog]', function (e) {
                 var $owner = $(this);
-                if (!_checkConfirmation($owner) || isNotBlank($owner.attr("disabled")) || $owner.hasClass("disabled")) {
+                if (!_checkConfirmation($owner) ||
+                    ktl.isNotBlank($owner.attr("disabled")) ||
+                    $owner.hasClass("disabled")) {
                     return false;
                 }
                 var url = $owner.attr("href");
@@ -314,7 +324,7 @@ $(function () {
                 }
                 _createSmartDialog($owner, url);
                 e.preventDefault();
-                piwikTrackLink(url);
+                ktl.trackLink(url);
                 //LEO: if return false, it will stop events from other controls. For example, when invoke dialog from bootstrap
                 // dropdown menu, if return false, it will not close the dropdown menu after clicking.
                 return false;
@@ -322,7 +332,7 @@ $(function () {
         }
 
         function _isJavascriptLink(link) {
-            return klib.isNotBlank(link) && link.indexOf("javascript:") == 0;
+            return ktl.isNotBlank(link) && link.indexOf("javascript:") === 0;
         }
 
         function onShortAccesskey() {
@@ -375,10 +385,12 @@ $(function () {
             }
             var msg = '<strong>' + jqxhr.status + '</strong> ' + jqxhr.statusText + ' <a href="#" class="js-details" data-pjax-disabled>...</a>';
             var flash;
-            if (isBlank(container))
-                flash = flashMessage(status, msg, 15);
-            else
+            if (ktl.isBlank(container)) {
+                flash = kui.showToast(status, msg, 15);
+            }
+            else {
                 flash = container.html(msg);
+            }
             $(flash).on('click', '.js-details', function (e) {
                 window.open().document.write(jqxhr.responseText);
                 e.preventDefault();
@@ -395,10 +407,10 @@ $(function () {
             });
             $(document).on('pjax:error', function (xhr, textStatus, errorThrown, options) {
                 // Some error is abort: errorThrown=abort, options=abort,textStatus.status=0,textStatus.statusText=abort
-                console.warn("pjax:error", xhr, textStatus, errorThrown, options);
+                logger.warn("pjax:error", xhr, textStatus, errorThrown, options);
                 // Returning false will prevent the the fallback redirect
                 // return false;
-            })
+            });
         }
 
 
@@ -428,20 +440,22 @@ $(function () {
 
             // Determine if auto create dialog div
             var selector = $linker.data("kui-dialog");
-            if (klib.isBlank(selector))
+            if (ktl.isBlank(selector)) {
                 selector = $linker.data("dialog");
+            }
             var cssClass = $linker.data('kui-dialog-class');
-            if (klib.isNotBlank(cssClass)) {
+            if (ktl.isNotBlank(cssClass)) {
                 options.dialogClass = cssClass;
             }
 
-            var isInline = !!(klib.isNotBlank($linker.data("dialog-inline")) || klib.isNotBlank($linker.data("kui-dialog-inline")));
+            var isInline = !!(ktl.isNotBlank($linker.data("dialog-inline")) || ktl.isNotBlank($linker.data("kui-dialog-inline")));
             var contentType = $linker.data("kui-dialog-content-type");
-            if (klib.isBlank(contentType))
+            if (ktl.isBlank(contentType)) {
                 contentType = $linker.data("dialog-content-type");
+            }
             var isIframe = contentType == "iframe";
             var $content = $(selector);
-            var isAutoDiv = klib.isBlank(selector);
+            var isAutoDiv = ktl.isBlank(selector);
 //        logger.debug("createSmartDialog: isAutoDiv=" + isAutoDiv + "; selector=" + selector + " length=" + $dialogDiv.length);
             if (isAutoDiv) {
                 $content = $('<div class="auto-dialog"></div>').uniqueId();
@@ -452,14 +466,14 @@ $(function () {
                     at: "top+70",
                     of: $body
                 };
-            } else if ($content.length == 0) {
+            } else if ($content.length === 0) {
                 logger.error("Cannot find dialog element by selector '" + selector + "'");
                 return null;
             }
 
             // Dialog option: buttons
             var buttons = $linker.data("kui-dialog-buttons") || $linker.data("dialog-buttons");
-            if (klib.isNotBlank(buttons)) {
+            if (ktl.isNotBlank(buttons)) {
                 options.buttons = [
                     { "text": "关闭", "class": "btn",
                         "click": function () {
@@ -469,17 +483,19 @@ $(function () {
                 ];
             }
             var optModal = $linker.data("kui-dialog-modal") || $linker.data("dialog-modal");
-            if (klib.isNotBlank(optModal))
+            if (ktl.isNotBlank(optModal)) {
                 options.modal = optModal;
+            }
             var optResizable = $linker.data("kui-dialog-resizable") || $linker.data("dialog-resizable");
-            if (klib.isNotBlank(optResizable))
+            if (ktl.isNotBlank(optResizable)) {
                 options.resizable = optResizable;
+            }
 
             // Dialog option: title
             var title = $linker.data("kui-dialog-title") || $linker.data("dialog-title");
-            if (klib.isBlank(title)) {
+            if (ktl.isBlank(title)) {
                 title = $linker.attr("title");
-                if (klib.isBlank(title) && $linker.is("a")) // Only work for link
+                if (ktl.isBlank(title) && $linker.is("a")) // Only work for link
                     title = $linker.html();
             }
             options.title = title;
@@ -496,8 +512,8 @@ $(function () {
                 if (isAutoDiv) {
                     $content.remove();
                 }
-                if (!klib.isBlank(aftersubmit)) {
-                    if (isFormSubmitted()) {
+                if (!ktl.isBlank(aftersubmit)) {
+                    if (kui.isFormSubmitted()) {
                         try {
                             eval(aftersubmit);
                         } catch (err) {
@@ -505,7 +521,7 @@ $(function () {
                         }
                     }
                 }
-                if (!klib.isBlank(afterclose)) {
+                if (!ktl.isBlank(afterclose)) {
                     try {
                         eval(afterclose);
                     } catch (err) {
@@ -521,10 +537,10 @@ $(function () {
                 var $iframe = $('<iframe src="" class="iframe"></iframe>').appendTo($content);
                 $iframe.attr("src", url);
 
-            } else if (klib.isNotBlank(content)) {
+            } else if (ktl.isNotBlank(content)) {
                 $content.html(content);
-            } else if (isValidAjaxUrl(url)) {
-                $content.html(showLoading("inline"));
+            } else if (ktl.isValidAjaxUrl(url)) {
+                $content.html(kui.showLoading("inline"));
                 var errorMsg = $linker.data('kui-dialog-error') || $linker.data('dialog-error');
                 $.ajax({
                     url: url,
@@ -532,7 +548,7 @@ $(function () {
                     success: function (xhr) {
                         $content.html(xhr);
                     }, error: function (xhr) {
-                        if (klib.isBlank(errorMsg)) {
+                        if (ktl.isBlank(errorMsg)) {
 //                            errorMsg = _findErrorMessageFromErrorPage(xhr);
                             _generateAjaxErrorMessage(xhr, $content);
                         } else {
@@ -551,39 +567,39 @@ $(function () {
 
             // Custom dialog option: css
             var style = $linker.data("kui-dialog-style") || $linker.data("dialog-style");
-            if (!klib.isBlank(style)) {
+            if (!ktl.isBlank(style)) {
                 var $dialog = $content.closest('.ui-dialog');
                 $dialog.attr('style', $dialog.attr('style') + ';' + style);
             }
             return $content;
         }
-    }
-
-    /**
-     * function flash message before send
-     * @param $item
-     * @returns {Boolean|*|created}
-     * @private
-     */
-    function _flashMessageBeforeSend($item) {
-        var message = $item.data("flash-message-beforesend");
-        return (isBlank(message) || (isNotBlank(message) && flashMessage("success", message, 3)));
-    }
-
-    /**
-     * function flash message after send
-     * @param $item
-     * @returns {Boolean|*|created}
-     * @private
-     */
-
-    function _flashMessageAfterSend($item) {
-        var message = $item.data("flash-message-aftersend");
-        return (isBlank(message) || (isNotBlank(message) && flashMessage("success", message, 3)));
-    }
 
 
-    function initControls() {
-        $.datepicker.setDefaults($.datepicker.regional[ "zh-CN" ]);
-    }
-});
+        /**
+         * function flash message before send
+         * @param $item
+         * @returns {Boolean|*|created}
+         * @private
+         */
+        function _flashMessageBeforeSend($item) {
+            var message = $item.data("flash-message-beforesend");
+            return (ktl.isBlank(message) || (ktl.isNotBlank(message) && kui.showToast("success", message, 3)));
+        }
+
+        /**
+         * function flash message after send
+         * @param $item
+         * @returns {Boolean|*|created}
+         * @private
+         */
+        function _flashMessageAfterSend($item) {
+            var message = $item.data("flash-message-aftersend");
+            return (ktl.isBlank(message) || (ktl.isNotBlank(message) && kui.showToast("success", message, 3)));
+        }
+
+
+        function initControls() {
+            $.datepicker.setDefaults($.datepicker.regional[ "zh-CN" ]);
+        }
+    });
+})(jQuery, ktl, kui, logger);

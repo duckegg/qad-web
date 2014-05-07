@@ -84,6 +84,9 @@
                                 $scope.allEntity = data.allEntity;
                                 angular.forEach($scope.allEntity, function (value, index) {
                                     value.isOwner = (value.trace.createdBy ==${(Session.user.id)!-100});
+                                    <@shiro.hasPermission name="udr-page:admin">
+                                    value.isOwner = true;
+                                    </@shiro.hasPermission>
                                 });
                                 $scope.so = data.so;
                             });

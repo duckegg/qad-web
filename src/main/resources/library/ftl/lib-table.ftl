@@ -1,24 +1,22 @@
-<#--
-********************************************************************************
-@desc Freemarker macro to build table with DataTables.
-      Request parameter "trc" (total record count) to determine if use serverSide
+<#---
+Freemarker macro to build table with DataTables.
+Request parameter "trc" (total record count) to determine if use serverSide
+@namespace ui2
 @author Leo Liao, 2012/04/22, created
-********************************************************************************
 -->
-<#--
-********************************************************************************
-Build table with AJAX data source
-@param tableId      HTML element id of the table
-@param ajaxUrl      Either ajaxUrl or ajaxForm must be specified
-@param ajaxForm     Either ajaxUrl or ajaxForm must be specified
-@param serverSide   If use server side pagination, sort, filter
-@param pagination   If display pagination
+
+<#---
+Build table with AJAX data source. The AJAX source is specified by either `ajaxUrl` or `ajaxForm`.
+
+@param tableId {string} HTML element id of the table
+@param ajaxUrl {string} a URL with query string
+@param ajaxForm {jQuery|HTMLElement} a form element which is submitted to fetch data
+@param serverSide {boolean} If use server side pagination, sort, filter
+@param pagination {boolean} If display pagination
 @param autoWidth
 @param height
-@param printable    If display printable buttons (pdf, excel, word).
-                    If true, must have a corresponding .print.ftl page.
+@param printable    If display printable buttons (pdf, excel, word). If true, must have a corresponding .print.ftl page.
 @param columnFilter If display filter for each column.
-********************************************************************************
 -->
 <#macro ajaxTable tableId ajaxUrl="" ajaxForm="" serverSide=false autoColumn=false
 rowGroup="" rowReordering=false rowIdDataField="" rowReorderOptions=""
@@ -57,10 +55,9 @@ pagination=true keyboard=false>
     pagination=pagination keyboard=keyboard/>
 </#macro>
 
-<#--
-********************************************************************************
+<#---
 Core macro.
-********************************************************************************
+@internal
 -->
 <#macro _buildTable tableId useAjax=true ajaxUrl="" ajaxForm="" serverSide=false autoColumn=false
 rowGroup="" rowReordering=false rowIdDataField="" rowReorderOptions=""
@@ -108,11 +105,9 @@ printable=false printPid="" keyboard=false ajaxheader=false>
     </#if>
 <script type="text/javascript">
 <#-- Init global variables -->
-//oTables = typeof(oTables) == 'undefined' ? [] : oTables;
-//oTableParams = typeof(oTableParams) == 'undefined' ? new Object() : oTableParams;
 $(function () {
     var $table = $('#${tableId}');
-    var columnDefs = getTableColumns('${tableId}') || [];
+    var columnDefs = kui.getTableColumns('${tableId}') || [];
 //    console.debug("columns", columnDefs);
     <#if useAjax>
         <#if columnFilter>
@@ -367,7 +362,8 @@ $(function () {
 
     var theTable = $table.dataTable(oSettings); // End of datatable creation
 //    console.debug(theTable);
-    AppRuntime.oTables['${tableId}'] = theTable;
+    <#--kao.oTables['${tableId}'] = theTable;-->
+    kui.setDataTable('${tableId}',theTable);
 
 //    // Set the classes that TableTools uses to something suitable for Bootstrap
 //    $.extend( true, $.fn.DataTable.TableTools.classes, {
@@ -476,7 +472,7 @@ $(function () {
     $(function () {
         var $list = $('#${tableId}');
         var $divider = $('[data-role="list-divider"]', $list);
-        var columns = getTableColumns('${tableId}');
+        var columns = kui.getTableColumns('${tableId}');
 
         var html = "";
         for (var i in columns) {
@@ -523,7 +519,7 @@ Do AJAX query and build table
 
     <div>
         <form id="${_formId}" action="${base}/query/json/table" method="post"
-              onsubmit="refreshDataTable('${tableId}');return false;"
+              onsubmit="kui.refreshDataTable('${tableId}');return false;"
               class="form-inline">
             <input type="hidden" name="qid" value="${qid}"/>
             <button type="submit" class="btn btn-default">刷新</button>

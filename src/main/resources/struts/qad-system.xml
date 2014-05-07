@@ -29,7 +29,10 @@ Shared features like home, link, upload, download.
         <action name="my/pref" class="hpps.qad.core.appsec.user.ProfileAction" method="$pref">
         </action>
         <action name="help/{module}/{topic}" class="hpps.qad.base.action.HelpAction">
-            <result name="success">/modules/{1}/help/help-{2}.ftl</result>
+            <result name="success" type="freemarker">/help/wrapper.ftl</result>
+        </action>
+        <action name="about">
+            <result name="success" type="freemarker">/modules/qad/system/about.ftl</result>
         </action>
         <!-- Changelog -->
         <action name="changelog">

@@ -1,16 +1,15 @@
-<#--
-********************************************************************************
-@desc Freemarker macro to build UI elements.
-@author Leo Liao, 2012/05/22, created
-********************************************************************************
--->
+<#---
+  - Freemarker macro to build UI elements.
+  - Documenation syntax by <a href="http://www.riotfamily.org/docs/fmdoc.html">fmdoc</a>.
+  - @namespace ui
+  - @author Leo Liao, 2012/05/22, created
+  - @author Leo Liao, 2014/04, documentation by fmdoc
+  -->
 <#include "/library/ftl/lib-table.ftl" parse=true/>
-<#--
-================================================================================
-Action Tabs
+
+<#---
+Generate an array of tabs which are clickable, sortable, scrollable.
 @param smartList true to display smart filter, sorting
-@deprecated use smartList instead
-================================================================================
 -->
 <#macro actionTabs id class="" smartList=true scrollable=true listStyle="">
 <div id="${id}" class="action-tabs ${class}">
@@ -48,7 +47,8 @@ Action Tabs
 </div>
 </#macro>
 
-<#--
+<#---
+A small box or badge to show statistic.
 @param tooltip describe meaning of count number
 -->
 <#macro stats title count link badge="" badgeTooltip="" id="" class="" accesskey="" tooltip="" badgeClass="">
@@ -66,16 +66,10 @@ Action Tabs
 </li>
 </#macro>
 
-<#--
-================================================================================
-Form Elements
-================================================================================
--->
-<#--
-Textfield
-@description if value is not specified or empty, it will try evaluate name as value using
-`${.vars[myKeyString]}`
-@reference http://freemarker.624813.n4.nabble.com/Interpolation-name-as-String-and-retrieve-value-td625424.html
+<#---
+HTML input textfield  with bootstrap "form-group" makeup.
+@param value If value is not specified or empty, it will look up value by its name using `${.vars[myKeyString]}`
+@see http://freemarker.624813.n4.nabble.com/Interpolation-name-as-String-and-retrieve-value-td625424.html
 -->
 <#macro textfield name label="" id="" style="" class="" title="" maxlength="" value="" placeholder="" dataAttribute="" isNgModel=false
 readonly=false disabled=false required=false helpText="" englishonly=false fontColor="" isPassword=false isHidden=false>
@@ -102,11 +96,12 @@ readonly=false disabled=false required=false helpText="" englishonly=false fontC
     </div>
 </div>
 </#macro>
-<#--
-Textarea
-@param size "small","middle","large"
+
+<#---
+HTML textarea with bootstrap "form-group" makeup.
+TODO: remove fontColor please. Use class
+@param size value of <code>small</code>,<code>middle</code>,<code>large</code>
 @param isNgModel boolean, if this is for angular model
- TODO: remove fontColor please. Use class
 -->
 <#macro textarea name id="" label="" style="" class="" size="middle" dataAttribute="" isNgModel=false
 maxlength="" onchange=""
@@ -135,8 +130,10 @@ fontColor="">
 </div>
 </#macro>
 
+<#---
+HTML label and control group with bootstrap "control-label" makeup.
+-->
 <#macro labelControlGroup label="" elementType="div" cssClass="" helpText="">
-<#-- Label and control group -->
 <${elementType} class="form-group control-group ${cssClass}">
 <label class="control-label"><#if label!="">${label}:</#if></label>
 <div class="controls">
@@ -147,17 +144,27 @@ fontColor="">
 </div>
 </${elementType}>
 </#macro>
-<#-- Button and Group -->
+
+<#---
+ HTML button
+ -->
 <#macro button label="" id="" type="submit" class="" name="" value="" style="">
 <button type="${type}" id="${id}" class="btn ${class}" name="${name}" value="${value}"
         style="${style}"><#if label!="">${label}<#else><#nested></#if></button>
 </#macro>
+
+<#---
+Bootstrap's form-actions elements.
+-->
 <#macro buttonGroup style="">
 <div class="form-actions"<#if style!="">style="${style}"</#if>>
     <#nested />
 </div>
 </#macro>
-<#-- Radio Button -->
+
+<#---
+HTML radio button with bootstrap "form-group" makeup.
+-->
 <#macro radio name label list={} id="" style="" class="" title="" maxlength="" value="" readonly=false required=false>
 <div class="form-group control-group">
     <label class="control-label" for="${id}">${label}:</label>
@@ -168,7 +175,10 @@ fontColor="">
     </div>
 </div>
 </#macro>
-<#-- Plain Text -->
+
+<#---
+Plain Text with bootstrap "form-group" makeup.
+-->
 <#macro text id="" label="" class="" style="">
 <div class="form-group control-group">
     <label class="control-label" style="${style}" for="${id}">${label}<#if label!="">:</#if></label>
@@ -268,7 +278,7 @@ Pagination.
     }
     $(function () {
         var timer = global_timers['${id}'];
-        if (isNotBlank(timer)) {
+        if (ktl.isNotBlank(timer)) {
             clearInterval(timer);
         }
         var $form = $('#${id}-timer-form');
@@ -287,7 +297,7 @@ Pagination.
          */
         function toggleTimer(status) {
             var isEnabled = status;
-            if (isBlank(status)) {
+            if (ktl.isBlank(status)) {
                 isEnabled = !$timerToggler.data('timer-enabled');
             }
             var text = isEnabled ? "定时刷新已开启" : "定时刷新已关闭";
@@ -340,12 +350,11 @@ Pagination.
 </div>
 </#macro>
 
-<#-- DEPRECATED -->
+<#---
+ !DEPRECATED! Use panel instead.
+ @see #panel
+-->
 <#macro portlet id title="" url="" class="" style="" type="">
-<#--<#if type=="box">-->
-<#--<div id="${id}" class="${class}" style="${style}">-->
-<#--</div>-->
-<#--<#else>-->
 <div id="${id}" class="portlet panel panel-default ${class}" <#if url!="">data-kui-content-url="${url}"</#if>
      style="${style}">
     <div class="panel-heading"><h3 class="panel-title">${title}</h3></div>
@@ -360,9 +369,14 @@ Pagination.
         });
     </script>
     </#if>
-<#--</#if>-->
 </#macro>
 
+<#---
+Bootstrap panel component.
+@panelClass bootstrap panel class
+@contentUrl URL loaded into the panel body
+@see http://getbootstrap.com/components/#panels
+-->
 <#macro panel id="" panelClass="panel-default" title="" contentUrl="">
 <div id="${id}" class="panel ${panelClass}"
      <#if contentUrl!="">data-kui-content-url="${contentUrl}"</#if>>
@@ -382,23 +396,24 @@ Pagination.
     <#nested/>
 </ul>
 </#macro>
+
 <#macro ajaxNavItem href>
 <li><a href="${href}" data-toggle="tab"><#nested></a></li>
 </#macro>
-<#--
-================================================================================
-PAGES
-================================================================================
+
+
+<#---
+Private macro. Display page after save.
+@internal
 -->
-<#-- Private macro. Display page after save. -->
 <#macro _afterSave link id type="">
     <#assign pageId="after-save-${id}"/>
 <div id="${pageId}">
     <div class="alert alert-success">
         已保存
         <ul class="list-unstyled">
-            <li><a href="${base}/${link}/view?id=${id}" accesskey="v" tabindex="-1"
-                   data-ajax-link data-kui-target="#${pageId}">查看 (V)</a></li>
+            <#--<li><a href="${base}/${link}/view?id=${id}" accesskey="v" tabindex="-1"-->
+                   <#--data-ajax-link data-kui-target="#${pageId}">查看 (V)</a></li>-->
             <li><a href="${base}/${link}/update?id=${id}" accesskey="m" tabindex="-1"
                    data-ajax-link data-kui-target="#${pageId}">修改 (M)</a></li>
             <#if type=="create">
@@ -407,7 +422,7 @@ PAGES
                 </li>
             </#if>
             <li><a href="#" accesskey="c" tabindex="-1"
-                   onclick="closeDialog('#${pageId}')">关闭 (C)</a></li>
+                   onclick="kui.closeDialog('#${pageId}')">关闭 (C)</a></li>
         </ul>
     </div>
 </div>
@@ -455,7 +470,7 @@ PAGES
         <#if style=="flash">
         <script type="text/javascript">
                 <#list action.actionMessages as msg>
-                flashMessage("info", '${msg?js_string}', 5);
+                kui.showToast("info", '${msg?js_string}', 5);
                 </#list>
         </script>
         <#else>

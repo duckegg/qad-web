@@ -94,7 +94,7 @@
             </#if>
         </div>
         <div class="list-group">
-            <a class="list-group-item" href="${base}/help/search">查看帮助</a>
+            <a class="list-group-item" href="${base}/help/qad/search">查看帮助</a>
             <a class="list-group-item" href="${base}/static/es_head/index.html" target="_blank">搜索控制台</a>
             <a class="list-group-item" href="${base}/admin/config/search/profile">索引方案</a>
             <a class="list-group-item" href="${base}/admin/config/search/settings/list">搜索参数</a>

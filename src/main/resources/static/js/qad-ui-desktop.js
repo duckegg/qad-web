@@ -11,6 +11,5 @@
 function DesktopUiKit() {
 }
 
-DesktopUiKit.prototype = new UiKit("desktop");
+DesktopUiKit.prototype = new QadUi("desktop");
 var kui = new DesktopUiKit();
-//var uiKit = kui;

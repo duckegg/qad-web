@@ -10,7 +10,7 @@
     <!--=====================================================================-->
     <groupId>hpps</groupId>
     <artifactId>qad-web</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,4 +32,37 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <!--https://gist.github.com/nadavdav/5308453-->
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <path id="classpath">
+                                    <fileset dir="${project.basedir}/lib">
+                                        <include name="*.jar"/>
+                                    </fileset>
+                                </path>
+                                <taskdef name="fmdoc" classpathref="classpath"
+                                         classname="org.riotfamily.fmdoc.ant.FreeMarkerDocTask"/>
+                                <fmdoc destdir="${project.build.directory}/doc/fmdoc">
+                                    <fileset dir="${project.basedir}/src/main/resources/library/ftl">
+                                        <include name="*.ftl"/>
+                                    </fileset>
+                                </fmdoc>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
