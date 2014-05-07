@@ -729,8 +729,8 @@ function QadUi(key) {
                     '<ul class="dropdown-menu dropdown-menu-right">' +
                     '<li><a class="js-chart-legend" href="#">显示图标</a></li>' +
                     '<li><a class="js-chart-image" href="#">保存图片</a></li>' +
-                    '<li><a class="js-chart-refresh" href="#"><i class="icomoon-refresh"></i> 刷新</a></li>' +
-                    '<li><a class="js-chart-enlarge" href="#"><i class="icomoon-zoom-in"></i> 放大</a></li>' +
+                    '<li><a class="js-chart-refresh" href="#">刷新</a></li>' +
+                    '<li><a class="js-chart-enlarge" href="#">放大</a></li>' +
                     '<li class="divider"></li>' + legendList +
                     '</ul>' +
                     '</div></div>');

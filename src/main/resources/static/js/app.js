@@ -1,5 +1,6 @@
 /**
  * Application specific javascript
+ * TODO: the file should be moved to app js folder
  */
 var appSession = {
     isPiwikWarned: false

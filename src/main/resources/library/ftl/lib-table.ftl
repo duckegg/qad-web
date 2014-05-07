@@ -311,7 +311,7 @@ $(function () {
                         <#if export?contains("pdf")>
                             {
                                 "sExtends": "text",
-                                "sButtonText": '<i class="icomoon-file-pdf"></i> 导出PDF',
+                                "sButtonText": '导出PDF',
                                 "fnClick": function (nnButton, oConfig, oFlash) {
                                     exportData('pdf');
                                 }
@@ -320,7 +320,7 @@ $(function () {
                         <#if export?contains("xls")>
                             {
                                 "sExtends": "text",
-                                "sButtonText": '<i class="icomoon-file-excel"></i> 导出Excel(2003+)',
+                                "sButtonText": '导出Excel(2003+)',
                                 "fnClick": function (nnButton, oConfig, oFlash) {
                                     exportData('excel');
                                 }
@@ -329,7 +329,7 @@ $(function () {
                         <#if export?contains("doc")>
                             {
                                 "sExtends": "text",
-                                "sButtonText": '<i class="icomoon-file-word"></i> 导出Word(2003+)',
+                                "sButtonText": '导出Word(2003+)',
                                 "fnClick": function (nnButton, oConfig, oFlash) {
                                     exportData('word');
                                 }
