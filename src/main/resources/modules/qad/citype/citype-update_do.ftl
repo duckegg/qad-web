@@ -5,4 +5,4 @@
 ********************************************************************************
 -->
 <#include "/library/ftl/taglibs.ftl"/>
-<@ui.afterUpdate link="citype" id="${id}"/>
+<@ui.afterUpdate link="admin/config/citype" id="${id}"/>

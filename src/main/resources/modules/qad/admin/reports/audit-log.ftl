@@ -10,7 +10,7 @@
 <@ui.page id=pageId title="看板使用日志">
 <div id="${pageId}-qdiv" class="accordion">
     <h3>精确查询</h3>
-    <form id="${pageId}-qform" action="${base}/query/json/table" method="post" class="form-inline" onsubmit="refreshDataTable('${pageId}');return false;">
+    <form id="${pageId}-qform" action="${base}/query/json/table" method="post" class="form-inline" onsubmit="kui.refreshDataTable('${pageId}');return false;">
         <input type="hidden" name="qid" value="admin.ADM_APP_LOG_LIST"/>
         <input type="text" name="sparams['username']" value="${(Request.sparams['loginName'])!""}"
                placeholder="用户" title="用户"/>

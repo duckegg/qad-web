@@ -410,6 +410,16 @@ function QadUi(key) {
     };
 
     /**
+     * Get a plot object
+     * @param chartId
+     * @return {*}
+     * @private
+     */
+    function _getPlot(chartId) {
+        return cachedPlots[chartId];
+    }
+
+    /**
      * Replot a chart
      * @param chartId ID of the chart
      */
@@ -679,15 +689,15 @@ function QadUi(key) {
         }
 
         processHighlight();
-        /**
-         * Get a plot object
-         * @param chartId
-         * @return {*}
-         * @private
-         */
-        function _getPlot(chartId) {
-            return cachedPlots[chartId];
-        }
+//        /**
+//         * Get a plot object
+//         * @param chartId
+//         * @return {*}
+//         * @private
+//         */
+//        function _getPlot(chartId) {
+//            return cachedPlots[chartId];
+//        }
 
         /**
          * Create chart toolbar

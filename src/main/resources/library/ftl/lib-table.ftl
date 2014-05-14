@@ -161,13 +161,19 @@ $(function () {
             var aParts = window.location.pathname.split('/');
             var sName = oSettings.sCookiePrefix + oSettings.sInstance;
             var sNameEQ = sName + '_' + aParts[aParts.length - 1].replace(/[\/:]/g, "").toLowerCase();
+            logger.debug("fnStateSave", oData);
             localStorage.setItem(sNameEQ, JSON.stringify(oData));
         },
         "fnStateLoad": function (oSettings) {
             var aParts = window.location.pathname.split('/');
             var sName = oSettings.sCookiePrefix + oSettings.sInstance;
             var sNameEQ = sName + '_' + aParts[aParts.length - 1].replace(/[\/:]/g, "").toLowerCase();
-            return JSON.parse(localStorage.getItem(sNameEQ));
+            var data = JSON.parse(localStorage.getItem(sNameEQ));
+            <#if serverSide>
+                if (data != null)
+                    data.aaSorting = [];
+            </#if>
+            return  data;
         },
         "iCookieDuration": 60 * 60 * 24 * 30, // 30 days
         // If bDeferRender is true, KeyTable will occur error "Cannot call method 'getElementsByTagName' of null"
@@ -362,8 +368,8 @@ $(function () {
 
     var theTable = $table.dataTable(oSettings); // End of datatable creation
 //    console.debug(theTable);
-    <#--kao.oTables['${tableId}'] = theTable;-->
-    kui.setDataTable('${tableId}',theTable);
+<#--kao.oTables['${tableId}'] = theTable;-->
+    kui.setDataTable('${tableId}', theTable);
 
 //    // Set the classes that TableTools uses to something suitable for Bootstrap
 //    $.extend( true, $.fn.DataTable.TableTools.classes, {

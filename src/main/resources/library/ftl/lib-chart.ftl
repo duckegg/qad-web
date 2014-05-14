@@ -66,7 +66,7 @@ allowZooming=false>
             <@_prepareLegendJs legendShow=legendShow legendPlacement=legendPlacement legendPosition=legendPosition/>
             <#if allowZooming>
                 cursor: {
-                    show: false,
+                    show: true,
                     zoom: true
                 },
             </#if>

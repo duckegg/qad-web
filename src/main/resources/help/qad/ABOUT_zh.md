@@ -157,16 +157,16 @@ AJAX表格页面的基础框架如下：
 <#assign chartId="${pageId}-chart"/>
 <!-- 1. Use a form to send AJAX request to fetch chart data -->
 <form id="${chartId}-qform" action="${base}/query/json/jqplot" method="post"
-      onsubmit="kui.replotChart('${chartId}');return false;">
+    class="form-inline" onsubmit="kui.replotChart('${chartId}');return false;">
     <!-- qid, chartOptions are essential for chart data -->
     <input type="hidden" name="qid" value="db:sample.STOCK_QUOTE_LIST"/>
                               `````[1]
-    <@ui.textfield name="chartOptions.xField" value="date"/>
-                         ```````````````````[2]
-    <@ui.textfield name="chartOptions.yField" value="close"/>
-                         ```````````````````[3]
-    <@ui.textfield name="chartOptions.seriesField" value="symbol"/>
-                         ````````````````````````[4]
+    <input type="hidden" name="chartOptions.xField" value="date"/>
+                               ```````````````````[2]
+    <input type="hidden" name="chartOptions.yField" value="close"/>
+                               ```````````````````[3]
+    <input type="hidden" name="chartOptions.seriesField" value="symbol"/>
+                               ````````````````````````[4]
     <@ui.textfield name="sparams['symbol']" value="SH600001"/>
                          ```````````````[5]
 </form>

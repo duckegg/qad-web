@@ -91,6 +91,7 @@
                 };
                 $scope.actionTestSql = function () {
                     var page = $('#${pageId}');
+                    //TODO: need check :param in $scope.queryDef.sql and prompt input
                     $('form', page).ajaxSubmit({
                         url: '${base}/udr/qdf/testsql',
                         target: $(".js-preview-zone", page)});

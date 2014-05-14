@@ -409,22 +409,23 @@ Private macro. Display page after save.
 <#macro _afterSave link id type="">
     <#assign pageId="after-save-${id}"/>
 <div id="${pageId}">
-    <div class="alert alert-success">
-        已保存
-        <ul class="list-unstyled">
-            <#--<li><a href="${base}/${link}/view?id=${id}" accesskey="v" tabindex="-1"-->
-                   <#--data-ajax-link data-kui-target="#${pageId}">查看 (V)</a></li>-->
-            <li><a href="${base}/${link}/update?id=${id}" accesskey="m" tabindex="-1"
-                   data-ajax-link data-kui-target="#${pageId}">修改 (M)</a></li>
-            <#if type=="create">
-                <li><a href="${base}/${link}/create" accesskey="n" tabindex="-1"
-                       data-ajax-link data-kui-target="#${pageId}">创建新的 (N)</a>
-                </li>
-            </#if>
-            <li><a href="#" accesskey="c" tabindex="-1"
-                   onclick="kui.closeDialog('#${pageId}')">关闭 (C)</a></li>
-        </ul>
-    </div>
+    <p class="text-success">
+        <i class="fa fa-check"></i> 已保存
+    </p>
+    <ul class="list-unstyled list-inline clearfix" style="margin-top:2em;margin-bottom:0">
+        <li><a href="${base}/${link}/update?id=${id}" accesskey="m" tabindex="-1"
+               class="btn btn-default"
+               data-ajax-link data-kui-target="#${pageId}">继续编辑 (M)</a></li>
+        <#if type=="create">
+            <li><a href="${base}/${link}/create" accesskey="n" tabindex="-1"
+                   class="btn btn-default"
+                   data-ajax-link data-kui-target="#${pageId}">创建新的 (N)</a>
+            </li>
+        </#if>
+        <li class="pull-right"><a href="#" accesskey="c" tabindex="-1"
+                                  class="btn btn-primary"
+                                  onclick="kui.closeDialog('#${pageId}')">关闭 (C)</a></li>
+    </ul>
 </div>
 </#macro>
 <#-- Display page after create -->

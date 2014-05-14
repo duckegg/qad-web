@@ -74,6 +74,7 @@
             .controller('ListCtrl', ['$rootScope', '$scope', '$http', '$location', function ($rootScope, $scope, $http, $location) {
                     <@shiro.user>$rootScope.isUserLoggedIn = true;</@shiro.user>
                 $scope.allEntity = [];
+                logger.debug("listctrl");
                 $scope.actionCreate = function () {
                     $location.path("/create");
                 };
@@ -81,13 +82,17 @@
                     $scope.so.page = page;
                     $http.post('${base}/udr/page/list.json', {so: $scope.so})
                             .success(function (data) {
-                                $scope.allEntity = data.allEntity;
-                                angular.forEach($scope.allEntity, function (value, index) {
+                                var allEntity = data.allEntity;
+                                angular.forEach(allEntity, function (value, index) {
                                     value.isOwner = (value.trace.createdBy ==${(Session.user.id)!-100});
                                     <@shiro.hasPermission name="udr-page:admin">
                                     value.isOwner = true;
                                     </@shiro.hasPermission>
                                 });
+                                $scope.allEntity.splice(0,$scope.allEntity.length);
+                                for (var i=0;i<allEntity.length;i++){
+                                    $scope.allEntity.push(allEntity[i]);
+                                }
                                 $scope.so = data.so;
                             });
                 };

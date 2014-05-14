@@ -11,36 +11,36 @@ Config file for demo only.
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
     <package name="qad-report" extends="qad-basic" namespace="/">
-        <!-- User defined query -->
-        <action name="udr/query" class="hpps.qad.core.udr.UserDefinedQueryAction" method="$list">
-            <result name="success" type="freemarker">/modules/qad/udr/query-list.ftl</result>
-        </action>
-        <action name="udr/query/json/{displayFormat}" class="hpps.qad.core.udr.UserDefinedQueryAction" method="$json">
-            <result type="stream">
-                <param name="contentType">application/json</param>
-                <param name="inputName">jsonStream</param>
-            </result>
-        </action>
-        <action name="udr/query/view/{id}/{displayFormat}" class="hpps.qad.core.udr.UserDefinedQueryAction" method="$view">
-            <result name="success" type="freemarker">/modules/qad/udr/query-view.ftl</result>
-        </action>
-        <action name="udr/query/{function}" class="hpps.qad.core.udr.UserDefinedQueryAction" method="${1}">
-            <result name="success" type="freemarker">/modules/qad/udr/query-{1}.ftl</result>
-        </action>
-        <!-- User defined QueryDef -->
-        <action name="udr/qdf">
-            <result name="success" type="freemarker">/modules/qad/udr/qdf-angular.ftl</result>
-        </action>
-        <action name="udr/qdf/{function}" class="hpps.qad.core.query.QueryDefAction" method="${1}">
-            <result name="success" type="freemarker">/modules/qad/udr/qdf-{1}.ftl</result>
-        </action>
-        <!-- User defined page -->
-        <action name="udr/page">
-            <result name="success" type="freemarker">/modules/qad/udr/page-angular.ftl</result>
-        </action>
-        <action name="udr/page/{function}" class="hpps.qad.core.udr.UserDefinedPageAction" method="${1}">
-            <result name="success" type="freemarker">/modules/qad/udr/page-{1}.ftl</result>
-        </action>
+        <!--&lt;!&ndash; User defined query &ndash;&gt;-->
+        <!--<action name="udr/query" class="hpps.qad.core.udr.UserDefinedQueryAction" method="$list">-->
+            <!--<result name="success" type="freemarker">/modules/qad/udr/query-list.ftl</result>-->
+        <!--</action>-->
+        <!--<action name="udr/query/json/{displayFormat}" class="hpps.qad.core.udr.UserDefinedQueryAction" method="$json">-->
+            <!--<result type="stream">-->
+                <!--<param name="contentType">application/json</param>-->
+                <!--<param name="inputName">jsonStream</param>-->
+            <!--</result>-->
+        <!--</action>-->
+        <!--<action name="udr/query/view/{id}/{displayFormat}" class="hpps.qad.core.udr.UserDefinedQueryAction" method="$view">-->
+            <!--<result name="success" type="freemarker">/modules/qad/udr/query-view.ftl</result>-->
+        <!--</action>-->
+        <!--<action name="udr/query/{function}" class="hpps.qad.core.udr.UserDefinedQueryAction" method="${1}">-->
+            <!--<result name="success" type="freemarker">/modules/qad/udr/query-{1}.ftl</result>-->
+        <!--</action>-->
+        <!--&lt;!&ndash; User defined QueryDef &ndash;&gt;-->
+        <!--<action name="udr/qdf">-->
+            <!--<result name="success" type="freemarker">/modules/qad/udr/qdf-angular.ftl</result>-->
+        <!--</action>-->
+        <!--<action name="udr/qdf/{function}" class="hpps.qad.core.udr.UserDefinedQdfActionAction" method="${1}">-->
+            <!--<result name="success" type="freemarker">/modules/qad/udr/qdf-{1}.ftl</result>-->
+        <!--</action>-->
+        <!--&lt;!&ndash; User defined page &ndash;&gt;-->
+        <!--<action name="udr/page">-->
+            <!--<result name="success" type="freemarker">/modules/qad/udr/page-angular.ftl</result>-->
+        <!--</action>-->
+        <!--<action name="udr/page/{function}" class="hpps.qad.core.udr.UserDefinedPageAction" method="${1}">-->
+            <!--<result name="success" type="freemarker">/modules/qad/udr/page-{1}.ftl</result>-->
+        <!--</action>-->
         <action name="report/{page}">
             <result name="success" type="freemarker">/WEB-INF/pages/{1}.ftl</result>
         </action>

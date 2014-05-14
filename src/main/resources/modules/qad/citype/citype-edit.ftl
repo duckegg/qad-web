@@ -47,7 +47,7 @@
                     <@ui.labelControlGroup label="索引方案">
                         <@s.select key="ciType.indexProfileId" cssClass="select2" title="请选择索引方案" list='availableIndexProfiles' listKey="id" listValue="name" value="ciType.indexProfileId" theme="simple"/>
                         <a href="${base}/admin/config/search/profile" target="_blank"
-                           title="新增索引方案" class="btn btn-default"><i class="fa fa-plus"></i></a>
+                           title="新增索引方案" class="btn btn-default btn-xs"><i class="fa fa-plus"></i></a>
                     </@ui.labelControlGroup>
                     <@ui.textarea name="ciType.searchIndexParam" label="索引参数" help="一行一个参数，格式<code>参数名:参数值</code>">${ciType.searchIndexParam!''}</@ui.textarea>
                     <@ui.labelControlGroup label="">
