@@ -161,7 +161,7 @@ $(function () {
             var aParts = window.location.pathname.split('/');
             var sName = oSettings.sCookiePrefix + oSettings.sInstance;
             var sNameEQ = sName + '_' + aParts[aParts.length - 1].replace(/[\/:]/g, "").toLowerCase();
-            logger.debug("fnStateSave", oData);
+//            logger.debug("fnStateSave", oData);
             localStorage.setItem(sNameEQ, JSON.stringify(oData));
         },
         "fnStateLoad": function (oSettings) {
@@ -217,7 +217,7 @@ $(function () {
             <#if useAjax>
                 theTable.fnSetFilteringDelay(400);
             </#if>
-            $('.dataTables_filter input').addClass('form-control');
+            $('.dataTables_filter input').addClass('form-control input-sm');
             var $tableWrapper = $("#${tableId}_wrapper");
             <#if ajaxheader>
 

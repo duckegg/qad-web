@@ -32,7 +32,8 @@
         <div class="media-heading">
             <#if isThread>
                 <#if jpost.status?? >
-                    <span id="js-jpost-${jpost.id}-status" class="label label-default kui-status-${jpost.status} pull-right">${jpost.status}</span>
+                    <span id="js-jpost-${jpost.id}-status"
+                          class="label label-default kui-status-${jpost.status} pull-right">${jpost.status}</span>
                 </#if>
                 <h3>
                     <#if type=="summary">
@@ -80,11 +81,9 @@
         <div class="<#if type!="summary">col-md-6<#else>col-md-12</#if>">
             <#if (jpost.tagLabels?size > 0)>
                 <ul class="list-unstyled list-inline kui-tag-list">
-                    <li>
-                        <#list jpost.tagLabels as tagLabel>
-                            <a href="javascript:;">${tagLabel}</a>
-                        </#list>
-                    </li>
+                    <#list jpost.tagLabels as tagLabel>
+                        <li><a href="javascript:;" class="label kui-label-tag">${tagLabel}</a></li>
+                    </#list>
                 </ul>
             </#if>
         </div>
@@ -117,7 +116,7 @@
 <div>
     <ul class="list-unstyled list-inline">
         <li>
-            #${jpost.id} <#if jpost.createdUser??><a data-kui-dialog
+            <#if jpost.createdUser??><a data-kui-dialog
                                         href="${base}/user/view/${jpost.createdUser.id}">${jpost.createdUser.fullName!""}</a></#if>
         ${jpost.createdAt!""}
         </li>

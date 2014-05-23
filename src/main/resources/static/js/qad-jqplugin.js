@@ -2,9 +2,6 @@
  * jQuery plugins
  * @author Leo Liao, 2014/04/30, extracted from qad-ui.js
  */
-//==============================================================================
-// jQuery Plugins
-//==============================================================================
 (function ($) {
     var pluginName = 'kuiDialog',
         defaults = {
@@ -83,9 +80,8 @@
         this.init();
         this.activateItem = function ($li) {
             $li.addClass('active');
-            var $liLevel1 = $li.parentsUntil('.nav-list-tree', 'li');
-            $liLevel1.addClass("active");
-            $li.closest('.nav-list-tree').find('li').not($li).not($liLevel1).removeClass("active");
+            var $liLevel1 = $li.parentsUntil('.nav-list-tree', 'li')/*.addClass("active")*/;
+            $li.closest('.nav-list-tree').find('li').not($li)/*.not($liLevel1)*/.removeClass("active");
 
             var $parentArrow = $li.parents("ul").prev("a").children(".arrow");
             $parentArrow.addClass("open");
@@ -95,10 +91,10 @@
     }
 
     KuiListTree.prototype.init = function () {
-        var $self = $(this);
-        var selector = $(this.element);
-        initData(selector);
-        regEvents(selector);
+        var $treeObj = $(this);
+        var $treeElem = $(this.element);
+        initData($treeElem);
+        regEvents($treeElem);
 
         function initData(ul) {
             var arrow = '<span class="arrow"></span>';
@@ -107,7 +103,7 @@
                 if ($li.children("ul").length > 0) {
                     $li.children('a').append(arrow).next().hide(); // Initially collapse all top level group
                 }
-                if ($li.parentsUntil($self, 'ul').length > 4)
+                if ($li.parentsUntil($treeElem, 'ul').length > 4)
                     logger.warn("List tree works best with up to 4 levels");
             });
         }
@@ -118,33 +114,39 @@
                 var $li = $a.parent();
                 var $ulSub = $a.next();
                 if ($ulSub.length > 0) {
-                    // Handle menu group, close previous open sub-menu group
+                    // Handle menu sub-group, close previous open sub-menu group
                     var $ulParent = $li.parent();
                     var $opened = $ulParent.children('li.open').removeClass('open');
                     $opened.children('a').children('.arrow').removeClass('open');
-
-                    $opened.children('ul').not($ulSub).slideUp();
-
-                    // Toggle current sub-menu group
                     var toOpen = $ulSub.is(":hidden");
+                    $opened.children('ul').not($ulSub).slideUp("fast", function () {
+                        if (toOpen) {
+                            // Make current sub-group visible in view port
+                            var itemOffset = $a.offset();
+                            var treeOffset = $treeElem.offset();
+                            $('html, body').animate({
+                                scrollTop: itemOffset.top - treeOffset.top
+                            });
+                        }
+                    });
+                    // Toggle current sub-menu group
                     $li.toggleClass("open", toOpen);
                     $a.children(".arrow").toggleClass('open', toOpen);
-//                    alert("pause");
                     $ulSub.slideToggle();
                     e.preventDefault();
                     e.stopPropagation();
                 } else {
-                    if ($li.parentsUntil($self, 'ul').length > 3)
+                    // Handle menu item
+                    if ($li.parentsUntil($treeElem, 'ul').length > 3) {
                         logger.warn("List tree best work with max 4 levels");
-                    $self.kuiListTree("activateItem", $li);
+                    }
+                    $treeObj.kuiListTree("activateItem", $li);
                     var itemLink = $a.attr('href');
-                    if ($a.data('kui-toggle') === 'ajaxSubMenu' && isValidAjaxUrl(itemLink)) {
+                    if ($a.data('kui-toggle') === 'ajaxSubMenu' && ktl.isValidAjaxUrl(itemLink)) {
                         $.get(itemLink, function (data) {
                             $a.after(data);
                             $a.children('.arrow').addClass('open');
                         });
-//                        e.preventDefault();
-//                        e.stopPropagation();
                     }
                 }
             });
@@ -568,7 +570,7 @@ $.widget("ui.dialog", $.ui.dialog, {
                     }
                 }
             } else {
-                $tabPane = $(getUrlHash(tabLink));
+                $tabPane = $(ktl.getUrlHash(tabLink));
             }
             $a.parent("li").addClass("active").siblings('.active').removeClass("active");
             $tabPane.addClass('active').siblings('.tab-pane.active').removeClass('active');
@@ -1087,52 +1089,62 @@ $.widget("ui.dialog", $.ui.dialog, {
             }
         }
 
-        function buildHomeMadeSidebar(selector) {
-            var $navTree = $(selector);
+        /**
+         * Build home made sidebar, metronic style
+         * @param ul jquery selector of menu `ul` element
+         */
+        function buildHomeMadeSidebar(ul) {
+            var $navTree = $(ul);
+            if ($navTree.not('ul')) {
+                $navTree = $('ul', ul).first();
+                if ($navTree.length == 0) {
+                    logger.error("buildHomeMadeSidebar: Need list 'ul' element to build sidebar menu");
+                    return;
+                }
+            }
             var $body = $("body");
             var SIDEBAR_CLOSED_CLASS = "kui-sidebar-closed";
             var SIDEBAR_OPEN_CLASS = "kui-sidebar-opened";
-            if ($navTree.not('ul')) {
-                $navTree = $('ul', selector).first();
-                if ($navTree.length == 0) {
-                    alert("buildHomeMadeSidebar: Need list 'ul' element to build sidebar menu");
-                    return;
-                }
-                $navTree.addClass('nav nav-list-tree dark');
-            }
-            $navTree.kuiListTree();
+            $navTree.addClass('nav nav-list-tree dark').kuiListTree();
 
-            sbHighlightMatch();
-            sbRegisterEvents();
-            sbToggleSidebar(kup.loadPreference("sidebarOpen", true));
+            highlightMatch();
+            registerEvents();
+            toggleSidebar(kup.loadPreference("sidebarOpen", true));
 
-            function sbToggleSidebar(toOpen) {
+            function toggleSidebar(toOpen) {
                 $(".sidebar-search").toggleClass("open", toOpen);
                 $body.toggleClass(SIDEBAR_CLOSED_CLASS, !toOpen).toggleClass(SIDEBAR_OPEN_CLASS, toOpen);
             }
 
-            function sbRegisterEvents() {
+            function registerEvents() {
                 // handle sidebar show/hide
                 $('.sidebar-toggler').on('click.kui', function (e) {
                     var toOpen = $body.hasClass(SIDEBAR_CLOSED_CLASS);
                     kup.savePreference("sidebarOpen", toOpen);
-                    sbToggleSidebar(toOpen);
+                    toggleSidebar(toOpen);
                     e.preventDefault();
                 });
             }
 
-            function sbHighlightMatch() {
+            /**
+             * Highlight matched menu item based on current URL.
+             * It compare menu item attribute of `data-kui-menu-key` or `href` with `document.location.href`.
+             * The menu item with the longest match will be highlighted.
+             */
+            function highlightMatch() {
                 var matched = null;
                 $('li a', $navTree).each(function (index) {
-                    var key = $(this).data("kui-menu-key");
-                    if (ktl.isBlank(key))
-                        key = $(this).attr("href");
+                    var $this = $(this);
+                    var key = $this.data("kui-menu-key");
+                    if (ktl.isBlank(key)) {
+                        key = $this.attr("href");
+                    }
                     var loc = decodeURIComponent(document.location.href);
                     if (loc.indexOf(key) > 0) {
                         if (matched == null) {
-                            matched = $(this);
+                            matched = $this;
                         } else if (key.length > matched.attr("href").length) {
-                            matched = $(this); // Longest match
+                            matched = $this; // Longest match
                         }
                     }
                 });

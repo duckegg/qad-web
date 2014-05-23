@@ -18,9 +18,9 @@
                     <a href="javascript:;" ng-click="actionEdit(p)">{{p.id}}: {{ p.name }}</a>
                 </li>
                 <li class=" pull-right">
-                    <button class="btn btn-default" ng-click="actionNew()"
+                    <button class="btn btn-default btn-sm" ng-click="actionNew()"
                             style="margin-bottom:1em;"
-                            ng-disabled="activeProfile.id==null"><i class="fa fa-plus"></i>
+                            ng-disabled="activeProfile.id==null"><i class="fa fa-plus"></i> 新建索引方案
                     </button>
                 </li>
             </ul>
@@ -44,8 +44,8 @@
 
                     <div class="controls">
                         <textarea id="indexProfileDefinition" name="activeProfile.definition"
-                                  class="form-control"
-                                  style='height: 15em; font-family: "Courier New"'
+                                  class="form-control kui-large code"
+                                  <#--style='height: 15em; font-family: "Courier New"'-->
                                   ng-model="activeProfile.definition"></textarea>
 
                         <div class="help-block">
@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="indexDesc">增加描述字段 </label>
+                    <label class="control-label" for="indexDesc">描述: </label>
 
                     <div class="controls">
                         <textarea id="indexDesc" name="activeProfile.description"

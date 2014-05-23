@@ -52,6 +52,7 @@ function QadUi(key) {
     /**
      * Call ajax. It shows processing message before calling.
      * @param options $.ajax options
+     * @deprecated use jQuery.ajax()
      */
     this.callAjax = function (options) {
 //    _showProcessing(true);
@@ -66,7 +67,7 @@ function QadUi(key) {
      */
     this.postAjax = function (options) {
         options.type = "post";
-        callAjax(options);
+        that.callAjax(options);
     };
 
     /**
@@ -152,6 +153,45 @@ function QadUi(key) {
     //==========================================================================
     // STATUS & MESSAGE
     //==========================================================================
+    /**
+     * @param jqxhr AJAX response data, including `status` and `statusText`
+     * @param container optional, where to display the message
+     */
+    this.showAjaxError = function (jqxhr, container) {
+        if (jqxhr.status == 0) {
+            // status ==0 means abort, timeout, which may happen when two requests happen too quickly
+            return null;
+        }
+        kui.hideLoading();
+        var status;
+        switch (jqxhr.status) {
+            case 400:
+            case 401:
+            case 404:
+                status = "warn";
+                break;
+            default:
+                status = "error";
+        }
+//            console.log("showAjaxErrorMessage", jqxhr);
+        var msg = '<strong>' + jqxhr.status + '</strong> ' + jqxhr.statusText + ' <a href="#" class="js-details" data-pjax-disabled>...</a>';
+        var flash;
+        if (ktl.isBlank(container)) {
+            flash = kui.showToast(status, msg, 15);
+        }
+        else {
+            flash = container.html(msg);
+        }
+        $(flash).on('click', '.js-details', function (e) {
+            var text = jqxhr.responseText;
+            if (ktl.isBlank(text)) {
+                text = jqxhr.data;
+            }
+            window.open().document.write(text);
+            e.preventDefault();
+        });
+        return flash;
+    };
 
     /**
      * Create and show a piece of alert message to indicate brief operation result.
@@ -193,7 +233,7 @@ function QadUi(key) {
         function getMessageContainer() {
             var FLASH_MSG_CONTAINTER_CLASS = 'flash-message-container';
             var $container = $('.' + FLASH_MSG_CONTAINTER_CLASS);
-            if ($container.length == 0) {
+            if ($container.length === 0) {
                 $container = $('<div class="' + FLASH_MSG_CONTAINTER_CLASS + '"></div>').prependTo("body");
             }
             return $container;
@@ -203,18 +243,18 @@ function QadUi(key) {
         $msgAlert.fadeIn("fast").prependTo($container).uniqueId();
         if (autoCloseSeconds > 0) {
             var elapsed = autoCloseSeconds;
-            var timer = setInterval(function () {
+            var timer = window.setInterval(function () {
                 if (elapsed <= 0) {
                     $msgAlert.fadeOut(function () {
                         $msgAlert.remove();
                     });
-                    clearInterval(timer);
+                    window.clearInterval(timer);
                 }
                 $('.counter', $msgAlert).html("" + elapsed);
                 elapsed--;
             }, 1000);
             $msgAlert.on('click', 'a.kui-flash-pin', function () {
-                clearInterval(timer);
+                window.clearInterval(timer);
                 $("i", this).alterClass("fa-*", "fa-lock");
             });
         }
@@ -305,9 +345,9 @@ function QadUi(key) {
 
         var $start = $('input.datetimepicker.start:not(readonly)', selector);
         var $end = $('input.datetimepicker.end:not([readonly])', selector);
-        if ($start.length == 0)
+        if ($start.length === 0)
             return;
-        if ($end.length == 0)
+        if ($end.length === 0)
             return;
 
         $start.datetimepicker({
@@ -331,8 +371,9 @@ function QadUi(key) {
                 if ($start.val() != '') {
                     var testStartDate = $start.datetimepicker('getDate');
                     var testEndDate = $end.datetimepicker('getDate');
-                    if (testStartDate > testEndDate)
+                    if (testStartDate > testEndDate) {
                         $start.datetimepicker('setDate', testEndDate);
+                    }
                 }
                 else {
                     $start.val(dateText);
@@ -385,7 +426,11 @@ function QadUi(key) {
         return isFormSubmitted;
     };
 
-    this.disableControls=function(container) {
+    /**
+     * Set controls status to disabled
+     * @param container
+     */
+    this.disableControls = function (container) {
         $('form .form-actions', container).each(function () {
             $(this).hide();
         });
@@ -431,82 +476,28 @@ function QadUi(key) {
 
     /**
      * Plot chart. Used with FreeMarker macro pieChart, lineChart and barChart.
+     * A chart layout:
+     * ```
+     * <div id="${chartId}_wrapper">        -- used to position chart when enlarge chart in popup dialog
+     *     <div id="${chartId}">            -- contains customized elements (like toolbar)
+     *         <div id="${chartId}_target"> -- jqplot will generate chart here
+     *          </div>
+     *     </div>
+     * </div>
+     * ```
      * @param chartId div id of the chart
-     * @param chartOptions jqPlot options with custom kuiExtraChartOptions
+     * @param chartOptions jqPlot options with custom `kuiExtraChartOptions`
      * @param chartType value of `bar`, `line` or `pie`
      */
     this.plotChart = function (chartId, chartOptions, chartType) {
-        var kuiOptions = chartOptions.kuiExtraChartOptions;
-        var chartArgument = {_chartOptions: chartOptions, _chartType: chartType};
-        var $chartDiv = $('#' + chartId);
-        var chartTitle = $("#" + chartId).data('title');
-        var DISPLAY_TOOLBAR = true;
-        var prefKey = "chart_" + chartId;
-        var pref = kup.loadPreference(prefKey, {});
 
-        //------------------------------------------
-        // Default options for all kinds of charts
-        //------------------------------------------
-        var DEFAULT_OPTIONS = {
-            title: chartTitle,
-            legend: {
-                show: false,
-                renderer: $.jqplot.EnhancedLegendRenderer,
-                rendererOptions: {
-                    numberRows: null
-                },
-                location: 'nw',
-                showSwatch: true,
-//            border: "1",
-                seriesToggle: 'fast'
-            },
-            grid: {
-                borderWidth: 0,
-                shadow: false,
-                background: 'rgba(0,0,0,0)'
-            },
-            highlighter: {
-                //LEO: undocumented property to customize tooltip, please refer to source code of jqplot.highlighter.js
-                tooltipContentEditor: jqplotTooltip,
-                show: true,
-                tooltipFadeSpeed: "fast"
-            },
-            cursor: {
-                show: false
-            },
-            seriesDefaults: {
-                shadow: false, // show shadow or not.
-                markerOptions: {
-                    show: false,
-                    shadow: false
-                },
-                rendererOptions: {
-                    animation: {
-//                    show: true
-                    }
-                }
-            },
-            axes: {
-                xaxis: {
-                    tickOptions: {
-                        showGridline: false
-                    }
-                },
-                yaxis: {
-                    tickOptions: {
-                        showGridline: false
-                    }
-                }
-            }
-        };
-
-        // Local variable allOptions is assigned to hold all plot options
-        var allOptions = chartOptions;
-
-        //------------------------------------------
-        /*--- Highlight color ---*/
-        //------------------------------------------
-        function assignHighlightColors(chartType) {
+        /**
+         * Calculate highlight colors
+         *
+         * @param chartType
+         * @param chartOptions jqplot chart options which will be modified for highlight color
+         */
+        function assignHighlightColors(chartType, chartOptions) {
             if (chartType === "pie") {
                 var highlightColors = [];
                 for (var index in chartColorScheme) {
@@ -514,9 +505,9 @@ function QadUi(key) {
                     highlightColors[index] = calcColorLuminance(color, 0.15);
                 }
 
-                if (typeof allOptions.seriesDefaults !== "undefined") {
-                    if (typeof allOptions.seriesDefaults.rendererOptions !== "undefined") {
-                        allOptions.seriesDefaults.rendererOptions.highlightColors = highlightColors;
+                if (typeof chartOptions.seriesDefaults !== "undefined") {
+                    if (typeof chartOptions.seriesDefaults.rendererOptions !== "undefined") {
+                        chartOptions.seriesDefaults.rendererOptions.highlightColors = highlightColors;
                     }
                 }
             }
@@ -547,157 +538,48 @@ function QadUi(key) {
             return rgb;
         }
 
-        assignHighlightColors(chartType);
-
-        //------------------------------------------
-        /*--- Fetch plot data ---*/
-        //------------------------------------------
-        var plotData = fetchPlotData(chartOptions);
-        if (plotData == null)
-            return;
-
-        //------------------------------------------
-        // Wrap chart div
-        //------------------------------------------
-        var wrapperId = chartId + "_wrapper";
-        var targetId = chartId + '_target';
-        var $targetDiv = $('#' + targetId).empty().css("height", "100%");
-        // Make them full height
-        $('#' + wrapperId).css("height", "100%").addClass('chart-wrapper')
-            .on({mouseenter: function () {
-//            $(this).find('.chart-controls').show();
-            }, mouseleave: function () {
-//            $(this).find('.chart-controls').hide();
-            }});
-        $('#' + chartId).css("height", "100%");
-
-        //------------------------------------------
-        // Check error or empty data
-        //------------------------------------------
-        var isEmptyChart = false;
-        var emptyChartMessage = "";
-        if (isNotBlank(plotData.error)) {
-            isEmptyChart = true;
-            emptyChartMessage = plotData.error;
-            // If no data returned, display no data
-            $targetDiv.addClass("jqplot-target").append(
-                    '<div class="jqplot-title">' + chartTitle + '</div><div style="text-align: center;padding-top:1em;">' + emptyChartMessage + '</div>');
-            cachedPlots[chartId] = $.extend(true, {isError: true}, chartArgument);
-            return;
-        }
-
-        // Combine chart options with priority: plotData (server data) > allOptions (custom options) > DEFAULT_OPTIONS
-        allOptions = $.extend(true, {}, DEFAULT_OPTIONS, allOptions, plotData);
-        allOptions.legend.rendererOptions.numberRows = allOptions.legend.location == "s" || allOptions.legend.location == "n" ? 1 : null;
-
-        //------------------------------------------
-        // Create plot and save it in global variable
-        //------------------------------------------
-        //*******************************************
-        var thePlot = $.jqplot(targetId, plotData.data, allOptions);
-        cachedPlots[chartId] = $.extend(true, thePlot, chartArgument);
-        //*******************************************
-
-
-        // Save original dimensions
-        if (ktl.isBlank($targetDiv.data("old-height")))
-            $targetDiv.data("old-height", $targetDiv.height());
-        if (ktl.isBlank($targetDiv.data("old-width")))
-            $targetDiv.data("old-width", $targetDiv.width());
-
-        //------------------------------------------
-        // Determine Chart Type
-        //------------------------------------------
-        var isPieChart = false, isBarChart = false, isLineChart = false;
-        var renderer = cachedPlots[chartId].series[0].renderer;
-        if (renderer._hiBandGridData === undefined) {
-            isPieChart = true;
-        } else if (renderer.smooth === undefined) {
-            isBarChart = true;
-        } else {
-            isLineChart = true;
-        }
-
-        //------------------------------------------
-        // Activate theme
-        //------------------------------------------
-        var chartTheme = {seriesStyles: {seriesColors: chartColorScheme}};
-        if (chartTheme != null) {
-            cachedPlots[chartId].themeEngine.newTheme('myStyle', chartTheme);
-            // TODO AND NOTE
-            // if not use plot.activateTheme, piechart chartTheme can not be applied
-            // if use plot.activateTheme, barchart x-axis label can not be displayed
-            if (isPieChart)
-                cachedPlots[chartId].activateTheme('myStyle');
-        }
-
         /**
          * Shorten legend labels, apply CSS styles.
          */
         function formatChartLegend($chartDiv, allOptions) {
-//        $chartDiv.find('td.jqplot-table-legend-label').each(function () {
-//            var text = $(this).text();
-//            $(this).html('<a href="javascript:void(0);" title="' + text + '">' + $(this).text() + '</a>');
-//        });
             var $legendTable = $('table.jqplot-table-legend', $chartDiv);
             if ($legendTable.length > 0) {
                 if (!allOptions.legend.show) {
                     $legendTable.hide();
                 }
                 var location = allOptions.legend.location;
-                if (location == "n" || location == "s") {
+                if (location === "n" || location === "s") {
                     $legendTable.addClass("kui-chart-legend-horizontal");
                 }
             }
-
         }
 
-        formatChartLegend($chartDiv, allOptions);
-        //------------------------------------------
-        // Post plot: create action toolbar
-        //------------------------------------------
-        if (DISPLAY_TOOLBAR) {
-            createToolbar(chartId);
-        }
-
-        //
         /**
          * Now bind function to the highlight event to show the tooltip and highlight the row in the legend.
          */
         function processHighlight() {
             var highlight = 'highlight';
-            var legendTds = $targetDiv.find('table.jqplot-table-legend td');
+            var legendTds = $chartObject.find('table.jqplot-table-legend td');
             if (isBarChart || isPieChart) {
-                $targetDiv.bind('jqplotDataHighlight',
+                $chartObject.bind('jqplotDataHighlight',
                     function (ev, seriesIndex, pointIndex, data, radius) {
                         // Pie chart has only one single series
                         legendTds.removeClass(highlight).eq(isPieChart ? pointIndex * 2 + 1 : seriesIndex * 2 + 1).addClass(highlight);
                     });
                 //Bind a function to the unhighlight event to clean up after highlighting.
-                $targetDiv.bind('jqplotDataUnhighlight',
+                $chartObject.bind('jqplotDataUnhighlight',
                     function (ev, seriesIndex, pointIndex, data) {
                         legendTds.removeClass(highlight);
                     });
             }
             else if (isLineChart) {
                 // Event jqplotDataHighlight does not work for line chart, use jqplotDataMouseOver instead
-                $targetDiv.bind('jqplotDataMouseOver',
+                $chartObject.bind('jqplotDataMouseOver',
                     function (ev, seriesIndex, pointIndex, data, radius) {
                         legendTds.removeClass(highlight).eq(seriesIndex * 2 + 1).addClass(highlight);
                     });
             }
         }
-
-        processHighlight();
-//        /**
-//         * Get a plot object
-//         * @param chartId
-//         * @return {*}
-//         * @private
-//         */
-//        function _getPlot(chartId) {
-//            return cachedPlots[chartId];
-//        }
 
         /**
          * Create chart toolbar
@@ -705,10 +587,7 @@ function QadUi(key) {
          * @private
          */
         function createToolbar(chartId) {
-
             var controlsId = chartId + "_controls";
-            var $chartDiv = $('#' + chartId);
-
             var $controlsDiv = $('#' + controlsId);
             if ($controlsDiv.length > 0) {
                 $controlsDiv.detach().empty();
@@ -719,9 +598,9 @@ function QadUi(key) {
             $.each(cachedPlots[chartId].legend._series, function (index, series) {
                 // Load user preference
                 var isShow = true;
-                if (isNotBlank(pref[series.label])) {
+                if (ktl.isNotBlank(pref[series.label])) {
                     isShow = pref[series.label].show;
-                    if (isNotBlank(isShow) && !isShow) {
+                    if (ktl.isNotBlank(isShow) && !isShow) {
                         series.toggleDisplay({data: {series: series}});
                     }
                 }
@@ -788,7 +667,7 @@ function QadUi(key) {
             //------------------------------------------
             // Event: save image
             //------------------------------------------
-            $chartDiv.off('click.kui', '.js-chart-image').on('click.kui', '.js-chart-image', {chart: $targetDiv}, function (e) {
+            $chartDiv.off('click.kui', '.js-chart-image').on('click.kui', '.js-chart-image', {chart: $chartObject}, function (e) {
                 var imgelem = e.data.chart.jqplotToImageElem();
                 var $imgDialog = $('<div></div>').css('display', "none");
                 $imgDialog.html("<img src='" + imgelem.src + "'/>").appendTo($('body'));
@@ -833,8 +712,8 @@ function QadUi(key) {
                     },
                     beforeClose: function (event, ui) {
                         // Put chart back
-                        $chartDiv.detach().prependTo($('#' + wrapperId));
-                        $targetDiv.height($targetDiv.data('old-height')).width($targetDiv.data('old-width'));
+                        $chartDiv.detach().prependTo($chartWrapper);
+                        $chartObject.height($chartObject.data('old-height')).width($chartObject.data('old-width'));
                         that.replotChart(chartId);
                         $chartDialog.removeClass("resizable-container");
                     }
@@ -859,23 +738,23 @@ function QadUi(key) {
 
         /**
          * Fetch plot data from AJAX
-         * @param options contains KUI enhanced options kuiExtraChartOptions
+         * @param options contains KUI enhanced options `kuiExtraChartOptions`
          * @return {*} null if program error
          */
-        function fetchPlotData(options) {
-            var kuiOptions = options.kuiExtraChartOptions;
+        function fetchAjaxPlotData(options) {
+            var kuiExtraChartOptions = options.kuiExtraChartOptions;
             // Prepare AJAX arguments
-            var ajaxUrl = kuiOptions.chartAjaxUrl;
-            var ajaxParam = kuiOptions.chartAjaxParam;
-            var ajaxForm = kuiOptions.chartAjaxForm;
+            var ajaxUrl = kuiExtraChartOptions.chartAjaxUrl;
+            var ajaxParam = kuiExtraChartOptions.chartAjaxParam;
+            var ajaxForm = kuiExtraChartOptions.chartAjaxForm;
 
             if (ktl.isBlank(ajaxUrl) && ktl.isBlank(ajaxForm)) {
-                alert("Program Error. Parameter 'ajaxUrl' or 'ajaxForm' must be specified");
+                logger.error("Parameter 'ajaxUrl' or 'ajaxForm' must be specified");
                 return null;
             }
             if (!ktl.isBlank(ajaxForm)) {
                 if ($(ajaxForm).length == 0) {
-                    alert("Program Error: Cannot find form element '" + ajaxForm + "'");
+                    logger.error("Cannot find form element '" + ajaxForm + "'");
                     return null;
                 }
                 ajaxUrl = $(ajaxForm).attr("action");
@@ -884,25 +763,26 @@ function QadUi(key) {
 
             // Call AJAX and process data
             var jsonData = null;
-            callAjax({
+            $.ajax({
                 url: ajaxUrl, type: "POST", data: ajaxParam, dataType: "json",
                 async: false, /* Have to use synchronous here, else the function will return before the data is fetched */
                 success: function (xhr) {
                     jsonData = xhr;
                 }
             });
+            return processJson(jsonData);
 
             /**
-             * Process return json data.
-             * TODO: rename plotData to plot in Java accordingly?
-             * <pre>
-             * - plotData: Array of object, each object is a series legend and its data
-             *     - dataPoints: Array of 2-D array (x value, y value)
-             *     - legendLabel: String
-             * </pre>
-             * JSON format: {"plotData":[{"dataPoints":[[x1,y1],[x2,y2],...,[xn,yn]],"legendLabel":"series1_legend"},...,{"dataPoints":...,"legendLabel:...}]}
-             * @param jsonData
-             * @return plotData
+             * Process input JSON data in format of:
+             * ```
+             * {"plotData":[{"dataPoints":[[x1,y1],[x2,y2],...,[xn,yn]],"legendLabel":"series1_legend"},...,{"dataPoints":...,"legendLabel:...}]}
+             * ```
+             * Here,
+             * - `plotData`: Array of object, each object is a series legend and its data
+             *     - `dataPoints`: Array of 2-D array (x value, y value)
+             *     - `legendLabel`: String
+             * @param jsonData data in JSON format
+             * @return {{series:[], data:[], error:""}} in jqplot chart data format
              */
             function processJson(jsonData) {
                 var plotData = {series: [], data: [], error: ""};
@@ -914,7 +794,6 @@ function QadUi(key) {
 
                 var chartSeries = [];
                 var chartData = [];
-//        var theme = {seriesStyles:{seriesColors:chartColorScheme}};
                 var seriesColors = chartColorScheme;
 
                 // Iterate all series
@@ -928,12 +807,12 @@ function QadUi(key) {
                     if (!ktl.isBlank(seriesColors)) {
                         color = seriesColors[i % (seriesColors.length)];
                     }
-                    if (isNotBlank(color)) {
+                    if (ktl.isNotBlank(color)) {
                         chartSeries.push({label: item['legendLabel'], color: color});
                     } else {
                         chartSeries.push({label: item['legendLabel']});
                     }
-                    if (chartData[i].length == 0) {
+                    if (chartData[i].length === 0) {
                         plotData.error = "没有数据点";
                     }
                 });
@@ -941,8 +820,6 @@ function QadUi(key) {
                 plotData.data = chartData;
                 return plotData;
             }
-
-            return processJson(jsonData);
         }
 
         /**
@@ -969,10 +846,166 @@ function QadUi(key) {
          * @private
          */
         function jqplotTooltip(str, seriesIndex, pointIndex, plot) {
-            if (kuiOptions.showSeriesInTooltip)
+            if (kuiOptions.showSeriesInTooltip) {
                 return "<strong>" + plot.series[seriesIndex]["label"] + "</strong> " + str;//plot.data[seriesIndex][pointIndex];
+            }
             return str;
         }
+
+        //######################################################################
+        // Main for plotChart
+        //######################################################################
+        var kuiOptions = chartOptions.kuiExtraChartOptions;
+        var chartArgument = {_chartOptions: chartOptions, _chartType: chartType};
+        var $chartDiv = $('#' + chartId).css("height", "100%");
+        var targetId = chartId + '_target';
+        var $chartObject = $('#' + targetId).empty().css("height", "100%");
+        var $chartWrapper = $('#' + chartId + "_wrapper").css("height", "100%").addClass('chart-wrapper');
+        var chartTitle = $chartDiv.data('title');
+        var DISPLAY_TOOLBAR = true;
+        var prefKey = "chart_" + chartId;
+        var pref = kup.loadPreference(prefKey, {});
+
+        var DEFAULT_CHART_OPTIONS = {
+            title: chartTitle,
+            legend: {
+                show: false,
+                renderer: $.jqplot.EnhancedLegendRenderer,
+                rendererOptions: {
+                    numberRows: null
+                },
+                location: 'nw',
+                showSwatch: true,
+                seriesToggle: 'fast'
+            },
+            grid: {
+                borderWidth: 0,
+                shadow: false,
+                background: 'rgba(0,0,0,0)'
+            },
+            highlighter: {
+                //LEO: undocumented property to customize tooltip, please refer to source code of jqplot.highlighter.js
+                tooltipContentEditor: jqplotTooltip,
+                show: true,
+                tooltipFadeSpeed: "fast"
+            },
+            cursor: {
+                show: false
+            },
+            seriesDefaults: {
+                shadow: false, // show shadow or not.
+                markerOptions: {
+                    show: false,
+                    shadow: false
+                },
+                rendererOptions: {
+                    animation: {
+//                    show: true
+                    }
+                }
+            },
+            axes: {
+                xaxis: {
+                    tickOptions: {
+                        showGridline: false
+                    }
+                },
+                yaxis: {
+                    tickOptions: {
+                        showGridline: false
+                    }
+                }
+            }
+        };
+
+        // Local variable allOptions is assigned to hold all plot options
+        var allOptions = chartOptions;
+
+        assignHighlightColors(chartType, allOptions);
+
+        var plotData = fetchAjaxPlotData(chartOptions);
+        if (plotData == null) {
+            return;
+        }
+
+        //------------------------------------------
+        // Check error or empty data
+        //------------------------------------------
+        var isEmptyChart = false;
+        var emptyChartMessage = "";
+        if (ktl.isNotBlank(plotData.error)) {
+            isEmptyChart = true;
+            emptyChartMessage = plotData.error;
+            // If no data returned, display no data
+            $chartObject.addClass("jqplot-target").append(
+                    '<div class="jqplot-title">' + chartTitle + '</div><div style="text-align: center;padding-top:1em;">' + emptyChartMessage + '</div>');
+            cachedPlots[chartId] = $.extend(true, {isError: true}, chartArgument);
+            return;
+        }
+
+        // Combine chart options with priority: plotData (server data) > allOptions (custom options) > DEFAULT_OPTIONS
+        allOptions = $.extend(true, {}, DEFAULT_CHART_OPTIONS, allOptions, plotData);
+        allOptions.legend.rendererOptions.numberRows = allOptions.legend.location == "s" || allOptions.legend.location == "n" ? 1 : null;
+
+        //------------------------------------------
+        // Create plot and save it in global variable
+        //------------------------------------------
+        //*******************************************
+        var thePlot;
+        try {
+            thePlot = $.jqplot(targetId, plotData.data, allOptions);
+        } catch (error) {
+            logger.error("Cannot plot chart:" + error.message);
+            return;
+        }
+        cachedPlots[chartId] = $.extend(true, thePlot, chartArgument);
+        //*******************************************
+
+
+        // Save original dimensions
+        if (ktl.isBlank($chartObject.data("old-height"))) {
+            $chartObject.data("old-height", $chartObject.height());
+        }
+        if (ktl.isBlank($chartObject.data("old-width"))) {
+            $chartObject.data("old-width", $chartObject.width());
+        }
+
+        //------------------------------------------
+        // Determine Chart Type
+        //------------------------------------------
+        var isPieChart = false, isBarChart = false, isLineChart = false;
+        var renderer = cachedPlots[chartId].series[0].renderer;
+        if (renderer._hiBandGridData === undefined) {
+            isPieChart = true;
+        } else if (renderer.smooth === undefined) {
+            isBarChart = true;
+        } else {
+            isLineChart = true;
+        }
+
+        //------------------------------------------
+        // Activate theme
+        //------------------------------------------
+        var chartTheme = {seriesStyles: {seriesColors: chartColorScheme}};
+        if (chartTheme != null) {
+            cachedPlots[chartId].themeEngine.newTheme('myStyle', chartTheme);
+            // TODO AND NOTE
+            // if not use plot.activateTheme, piechart chartTheme can not be applied
+            // if use plot.activateTheme, barchart x-axis label can not be displayed
+            if (isPieChart) {
+                cachedPlots[chartId].activateTheme('myStyle');
+            }
+        }
+
+        formatChartLegend($chartDiv, allOptions);
+        //------------------------------------------
+        // Post plot: create action toolbar
+        //------------------------------------------
+        if (DISPLAY_TOOLBAR) {
+            createToolbar(chartId);
+        }
+
+        processHighlight();
     };
 }
 

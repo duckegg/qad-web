@@ -1,6 +1,6 @@
 /**
  * Angular modules
- * Created by liaol on 2014/4/11.
+ * @author Leo Liao, created 2014/4/11.
  */
 (function (angular, $, kui) {
     'use strict';
@@ -12,16 +12,13 @@
                 }
 
                 function error(response) {
-                    var status = response.status;
-                    var str = status === 401 ? "warn" : "error";
-                    kui.showToast(str, response.status + ":" + response.data.errorMessage, 15);
-//                    if (status == 401) {
-//                        window.location = "./index.html";
-//                        return;
-//                    }
+                    console.debug(response);
+                    kui.showAjaxError(response);
+//                    var status = response.status;
+//                    var str = status === 401 ? "warn" : "error";
+//                    kui.showToast(str, response.status + ":" + response.statusText, 15);
                     // otherwise
                     return $q.reject(response);
-
                 }
 
                 return function (promise) {

@@ -40,6 +40,14 @@ $scope.getUsers = function() {
 });
 The maximum number of allowed iterations of the $digest cycle is controlled via TTL setting which can be configured via $rootScopeProvider.
 -->
-<a href="${base}/udr/page#!/update/${id}" class="btn btn-default" data-pjax-disabled>Edit</a>
-    <#include "/"+fmTemplateName/>
+<a href="${base}/udr/page#!/update/${id}" data-pjax-disabled
+   class="btn btn-default btn-sm"
+   style="position: absolute;right: 15px;top: 50px;">编辑</a>
+<#--${fmTemplateName}-->
+    <#attempt>
+        <#include "/"+fmTemplateName/>
+        <#recover>
+        自定义页面有错误
+        <pre class="text-danger">${.error}</pre>
+    </#attempt>
 </@ui.page>

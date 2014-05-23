@@ -1,10 +1,10 @@
-/*******************************************************************************
+/**
  *
  * JavaScript for utility functions.
  *
  * @author Leo Liao, 2014/03, extracted from app-util.js
  *
- ******************************************************************************/
+ */
 
 /**
  * Server context path need be initialized if your application is not deployed under web root "/".
@@ -204,7 +204,7 @@ var qadServerContextPath = window.qadServerContextPath || '';
          * @return {Boolean} `true` for a valid AJAX url
          */
         this.isValidAjaxUrl = function (url) {
-            return !(that.isBlank(url) || url.indexOf("#") == 0 || url.indexOf("javascript:") == 0 /*|| !isBlank($(this).attr("target"))*/)
+            return !(that.isBlank(url) || url.indexOf("#") === 0 || url.indexOf("javascript:") === 0 /*|| !isBlank($(this).attr("target"))*/)
         };
         /**
          * Get hash from a URL.
@@ -215,7 +215,7 @@ var qadServerContextPath = window.qadServerContextPath || '';
          * @param url a full url or partial url
          * @returns {null}
          */
-        this.getUrlHash = function(url){
+        this.getUrlHash = function (url) {
             var hashPos = url.lastIndexOf('#');
             return hashPos < 0 ? null : url.substring(hashPos);
         };
@@ -226,7 +226,7 @@ var qadServerContextPath = window.qadServerContextPath || '';
          * @param properties properties to be extracted
          * @return {String}
          */
-        this.toSparamsJsonString=function(object, properties) {
+        this.toSparamsJsonString = function (object, properties) {
             var map = {};
             for (var i = 0; i < properties.length; i++) {
                 map["sparams['" + properties[i] + "']"] = object[properties[i]];
@@ -237,7 +237,7 @@ var qadServerContextPath = window.qadServerContextPath || '';
         //======================================================================
         // STATISTICS
         //======================================================================
-        this.trackLink=function(url){
+        this.trackLink = function (url) {
             logger.warn("Function trackLink need implemented by application");
         };
 
@@ -336,7 +336,7 @@ var qadServerContextPath = window.qadServerContextPath || '';
                     }
                 }
             } else {
-                // We use async!
+                // We use sync!
                 $.ajax({type: "get", url: serverUrl, async: false, success: function (xhr) {
                     localPref = xhr || {};
                 }});
@@ -346,12 +346,13 @@ var qadServerContextPath = window.qadServerContextPath || '';
         /**
          * Save user preference.
          * @param key preference key
-         * @param pref preference object
+         * @param pref preference object corresponding to the key
          */
         this.savePreference = function (key, pref) {
             var obj = {};
             obj[key] = pref;
-            $.extend(true, localPref, obj);
+            // NOTE: deep copy cannot overwrite non-empty array with empty array.
+            localPref = $.extend(false, localPref, obj);
             var json = JSON.stringify(localPref);
             saveServerPref(json);
             if (USE_LOCAL_STORAGE) {

@@ -1,14 +1,7 @@
-/*******************************************************************************
- *
+/**
  * JavaScript for global events handling.
- *
  * @author Leo Liao, 2012/11/13, extracted from app.util.js
- *
- ******************************************************************************/
-
-//==============================================================================
-// Global events
-//==============================================================================
+ */
 (function ($, ktl, kui, logger) {
     "use strict";
 
@@ -85,7 +78,7 @@
                         return true;
                     },
                     beforeSubmit: function () {
-                        _flashMessageBeforeSend($form);
+//                        _flashMessageBeforeSend($form);
                         var isValid = true;
                         var fnValidate = $form.data("kui-validate") || $form.data("form-validate");
                         if (ktl.isNotBlank(fnValidate)) {
@@ -100,11 +93,11 @@
                         return  isValid;
                     },
                     success: function (xhr) {
-                        setFormSubmited(true);
+                        kui.setFormSubmited(true);
                         kui.hideLoading();
-                        _flashMessageAfterSend($form);
+//                        _flashMessageAfterSend($form);
                         if (isDialog) {
-                            var $dialog = _createSmartDialog($form, null, xhr).closest('.ui-dialog');
+                            var $dialog = createSmartDialog($form, null, xhr).closest('.ui-dialog');
                             var title = $(xhr).data('title');
                             if ($dialog.length > 0 && ktl.isNotBlank(title)) {
                                 $('.ui-dialog-title', $dialog).html(title);
@@ -322,7 +315,7 @@
                 if (_isJavascriptLink(url)) {
                     return true;
                 }
-                _createSmartDialog($owner, url);
+                createSmartDialog($owner, url);
                 e.preventDefault();
                 ktl.trackLink(url);
                 //LEO: if return false, it will stop events from other controls. For example, when invoke dialog from bootstrap
@@ -363,47 +356,11 @@
         }
 
         /**
-         *
-         * @param jqxhr AJAX return data
-         * @param container where to display the message
-         */
-        function _generateAjaxErrorMessage(jqxhr, container) {
-            if (jqxhr.status == 0) {
-                // status ==0 means abort, timeout, which may happen when two requests happen too quickly
-                return null;
-            }
-            hideLoading();
-            var status;
-            switch (jqxhr.status) {
-                case 400:
-                case 401:
-                case 404:
-                    status = "warn";
-                    break;
-                default:
-                    status = "error";
-            }
-            var msg = '<strong>' + jqxhr.status + '</strong> ' + jqxhr.statusText + ' <a href="#" class="js-details" data-pjax-disabled>...</a>';
-            var flash;
-            if (ktl.isBlank(container)) {
-                flash = kui.showToast(status, msg, 15);
-            }
-            else {
-                flash = container.html(msg);
-            }
-            $(flash).on('click', '.js-details', function (e) {
-                window.open().document.write(jqxhr.responseText);
-                e.preventDefault();
-            });
-            return flash;
-        }
-
-        /**
          * Global AJAX error handler
          */
         function onAjaxError() {
             $(document).ajaxError(function (e, jqxhr, settings, exception) {
-                _generateAjaxErrorMessage(jqxhr);
+                kui.showAjaxError(jqxhr);
             });
             $(document).on('pjax:error', function (xhr, textStatus, errorThrown, options) {
                 // Some error is abort: errorThrown=abort, options=abort,textStatus.status=0,textStatus.statusText=abort
@@ -433,9 +390,10 @@
          * @param $linker
          * @param url
          * @param content content to be displayed in dialog
+         * @private
          * @return {*}
          */
-        function _createSmartDialog($linker, url, content) {
+        function createSmartDialog($linker, url, content) {
             var options = {modal: true, resizable: false};
 
             // Determine if auto create dialog div
@@ -550,7 +508,7 @@
                     }, error: function (xhr) {
                         if (ktl.isBlank(errorMsg)) {
 //                            errorMsg = _findErrorMessageFromErrorPage(xhr);
-                            _generateAjaxErrorMessage(xhr, $content);
+                            kui.showAjaxError(xhr, $content);
                         } else {
                             $content.html(errorMsg);
                         }
@@ -579,6 +537,7 @@
          * function flash message before send
          * @param $item
          * @returns {Boolean|*|created}
+         * @deprecated not necessary
          * @private
          */
         function _flashMessageBeforeSend($item) {
@@ -590,6 +549,7 @@
          * function flash message after send
          * @param $item
          * @returns {Boolean|*|created}
+         * @deprecated not necessary
          * @private
          */
         function _flashMessageAfterSend($item) {

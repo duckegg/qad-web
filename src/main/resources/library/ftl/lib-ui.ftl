@@ -100,7 +100,7 @@ readonly=false disabled=false required=false helpText="" englishonly=false fontC
 <#---
 HTML textarea with bootstrap "form-group" makeup.
 TODO: remove fontColor please. Use class
-@param size value of <code>small</code>,<code>middle</code>,<code>large</code>
+@param size value of `small`,`middle`,`large`
 @param isNgModel boolean, if this is for angular model
 -->
 <#macro textarea name id="" label="" style="" class="" size="middle" dataAttribute="" isNgModel=false
@@ -391,6 +391,11 @@ Bootstrap panel component.
 </div>
 </#macro>
 
+<#---
+A HTML skeleton of AJAX supported navigation.
+@param target a jquery selector to display AJAX result
+@param class bootstrap nav style, "nav-tabs", "nav-pills"
+-->
 <#macro ajaxNav target id="" class="">
 <ul <#if id!="">id="${id}"</#if> class="nav ${class}" data-ajax-nav data-kui-target="${target}">
     <#nested/>

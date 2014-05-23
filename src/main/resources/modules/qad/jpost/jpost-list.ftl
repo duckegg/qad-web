@@ -9,6 +9,7 @@
 <#include "/library/ftl/lib-function.ftl" parse=true/>
 <#include "post-helper.ftl" parse=true/>
 <#assign pageId="jpost-list"/>
+<#assign soTags=so.tags!''/>
 <@ui.page id=pageId title="系统公告">
     <#assign sortCss="fa-angle-up"/>
     <#if so.dir=="desc">
@@ -20,7 +21,7 @@
     <input type="text" name="so.page" value="${so.page}" title="每页数量"/>
     <input type="text" name="so.sort" value="${so.sort}" title="排列字段"/>
     <input type="text" name="so.dir" value="${so.dir}" title="排列顺序"/>
-    <input type="text" name="so.tags" value="${so.tags}" title="标签"/>
+    <input type="text" name="so.tags" value="${soTags}" title="标签"/>
     <button type="submit" class="btn btn-default">刷新</button>
 </form>
 <#--<div class="row">-->
@@ -32,17 +33,17 @@
         <div class="panel-heading clearfix">
             <div class="btn-group btn-group-sm pull-right">
                 <a class="btn btn-default" data-kui-sort-by="updatedAt"
-                   href="${base}/jpost/${postType}/list?style=fancy&so.page=${so.page}&so.size=${so.size}&so.sort=updatedAt&so.dir=${iif(so.dir=='asc','desc','asc')}&so.tags=${so.tags}">
+                   href="${base}/jpost/${postType}/list?style=fancy&so.page=${so.page}&so.size=${so.size}&so.sort=updatedAt&so.dir=${iif(so.dir=='asc','desc','asc')}&so.tags=${soTags}">
                     <i class="fa"></i> 按日期</a>
                 <a class="btn btn-default" data-kui-sort-by="updatedBy"
-                   href="${base}/jpost/${postType}/list?style=fancy&so.page=${so.page}&so.size=${so.size}&so.sort=updatedBy&so.dir=${iif(so.dir=='asc','desc','asc')}&so.tags=${so.tags}">
+                   href="${base}/jpost/${postType}/list?style=fancy&so.page=${so.page}&so.size=${so.size}&so.sort=updatedBy&so.dir=${iif(so.dir=='asc','desc','asc')}&so.tags=${soTags}">
                     <i class="fa"></i> 按作者</a>
             </div>
             <div class="btn-group btn-group-sm">
                 <a class="btn btn-default" href="${base}/jpost/${postType}/create"
                    data-dialog data-dialog-aftersubmit="refreshPageList()">
                     <i class="fa fa-plus"></i> 新建</a>
-                <button type="submit" id="toolbarDelete" class="btn btn-default">
+                <button type="submit" id="toolbarDelete" class="btn btn-default" disabled>
                     <i class=" fa fa-times"></i> 删除
                 </button>
             </div>
@@ -58,7 +59,7 @@
         </div>
         <div class="panel-footer small clearfix">
             <div class="pull-right">共${so.totalRecords}条</div>
-            <@ui.pagination size=so.size records=so.totalRecords current=so.page link="${base}/jpost/${postType}/list?style=fancy&so.page=[page]&so.size=${so.size}&so.sort=${so.sort}&so.dir=${so.dir}&so.tags=${so.tags}"/>
+            <@ui.pagination size=so.size records=so.totalRecords current=so.page link="${base}/jpost/${postType}/list?style=fancy&so.page=[page]&so.size=${so.size}&so.sort=${so.sort}&so.dir=${so.dir}&so.tags=${soTags}"/>
         </div>
     </div>
 </form>
@@ -90,7 +91,7 @@
         var $form = $('#jpost-list-batch-form');
         $form.on('click', ':checkbox', function () {
             if ($(':checked', $form).length == 0) {
-                $('#toolbarDelete').attr('disabled', 'disabled').hide();
+                $('#toolbarDelete').attr('disabled', 'disabled');
             } else {
                 $('#toolbarDelete').removeAttr('disabled').show();
             }

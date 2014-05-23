@@ -10,6 +10,7 @@
 <@ui.page id=pageId title="ABOUT">
     <#assign markdownContent>
         <#include "/help/qad/about.md" parse=false/>
+        <#include "/help/qad/dev-guide.md" parse=false/>
     </#assign>
 ${markdownToHtml(markdownContent)}
 <script type="text/javascript">
