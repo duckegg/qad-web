@@ -1,24 +1,24 @@
 # CHANGE LOG
 
-2.0.4@20140521
+qad-web-2.0.4@20140527
 -------------------
 ### Bug Fixes
 * __Bulletin__: disable Delete button when no post selected
 * __Bulletin__: remove debug post id
 
 ### Enhancements
-* __User defined page__: better error message in user defined page
+* __User Defined Page__: better error message in user defined page
 * __UI__: scroll to current menu item in sidebar when click
 * __Search__: fields not matching but defined in translation will be displayed in search result
-* __Sidebar__: use `data-kui-sidebar-mmenu="true|false"` and `data-kui-sidebar-min-icon="true|false"`
+* __Sidebar__: add `data-kui-sidebar-min-icon="true|false"` to show/hide icons when sidebar collapsed.
 
 ### New Features
 * __User defined page__: tagging, filter, sort
 
 ### Change
-* __Sidebar__: use `data-kui-sidebar-mmenu` instead of `data-kui-usemmenu`
+N/A
 
-2.0.3@201405
+qad-web-2.0.3@201405
 -------------------
 ### Bug Fixes
 * Fix `kui.replotChart()` does not replot
@@ -31,6 +31,6 @@
 * When use `serverSide=true` with `<@ui.ajaxTable>`, do not save DataTable's `aaSorting` setting in `localStorage` to speed load time (without `ORDER BY`) in the case of millions of records in database.
 
 
-2.0.0@20410423
+qad-web-2.0.0@20410423
 -------------------
 * Extract qad web content to this jar
