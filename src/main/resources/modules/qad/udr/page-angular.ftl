@@ -78,7 +78,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="list-group udp">
+            <div class="list-group">
                 <div class="list-group-item kui-toolbar-container" ng-repeat="udp in allEntity">
                     <div class="media">
                         <div class="media-body">

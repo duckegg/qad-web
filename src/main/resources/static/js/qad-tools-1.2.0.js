@@ -324,22 +324,36 @@ var qadServerContextPath = window.qadServerContextPath || '';
             $.ajax({type: "post", url: serverUrl, data: {myPrefJson: prefJson}});
         }
 
+        /**
+         * Load preference from local storage
+         */
+        function loadFromLocalStorage() {
+            var json = localStorage.getItem(LOCAL_PREF_KEY);
+            if (!ktl.isBlank(json)) {
+                try {
+                    localPref = JSON.parse(json);
+                } catch (error) {
+                    logger.warn(error.message);
+                }
+            }
+        }
+
+        /**
+         * Load preference from server
+         */
+        function loadFromRemoteServer() {
+            // We use sync!
+            $.ajax({type: "get", url: serverUrl, async: false, success: function (xhr) {
+                localPref = xhr || {};
+            }});
+        }
+
         function loadQadPref() {
             if (ktl.isBlank(serverUrl)) {
-                logger.info("loadQadPref:Server URL not set, use local storage");
-                var json = localStorage.getItem(LOCAL_PREF_KEY);
-                if (!ktl.isBlank(json)) {
-                    try {
-                        localPref = JSON.parse(json);
-                    } catch (error) {
-                        logger.warn(error.message);
-                    }
-                }
+                logger.warn("loadQadPref:Server URL not set, use local storage");
+                loadFromLocalStorage();
             } else {
-                // We use sync!
-                $.ajax({type: "get", url: serverUrl, async: false, success: function (xhr) {
-                    localPref = xhr || {};
-                }});
+                loadFromRemoteServer();
             }
         }
 
@@ -347,15 +361,16 @@ var qadServerContextPath = window.qadServerContextPath || '';
          * Save user preference.
          * @param key preference key
          * @param pref preference object corresponding to the key
+         * @param forceLocal {boolean} `true` to force use in local storage
          */
-        this.savePreference = function (key, pref) {
+        this.savePreference = function (key, pref, forceLocal) {
             var obj = {};
             obj[key] = pref;
             // NOTE: deep copy cannot overwrite non-empty array with empty array.
             localPref = $.extend(false, localPref, obj);
             var json = JSON.stringify(localPref);
             saveServerPref(json);
-            if (USE_LOCAL_STORAGE) {
+            if (USE_LOCAL_STORAGE || forceLocal === true) {
                 localStorage.setItem(LOCAL_PREF_KEY, json);
             }
         };
@@ -364,10 +379,16 @@ var qadServerContextPath = window.qadServerContextPath || '';
          * Load user prederence
          * @param key preference key
          * @param defaultPref default preference
+         * @param forceLocal {boolean} `true` to force use in local storage
          * @return {Object} preference object
          */
-        this.loadPreference = function (key, defaultPref) {
-            return localPref[key] || defaultPref;
+        this.loadPreference = function (key, defaultPref, forceLocal) {
+            var pref = localPref[key];
+            if (ktl.isBlank(pref) && forceLocal === true) {
+                loadFromLocalStorage();
+                pref = localPref[key];
+            }
+            return ktl.isBlank(pref) ? defaultPref : pref;
         };
 
         loadQadPref();

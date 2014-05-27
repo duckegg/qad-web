@@ -10,9 +10,13 @@
 * __User defined page__: better error message in user defined page
 * __UI__: scroll to current menu item in sidebar when click
 * __Search__: fields not matching but defined in translation will be displayed in search result
+* __Sidebar__: use `data-kui-sidebar-mmenu="true|false"` and `data-kui-sidebar-min-icon="true|false"`
 
 ### New Features
 * __User defined page__: tagging, filter, sort
+
+### Change
+* __Sidebar__: use `data-kui-sidebar-mmenu` instead of `data-kui-usemmenu`
 
 2.0.3@201405
 -------------------

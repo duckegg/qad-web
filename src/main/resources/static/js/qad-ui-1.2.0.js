@@ -322,8 +322,10 @@ function QadUi(key) {
 //        $('.kui-collapsible-form fieldset', selector).collapsibleForm();
 //    };
     this.uiBuildSidebar = function (selector) {
-        var useMmenu = ($(selector).data('kui-usemmenu') === true);
-        $(selector).kuiSidebar({useMmenu: useMmenu});
+        var $elem = $(selector);
+        var useMmenu = $elem.data('kui-sidebar-mmenu') === true;
+        var showMinIcon = $elem.data("kui-sidebar-min-icon") === true;
+        $elem.kuiSidebar({useMmenu: useMmenu, showMinIcon: showMinIcon});
     };
     function uiBuildCollapsible(selector) {
         var $container = $('[data-role="collapsible"],.accordion', $(selector))

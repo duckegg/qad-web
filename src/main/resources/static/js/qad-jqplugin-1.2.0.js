@@ -2,6 +2,7 @@
  * jQuery plugins
  * @author Leo Liao, 2014/04/30, extracted from qad-ui.js
  */
+
 (function ($) {
     var pluginName = 'kuiDialog',
         defaults = {
@@ -108,6 +109,22 @@
             });
         }
 
+        function isElementInViewport(el) {
+            //special bonus for those using jQuery
+            if (el instanceof jQuery) {
+                el = el[0];
+            }
+
+            var rect = el.getBoundingClientRect();
+
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+                );
+        }
+
         function regEvents(ul) {
             ul.on('click.kui', 'li > a', function (e) {
                 var $a = $(this);
@@ -120,7 +137,7 @@
                     $opened.children('a').children('.arrow').removeClass('open');
                     var toOpen = $ulSub.is(":hidden");
                     $opened.children('ul').not($ulSub).slideUp("fast", function () {
-                        if (toOpen) {
+                        if (toOpen && !isElementInViewport($a)) {
                             // Make current sub-group visible in view port
                             var itemOffset = $a.offset();
                             var treeOffset = $treeElem.offset();
@@ -203,7 +220,7 @@ $.fn.kuiAjaxForm = function (settings) {
     $.extend(true, ajaxFormOpts, settings);
     $form.ajaxForm(ajaxFormOpts);
     $form.on("click.kui", ":reset", function () {
-        closeDialog($(this));
+        kui.closeDialog($(this));
     });
     return $form;
 };
@@ -666,7 +683,6 @@ $.widget("ui.dialog", $.ui.dialog, {
         }
         if (ktl.isBlank(containerId)) {
             var container = $(element).closest('.portlet-container');
-            logger.debug("container", $(element), container.length);
             if (container.length == 0 || ktl.isBlank(container.attr('id'))) {
                 logger.error('KuiPortlet: Cannot find portlet container "#' + containerId +
                     '". You need provide "containerId" or enclose portlets within ".portlet-container" element');
@@ -1016,13 +1032,14 @@ $.widget("ui.dialog", $.ui.dialog, {
 (function ($) {
     var pluginName = 'kuiSidebar',
         defaults = {
-            useMmenu: true
+            useMmenu: true,
+            showMinIcon: false
         };
 
     /**
-     * Create sidebar
+     * Create sidebar.
      * @memberOf "$.fn"
-     * @param options
+     * @param options {{useMmenu:boolean, showMinIcon:boolean}}
      * @returns {*}
      */
     $.fn.kuiSidebar = function (options) {
@@ -1043,6 +1060,7 @@ $.widget("ui.dialog", $.ui.dialog, {
     }
 
     KuiSidebar.prototype.init = function () {
+        var self = this;
         var $this = $(this.element);
         if (this.options.useMmenu) {
             buildMmenuSidebar($this)
@@ -1103,27 +1121,44 @@ $.widget("ui.dialog", $.ui.dialog, {
                 }
             }
             var $body = $("body");
-            var SIDEBAR_CLOSED_CLASS = "kui-sidebar-closed";
-            var SIDEBAR_OPEN_CLASS = "kui-sidebar-opened";
+            var showCollapsedIcon = self.options.showMinIcon;
+            var SIDEBAR_MIN_CLASS = showCollapsedIcon ? "kui-sidebar-collapsed" : "kui-sidebar-closed";
+            var SIDEBAR_MAX_CLASS = "kui-sidebar-opened";
             $navTree.addClass('nav nav-list-tree dark').kuiListTree();
 
             highlightMatch();
             registerEvents();
-            toggleSidebar(kup.loadPreference("sidebarOpen", true));
+            var toOpen = kup.loadPreference("sidebarOpen", true, true);
+            toggleSidebar(toOpen);
 
             function toggleSidebar(toOpen) {
                 $(".sidebar-search").toggleClass("open", toOpen);
-                $body.toggleClass(SIDEBAR_CLOSED_CLASS, !toOpen).toggleClass(SIDEBAR_OPEN_CLASS, toOpen);
+                $body.toggleClass(SIDEBAR_MIN_CLASS, !toOpen).toggleClass(SIDEBAR_MAX_CLASS, toOpen);
+            }
+
+            function isSidebarClosed() {
+                return $body.hasClass(SIDEBAR_MIN_CLASS);
             }
 
             function registerEvents() {
                 // handle sidebar show/hide
                 $('.sidebar-toggler').on('click.kui', function (e) {
-                    var toOpen = $body.hasClass(SIDEBAR_CLOSED_CLASS);
-                    kup.savePreference("sidebarOpen", toOpen);
+                    var toOpen = $body.hasClass(SIDEBAR_MIN_CLASS);
                     toggleSidebar(toOpen);
+                    kup.savePreference("sidebarOpen", toOpen, true);
                     e.preventDefault();
                 });
+                /*$body.mousemove(function (event) {
+                 if (!showCollapsedIcon) {
+                 if (isSidebarClosed()) {
+                 if (event.pageX === 0) {
+                 toggleSidebar(true);
+                 }
+                 } else if (event.pageX > 0) {
+                 toggleSidebar(false);
+                 }
+                 }
+                 });*/
             }
 
             /**

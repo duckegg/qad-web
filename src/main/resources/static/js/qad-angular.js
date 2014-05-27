@@ -12,11 +12,7 @@
                 }
 
                 function error(response) {
-                    console.debug(response);
                     kui.showAjaxError(response);
-//                    var status = response.status;
-//                    var str = status === 401 ? "warn" : "error";
-//                    kui.showToast(str, response.status + ":" + response.statusText, 15);
                     // otherwise
                     return $q.reject(response);
                 }
