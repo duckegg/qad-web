@@ -213,11 +213,13 @@ $(function () {
                 "sAlign": "left", "buttonText": '<span class="btn btn-default btn-xs" title="选择显示列"><i class="icon fa fa-columns"></i></span>', "bRestore": true, "sRestore": "Reset"
             },
         </#if>
+        fnDrawCallback: function( oSettings ) {
+            $('.dataTables_filter input').addClass('form-control input-sm');
+        },
         "fnInitComplete": function () {
             <#if useAjax>
                 theTable.fnSetFilteringDelay(400);
             </#if>
-            $('.dataTables_filter input').addClass('form-control input-sm');
             var $tableWrapper = $("#${tableId}_wrapper");
             <#if ajaxheader>
 

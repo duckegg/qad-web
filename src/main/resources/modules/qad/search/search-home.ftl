@@ -119,6 +119,7 @@
             <#assign toJson="hpps.qad.base.freemarker.ToJsonMethod"?new()/>
             var indexTypeCit = ${toJson(definedCiTypes)};
             var translation = ${translationJson!'{}'};
+            var fieldsConfig = ${fieldsConfigJson!'{}'} || {};
             var hits = searchResult.hits.hits;
             var $list = $('#search-result-list');
             $('#${pageId}-input').focus();
@@ -129,7 +130,6 @@
                 html += '<h4>' + renderHitLink(hit) + '</h4>';
                 var field;
                 var displayFields = {};
-                console.debug("hit", hit);
 
                 // All matching fields in `hit.highlight` need display
                 for (var hf in hit.highlight) {
@@ -141,7 +141,7 @@
                 }
                 // All fields defined in `hit._source` and translation need display
                 for (var sf in hit._source) {
-                    if (typeof displayFields[sf] == "undefined" && isFieldDefinedInTranslation(hit._type, sf)) {
+                    if (typeof displayFields[sf] == "undefined" && isAlwaysDisplayField(hit._type, sf)) {
                         displayFields[sf] = {title: translateField(hit._type, sf), value: hit._source[sf]};
                     }
                 }
@@ -166,6 +166,18 @@
             }
 
             /**
+             * If a field should always display
+             */
+            function isAlwaysDisplayField(type, field) {
+                if (fieldsConfig[type] && fieldsConfig[type][field.toLowerCase()]) {
+                    var newVar = fieldsConfig[type][field.toLowerCase()]["alwaysDisplay"];
+                    console.debug(field,!!newVar);
+                    return !!newVar;
+                }
+                return false;
+            }
+
+            /**
              * If a field is defined in translation
              */
             function isFieldDefinedInTranslation(type, field) {
@@ -182,8 +194,20 @@
              * @returns {*}
              */
             function translateField(type, field) {
-                if (isFieldDefinedInTranslation(type, field)) {
-                    return translation[type][field.toLowerCase()];
+//                if (isFieldDefinedInTranslation(type, field)) {
+//                    return translation[type][field.toLowerCase()];
+//                }
+//                return field;
+
+                if (fieldsConfig[type]) {
+                    var config = fieldsConfig[type][field.toLowerCase()];
+                    if (ktl.isNotBlank(config)) {
+                        if (typeof config === "string") {
+                            return config;
+                        } else if (ktl.isNotBlank(config.title)) {
+                            return config.title;
+                        }
+                    }
                 }
                 return field;
             }

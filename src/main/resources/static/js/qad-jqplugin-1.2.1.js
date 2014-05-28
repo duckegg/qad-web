@@ -1148,17 +1148,9 @@ $.widget("ui.dialog", $.ui.dialog, {
                     kup.savePreference("sidebarOpen", toOpen, true);
                     e.preventDefault();
                 });
-                /*$body.mousemove(function (event) {
-                 if (!showCollapsedIcon) {
-                 if (isSidebarClosed()) {
-                 if (event.pageX === 0) {
-                 toggleSidebar(true);
-                 }
-                 } else if (event.pageX > 0) {
-                 toggleSidebar(false);
-                 }
-                 }
-                 });*/
+                $(document).on('pjax:complete', function () {
+                    highlightMatch();
+                });
             }
 
             /**
