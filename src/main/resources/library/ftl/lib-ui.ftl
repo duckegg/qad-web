@@ -186,14 +186,12 @@ Plain Text with bootstrap "form-group" makeup.
     <div class="controls"><span id="${id}" class="${class}"><#nested></span></div>
 </div>
 </#macro>
-<#--
-================================================================================
+<#---
 Pagination.
 @param size: number of records per page
 @param current: current page number, starting from 1
 @param records: number of total records
 @param link: hyper link for page, available token is [page] for page number
-================================================================================
 -->
 <#macro pagination size current link records class="" verbose=false>
     <#if (size<=0 || records==0 )><#return /></#if>
@@ -336,11 +334,17 @@ Pagination.
 </script>
 </#macro>
 
-<#macro page id title="" class="" dataAttribute="">
+<#---
+Generate HTML skeleton and javascripts for a page.
+@param showStrutsInfo true (default) to show struts action errors and messages, if exist
+-->
+<#macro page id title="" class="" dataAttribute="" showStrutsInfo=true>
     <#if title!=""><title>${title}</title></#if>
 <div id="${id}" <#if class!="">class="${class}"</#if> <#if dataAttribute!="">${dataAttribute}</#if>>
-    <@strutsErrors/>
-    <@strutsMessages/>
+    <#if showStrutsInfo>
+        <@strutsErrors/>
+        <@strutsMessages/>
+    </#if>
     <#nested />
     <script type="text/javascript">
         $(function () {
@@ -443,7 +447,7 @@ Private macro. Display page after save.
 </#macro>
 
 <#--
-@param level: "info", "success", "error", "danger", "warning", "help"
+@param level "info", "success", "error", "danger", "warning", "help"
 -->
 <#macro alert level icon=true class="" style="" textOnly=false>
     <#assign alertCss={"info":"alert-info","success":"alert-success","error":"alert-danger","danger":"alert-danger","warning":"alert-warning"}/>
@@ -458,6 +462,9 @@ Private macro. Display page after save.
 </div>
 </#macro>
 
+<#---
+Show struts action errors if exist.
+-->
 <#macro strutsErrors>
     <@s.if test="hasErrors()">
     <ul class="alert alert-danger list-unstyled">
@@ -471,6 +478,9 @@ Private macro. Display page after save.
     </@s.if>
 </#macro>
 
+<#---
+Show struts action messages if exist.
+-->
 <#macro strutsMessages style="flash">
     <@s.if test="hasActionMessages()">
         <#if style=="flash">

@@ -10,7 +10,7 @@ Post/article module.
         "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
         "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
-    <package name="qad-article" namespace="/jpost" extends="qad-basic">
+    <package name="qad-post" namespace="/jpost" extends="qad-basic">
         <!-- =================================================================== -->
         <!-- Actions: jpost -->
         <!-- =================================================================== -->
@@ -46,7 +46,6 @@ Post/article module.
                 <param name="includeProperties">jpost.*</param>
                 <param name="excludeWildcards">jpost.createdUser.*</param>
             </result>
-            <!--<param name="permCode">perm_jpost_update</param>-->
         </action>
         <action name="{postType}/reply_do" class="hpps.qad.core.post.JpostAction" method="reply_do">
             <result name="success" type="freemarker">/modules/qad/jpost/jpost-reply_do.ftl</result>
@@ -54,7 +53,6 @@ Post/article module.
         </action>
         <action name="{postType}/delete" class="hpps.qad.core.post.JpostAction" method="$delete">
             <result name="success" type="freemarker">/modules/qad/jpost/jpost-delete.ftl</result>
-            <!--<param name="permCode">perm_jpost_delete</param>-->
         </action>
         <action name="{postType}/delete_do" class="hpps.qad.core.post.JpostAction" method="$delete_do">
             <result name="success" type="freemarker">/modules/qad/jpost/jpost-delete_do.ftl</result>
@@ -63,7 +61,6 @@ Post/article module.
                 <param name="includeProperties">jpost.*</param>
                 <param name="excludeWildcards">jpost.createdUser.*</param>
             </result>
-            <!--<param name="permCode">perm_jpost_delete</param>-->
         </action>
         <action name="{postType}/view" class="hpps.qad.core.post.JpostAction" method="$view">
             <result name="success" type="freemarker">/modules/qad/jpost/jpost-view.ftl</result>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 ********************************************************************************
-Sub config file for system admin.
+Features for system admin.
 
 @author leo.liao@hp.com, 2012/05/30, modified
 @author leo.liao@hp.com, 2014/03/10, renamed from struts-admin.xml and adopt drupal like URL route

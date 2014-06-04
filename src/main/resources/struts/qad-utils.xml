@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 ********************************************************************************
-Sub config file for system admin.
+Utility URL for internal use.
 
 @author leo.liao@hp.com, 2012/05/30, modified
 @author leo.liao@hp.com, 2014/03/10, renamed from struts-admin.xml and adopt drupal like URL route
@@ -15,6 +15,12 @@ Sub config file for system admin.
         <action name="utils/tag/controls" class="hpps.qad.core.tag.TagAction" method="controls">
         </action>
         <action name="utils/customer/list" class="hpps.qad.core.customer.CustomerAction" method="list">
+        </action>
+        <action name="utils/layout/navbar">
+            <result name="success" type="freemarker">/WEB-INF/decorators/default/navbar.ftl</result>
+        </action>
+        <action name="utils/layout/sidebar">
+            <result name="success" type="freemarker">/WEB-INF/decorators/default/sidebar.ftl</result>
         </action>
     </package>
 </struts>

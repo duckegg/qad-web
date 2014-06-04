@@ -1,7 +1,7 @@
 开发指南
 =================
 
-开发准备
+开发准备<a name="dev-prepare"></a>
 -----------------
 
 在`pom.xml`中加入以下依赖
@@ -22,7 +22,7 @@
 数据查询
 -----------------
 
-### 定义SQL查询
+### 定义SQL查询<a name="data-query-qdf"></a>
 
 在Java和Freemarker页面中，不直接写SQL语句，SQL语句定义为`qdf`（QueryDef）。KANBAN对qdf中的SQL语句进行了增强处理，可以自适应匹配参数，模糊查询等。Qdf可以保存在名为`qdf.xml`的文件中，也可以保存在数据库中。
 
@@ -72,10 +72,10 @@ SELECT symbol,date,open,close,high,low,volume FROM stock_quote WHERE (1==1)
 SELECT symbol,date,open,close,high,low,volume FROM stock_quote WHERE (symbol='ZSL')
 ```
 
-前端页面
+前端页面<a name="page"></a>
 -----------------
 
-### 页面框架
+### 页面框架<a name="page-layout"></a>
 
 Web页面通过Freemarker模板来编写，一个ftl文件的框架如下：
 
@@ -90,11 +90,11 @@ Web页面通过Freemarker模板来编写，一个ftl文件的框架如下：
 
 __注意__: 保持`pageId`在整个系统中唯一。
 
-### 页面样式
+### 页面样式<a name="page-css"></a>
 
 系统样式采用bootstrap3，请参考[bootstrap网站](http://www.getbootstrap.com)
 
-### 展示表格数据<a name="table"></a>
+### 展示表格数据<a id="table"></a>
 
 表格的数据源有两种：AJAX和静态HTML，分别通过`<@ui.ajaxTable>`和`<@ui.staticTable>`来实现
 
@@ -140,7 +140,7 @@ __参数含义__
 <#macro staticTable>
 ```
 
-### 展示图形数据
+### 展示图形数据<a id="chart"></a>
 
 当前的图形支持折线图、直方图、饼图，分别用`<@chart.lineChart>`，`<@chart.barChart>`和`<@chart.pieChart>` 三个预定义的标签来实现。
 图形展示的基本页面如下：
@@ -175,21 +175,6 @@ __参数含义__
 5. `sparams['paramInSql']`: 其它在qdf中定义的SQL参数
 6. 可以替换成`<@chart.barChart>`或`<@chart.pieChart>`，具体参数参考API文档
 
-权限配置
------------------
-
-搜索配置
------------------
-可配置搜索参数
-
-- 启动和停止搜索引擎的命令
-- 搜索字段的翻译：将搜索出来的字段翻译成容易看懂的字段名称
-- 索引库的名称：重要，必须和索引方案中定义的保持一致
-- 搜索引擎URL
-
-`admin/config/search/settings/list`
-
-TODO
 
 开发文档
 -----------------

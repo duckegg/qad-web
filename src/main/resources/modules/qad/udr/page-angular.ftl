@@ -87,27 +87,27 @@
                             </h3>
 
                             <p><a href="${base}/user/view/{{udp.trace.createdBy}}"
-                                                               data-kui-dialog>{{udp.trace.createdUser.fullName}}</a>
+                                  data-kui-dialog>{{udp.trace.createdUser.fullName}}</a>
                                 {{udp.trace.updatedAt}}</p>
                         </div>
                         <div class="js-media-tag-and-action">
-                        <ul class="list-inline kui-tag-list" ng-show="udp.tagLabels.length>0">
-                            <li><i class="fa fa-tag"></i></li>
-                            <li ng-repeat="tag in udp.tagLabels">
-                                <a href="#!/tags/{{tag}}" class="label kui-label-tag">
-                                    {{tag}}
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="btn-toolbar kui-hover-toolbar" kui-hover-toolbar>
-                            <div class="btn-group btn-group-sm">
-                                <a href="#!/update/{{udp.id}}" class="btn btn-default" ng-disabled="!udp.allowEdit"><i
-                                        class="fa fa-pencil"></i> 编辑</a>
-                                <a href="javascript:;" ng-click="actionDelete(udp)" class="btn btn-default"
-                                   ng-disabled="!udp.allowEdit"><i
-                                        class="fa fa-trash-o"></i> 删除</a>
+                            <ul class="list-inline kui-tag-list" ng-show="udp.tagLabels.length>0">
+                                <li><i class="fa fa-tag"></i></li>
+                                <li ng-repeat="tag in udp.tagLabels">
+                                    <a href="#!/tags/{{tag}}" class="label kui-label-tag">
+                                        {{tag}}
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="btn-toolbar kui-hover-toolbar" kui-hover-toolbar>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="#!/update/{{udp.id}}" class="btn btn-default" ng-disabled="!udp.allowEdit"><i
+                                            class="fa fa-pencil"></i> 编辑</a>
+                                    <a href="javascript:;" ng-click="actionDelete(udp)" class="btn btn-default"
+                                       ng-disabled="!udp.allowEdit"><i
+                                            class="fa fa-trash-o"></i> 删除</a>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </div>
                 </div>
@@ -133,7 +133,9 @@
             </form>
         </div>
         <div class="col-md-5" id="${pageId}-help">
-            <a href="${base}/help/qad/dev-guide">开发指南</a>
+            <li><a href="${base}/help/qad/dev-guide">开发指南</a></li>
+            <li><a href="${base}/help/qad/dev-guide#table">表格</a></li>
+            <li><a href="${base}/help/qad/dev-guide#chart">图形</a></li>
         </div>
     </div>
     <#--<div class="well js-preview-zone" ng-show="showPreview"></div>-->
@@ -186,15 +188,6 @@
                         <@shiro.user>$rootScope.isUserLoggedIn = true;</@shiro.user>
                     $scope.allEntity = [];
                     $scope.so = loadSearchOption();
-//                    alert($scope.so.tagLabels.length);
-//                    console.debug($scope.so.tagLabels.length);
-
-                    $scope.showMoreFilter = ktl.isNotBlank($scope.so.likes.title) || $scope.so.tagLabels.length > 0;
-//                    console.debug("showMoreFilter",$scope.showMoreFilter,$scope.so.tagLabels);
-                    $scope.sortFields = {'trace.updatedAt': '修改时间', 'trace.createdBy': '作者', 'title': '标题'};
-                    $scope.actionCreate = function () {
-                        $location.path("/create");
-                    };
                     $scope.$on('$routeChangeSuccess', function () {
                         var tags = $routeParams.tags;
                         if (ktl.isNotBlank(tags)) {
@@ -202,9 +195,15 @@
                             $scope.so.tagLabels = _.remove(array, function (t) {
                                 return t != "";
                             });
-//                                console.debug("array",$scope.so.tagLabels);
                         }
+                        $scope.showMoreFilter = ktl.isNotBlank($scope.so.likes.title) || ($scope.so.tagLabels.length > 0);
+//                        console.debug("showMoreFilter", $scope.showMoreFilter, $scope.so.tagLabels);
                     });
+
+                    $scope.sortFields = {'trace.updatedAt': '修改时间', 'trace.createdBy': '作者', 'title': '标题'};
+                    $scope.actionCreate = function () {
+                        $location.path("/create");
+                    };
                     $scope.actionChangePage = function (page) {
                         $scope.so.page = page;
                         saveSearchOption($scope.so);
@@ -220,9 +219,6 @@
                         var tagStr = $scope.so.tagLabels.join(",");
                         saveSearchOption($scope.so);
                         $location.path("/tags/" + tagStr);
-//                        $scope.so.tags = $scope.so.tagLabels.join(",");
-//                        $scope.so.tagCategor="report";
-//                        fetchData();
                     };
                     $scope.actionSort = function (sort) {
                         $scope.so.sort = sort;
@@ -231,12 +227,6 @@
                         fetchData();
                     };
                     $scope.actionFilter = function () {
-//                        console.debug("filter");
-//                        if (ktl.isBlank($scope.so.likes.title)) {
-//                            $scope.so.likes = {};
-//                        } else {
-//                            $scope.so.likes.title = $scope.filterTitle;
-//                        }
                         saveSearchOption($scope.so);
                         fetchData();
                     };

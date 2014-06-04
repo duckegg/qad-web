@@ -46,7 +46,7 @@
         }
 //        $dialog.find(":input:visible").not("[readonly]").first().focus();
         $(":tabbable:first", $dialog).focus();
-        setFormSubmited(false);
+        kui.setFormSubmited(false);
     };
 })(jQuery);
 
@@ -202,7 +202,7 @@ $.fn.kuiTabForm = function () {
 
 /**
  * Initiate AJAX form with validation
- * @param settings
+ * @param settings options of $fn.ajaxForm plugin
  */
 $.fn.kuiAjaxForm = function (settings) {
     var $form = $(this);
@@ -212,7 +212,7 @@ $.fn.kuiAjaxForm = function (settings) {
             return  $(ui).valid(); //jquery validate plugin
         },
         success: function (xhr) {
-            setFormSubmited(true);
+            kui.setFormSubmited(true);
             $form.resetForm();
             $form.parents("div.webform:first").parent().first().html(xhr);
         }
@@ -371,17 +371,17 @@ $.widget("ui.dialog", $.ui.dialog, {
     _createMinMaxButton: function () {
         var self = this, options = self.options;
         self.uiDialogTitlebarClose.remove();
-        $('<a href="#" class="ui-dialog-titlebar-xclose pull-right" role="button"><span class="ui-icon ui-icon-closethick">close</span></a>')
+        $('<a href="javascript:;" class="ui-dialog-titlebar-xclose pull-right" role="button"><span class="ui-icon ui-icon-closethick">close</span></a>')
             .appendTo(this.uiDialogTitlebar).click(function (e) {
                 self.close();
             });
         if (!options.modal && options.maximize)
-            $('<a href="#" class="ui-dialog-titlebar-maximize pull-right" role="button"><span class="ui-icon ui-icon-plusthick">maximize</span></a>')
+            $('<a href="javascript:;" class="ui-dialog-titlebar-maximize pull-right" role="button"><span class="ui-icon ui-icon-plusthick">maximize</span></a>')
                 .appendTo(this.uiDialogTitlebar).click(function (e) {
                     self.maximize(e);
                 });
         if (!options.modal && options.minimize)
-            $('<a href="#" class="ui-dialog-titlebar-minimize pull-right" role="button"><span class="ui-icon ui-icon-minusthick">minimize</span></a>')
+            $('<a href="javascript:;" class="ui-dialog-titlebar-minimize pull-right" role="button"><span class="ui-icon ui-icon-minusthick">minimize</span></a>')
                 .appendTo(this.uiDialogTitlebar).click(function (e) {
                     self.minimize(e);
                 });

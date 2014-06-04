@@ -77,7 +77,9 @@ Shared features like home, link, upload, download.
             <result name="input">/modules/qad/file/upload-input.ftl</result>
         </action>
 
-        <!--@deprecated, use system/upload -->
+        <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+        <!--@DEPRECATED, use system/upload -->
+        <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
         <!-- File upload -->
         <action name="upload/input" class="hpps.qad.base.action.UploadAction" method="input">
             <result name="input">/modules/qad/file/upload-input.ftl</result>

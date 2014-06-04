@@ -15,7 +15,8 @@ User, role and permission
             <result name="success" type="freemarker">/modules/qad/appsec/role-{1}.ftl</result>
             <result name="input" type="freemarker">/modules/qad/appsec/role-edit.ftl</result>
         </action>
-        <action name="admin/people/permission/{function}" class="hpps.qad.core.appsec.perm.PermissionAction" method="${1}">
+        <action name="admin/people/permission/{function}" class="hpps.qad.core.appsec.perm.PermissionAction"
+                method="${1}">
             <result name="success" type="freemarker">/modules/qad/appsec/permission-{1}.ftl</result>
             <result name="input" type="freemarker">/modules/qad/appsec/permission-edit.ftl</result>
             <result name="matrix">/modules/qad/appsec/permission-matrix.ftl</result>
@@ -24,6 +25,11 @@ User, role and permission
         <!-- =================================================================== -->
         <!-- Actions: login/logout -->
         <!-- =================================================================== -->
+        <action name="login-inline" class="hpps.qad.core.appsec.auth.AuthcAction" method="login">
+            <result name="input" type="freemarker">/modules/qad/util/login-inline.ftl</result>
+            <result name="redirect" type="freemarker">/modules/qad/util/login-success.ftl</result>
+            <result name="success" type="freemarker">/modules/qad/util/login-success.ftl</result>
+        </action>
         <action name="login" class="hpps.qad.core.appsec.auth.AuthcAction" method="login">
             <result name="redirect" type="redirect">${next}</result>
             <result name="success" type="redirectAction">

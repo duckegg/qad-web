@@ -6,12 +6,14 @@
     'use strict';
     angular.module('qad.angular', [])
         .config(['$httpProvider', function ($httpProvider) {
+            $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
             $httpProvider.responseInterceptors.push(['$rootScope', '$q', function ($rootScope, $q) {
                 function success(response) {
                     return response;
                 }
 
                 function error(response) {
+                    console.debug("response",response);
                     kui.showAjaxError(response);
                     // otherwise
                     return $q.reject(response);

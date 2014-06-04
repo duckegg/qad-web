@@ -44,7 +44,7 @@
          * data-kui-ajax-form-serialize="functionName": a callback function for serialization
          * data-kui-validate or data-form-validate(deprecated)="true|false": validate the form before submit, default is "true"
          * data-kui-dialog or data-dialog(deprecated): mutual exclusion with data-kui-target, show response in dialog
-         * data-kui-dialog-* or data-dialog-*(deprecated): all info in {@link _createSmartDialog()}
+         * data-kui-dialog-* or data-dialog-*(deprecated): all info in {@link #createSmartDialog()}
          * data-kui-target: show response in target, a jQuery selection string
          *                  (Mark)if want stay in this form after AJAX request,
          *                  set data-kui-target="#xxx" #xxx is a div which is a blank hidden div.
@@ -368,33 +368,22 @@
                 // Returning false will prevent the the fallback redirect
                 // return false;
             });
+//            console.debug("new events");
+//            $(document).on("pjax:error",function(xhr,textStatus,errorThrown,options){
+//                console.debug("Pjax:error",xhr);
+//            });
+//            $(document).ajaxComplete(function(e,jqxhr,settings,exception){
+//               console.debug("ajaxComplete",jqxhr);
+//            });
         }
 
 
         /**
-         * data-kui-dialog
-         * data-kui-dialog-title: string, "View"
-         * data-kui-dialog-aftersubmit: string, "refreshTable"
-         * data-kui-dialog-afterclose: "refreshTable"
-         * data-kui-dialog-class: "kui-webform-lg"
-         * data-kui-dialog-inline: "true" | "false"(default)
-         * data-kui-dialog-content-type: "" (default) | "iframe"
-         * data-kui-dialog-resizable: "true"
-         * data-kui-dialog-modal: "false"
-         * data-kui-dialog-title: "A Dialog Title"
-         * data-kui-dialog-style: "width:200px"
-         * data-kui-dialog-error
-         * data-kui-dialog-buttons
-         *
-         * NOTE: previous data-dialog-* are deprecated with data-kui-dialog-*
-         * @param $linker
-         * @param url
-         * @param content content to be displayed in dialog
-         * @private
-         * @return {*}
+         * @deprecated use kui.createSmartDialog
          */
         function createSmartDialog($linker, url, content) {
-            var options = {modal: true, resizable: false};
+            return kui.createSmartDialog($linker, url, content);
+            /*var options = {modal: true, resizable: false};
 
             // Determine if auto create dialog div
             var selector = $linker.data("kui-dialog");
@@ -507,14 +496,10 @@
                         $content.html(xhr);
                     }, error: function (xhr) {
                         if (ktl.isBlank(errorMsg)) {
-//                            errorMsg = _findErrorMessageFromErrorPage(xhr);
                             kui.showAjaxError(xhr, $content);
                         } else {
                             $content.html(errorMsg);
                         }
-//                        _generateAjaxErrorMessage(xhr, $content);
-//                        $content.html(errorMsg + "<!--" + xhr.responseText + "-->");
-//                        hasError = true;
                     }
                 });
             }
@@ -529,7 +514,7 @@
                 var $dialog = $content.closest('.ui-dialog');
                 $dialog.attr('style', $dialog.attr('style') + ';' + style);
             }
-            return $content;
+            return $content;*/
         }
 
 

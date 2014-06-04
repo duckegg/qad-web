@@ -158,43 +158,215 @@ function QadUi(key) {
      * @param container optional, where to display the message
      */
     this.showAjaxError = function (jqxhr, container) {
-        if (jqxhr.status == 0) {
+        var statusCode = jqxhr.status;
+        if (statusCode === 0) {
             // status ==0 means abort, timeout, which may happen when two requests happen too quickly
             return null;
         }
         kui.hideLoading();
-        var status;
-        switch (jqxhr.status) {
-            case 400:
-            case 401:
-            case 404:
-                status = "warn";
-                break;
-            default:
-                status = "error";
-        }
-//            console.log("showAjaxErrorMessage", jqxhr);
-        var msg = '<strong>' + jqxhr.status + '</strong> ' + jqxhr.statusText + ' <a href="#" class="js-details" data-pjax-disabled>...</a>';
-        var flash;
-        if (ktl.isBlank(container)) {
-            flash = kui.showToast(status, msg, 15);
-        }
-        else {
-            flash = container.html(msg);
-        }
-        $(flash).on('click', '.js-details', function (e) {
-            var text = jqxhr.responseText;
-            if (ktl.isBlank(text)) {
-                text = jqxhr.data;
+        var toastStatus;
+        var needLogin = false;
+        if (statusCode === 400 || statusCode === 401 || statusCode === 404) {
+            //jqxhr.responseJSON used for jquery
+            //jqxhr.data used for angularjs
+            if (statusCode === 401 &&
+                ((ktl.isNotBlank(jqxhr.responseJSON) && 302 === jqxhr.responseJSON.error)
+                    || (ktl.isNotBlank(jqxhr.data) && 302 === jqxhr.data.error))) {
+                needLogin = true;
             }
-            window.open().document.write(text);
-            e.preventDefault();
-        });
-        return flash;
+            toastStatus = "warn";
+        } else {
+            toastStatus = "error";
+        }
+        function showInlineLoginBox() {
+            //TODO: temp solution, tight with page element
+            var $loginLink = $('#js-inline-login');
+            if ($loginLink.length > 0) {
+                $loginLink.trigger("click");
+            } else {
+                logger.warn("Need define a js-inline-login link");
+            }
+        }
+
+        if (needLogin) {
+            showInlineLoginBox();
+        } else {
+            var msg = '<strong>' + statusCode + '</strong> ' + jqxhr.statusText + ' <a href="#" class="js-details" data-pjax-disabled>...</a>';
+            var flash;
+            if (ktl.isBlank(container)) {
+                flash = kui.showToast(toastStatus, msg, 15);
+            }
+            else {
+                flash = container.html(msg);
+            }
+            $(flash).on('click', '.js-details', function (e) {
+                var text = jqxhr.responseText;
+                if (ktl.isBlank(text)) {
+                    text = jqxhr.data;
+                }
+                window.open().document.write(text);
+                e.preventDefault();
+            });
+            return flash;
+        }
+    };
+    /**
+     *
+     * - data-kui-dialog
+     * - data-kui-dialog-title: string, "View"
+     * - data-kui-dialog-aftersubmit: string, "refreshTable"
+     * - data-kui-dialog-afterclose: "refreshTable"
+     * - data-kui-dialog-class: "kui-webform-lg"
+     * - data-kui-dialog-inline: "true" | "false"(default)
+     * - data-kui-dialog-content-type: "" (default) | "iframe"
+     * - data-kui-dialog-resizable: "true"
+     * - data-kui-dialog-modal: "false"
+     * - data-kui-dialog-title: "A Dialog Title"
+     * - data-kui-dialog-style: "width:200px"
+     * - data-kui-dialog-error
+     * - data-kui-dialog-buttons
+     *
+     * __NOTE__: previous `data-dialog-*` are deprecated with `data-kui-dialog-*`
+     *
+     * @param $linker a jQuery object contains `data` attribute
+     * @param url
+     * @param content content to be displayed in dialog
+     * @return {null|jQuery}
+     */
+    this.createSmartDialog = function ($linker, url, content) {
+        var options = {modal: true, resizable: false};
+
+        // Determine if auto create dialog div
+        var selector = $linker.data("kui-dialog") || $linker.data("dialog");
+        var cssClass = $linker.data('kui-dialog-class');
+        if (ktl.isNotBlank(cssClass)) {
+            options.dialogClass = cssClass;
+        }
+
+        var isInline = !!(ktl.isNotBlank($linker.data("dialog-inline")) || ktl.isNotBlank($linker.data("kui-dialog-inline")));
+        var contentType = $linker.data("kui-dialog-content-type") || $linker.data("dialog-content-type");
+        var isIframe = contentType == "iframe";
+        var $content = $(selector);
+        var isAutoDiv = ktl.isBlank(selector);
+//        logger.debug("createSmartDialog: isAutoDiv=" + isAutoDiv + "; selector=" + selector + " length=" + $dialogDiv.length);
+        if (isAutoDiv) {
+            $content = $('<div class="auto-dialog"></div>').uniqueId();
+            var $body = $('body');
+            $content.appendTo($body);
+            options.position = {
+                my: "top",
+                at: "top+70",
+                of: $body
+            };
+        } else if ($content.length === 0) {
+            logger.error("Cannot find dialog element by selector '" + selector + "'");
+            return null;
+        }
+
+        // Dialog option: buttons
+        var buttons = $linker.data("kui-dialog-buttons") || $linker.data("dialog-buttons");
+        if (ktl.isNotBlank(buttons)) {
+            options.buttons = [
+                { "text": "关闭", "class": "btn",
+                    "click": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            ];
+        }
+        var optModal = $linker.data("kui-dialog-modal") || $linker.data("dialog-modal");
+        if (ktl.isNotBlank(optModal)) {
+            options.modal = optModal;
+        }
+        var optResizable = $linker.data("kui-dialog-resizable") || $linker.data("dialog-resizable");
+        if (ktl.isNotBlank(optResizable)) {
+            options.resizable = optResizable;
+        }
+
+        // Dialog option: title
+        var title = $linker.data("kui-dialog-title") || $linker.data("dialog-title");
+        if (ktl.isBlank(title)) {
+            title = $linker.attr("title");
+            if (ktl.isBlank(title) && $linker.is("a")) // Only work for link
+                title = $linker.html();
+        }
+        options.title = title;
+
+        // hide is custom option defined in jquery.ui.dialog.minmax.custom.js will make close malfunctional
+        // If hide is null, close will not be triggered
+        options.hide = function () {
+        };
+        // Dialog option: after submit or close
+        var aftersubmit = $linker.data("kui-dialog-aftersubmit") || $linker.data("dialog-aftersubmit");
+        var afterclose = $linker.data("kui-dialog-afterclose") || $linker.data("dialog-afterclose");
+        options.close = function () {
+//            logger.debug('createSmartDialog: close invoked');
+            if (isAutoDiv) {
+                $content.remove();
+            }
+            if (!ktl.isBlank(aftersubmit)) {
+                if (kui.isFormSubmitted()) {
+                    try {
+                        eval(aftersubmit);
+                    } catch (err) {
+                        logger.error("Error handling dialog-aftersubmit code: " + aftersubmit + "\n" + err);
+                    }
+                }
+            }
+            if (!ktl.isBlank(afterclose)) {
+                try {
+                    eval(afterclose);
+                } catch (err) {
+                    logger.error("Error handling dialog-afterclose code: " + afterclose + "\n" + err);
+                }
+            }
+        };
+
+
+        // Load URL and show dialog
+        var hasError = false;
+        if (isIframe) {
+            var $iframe = $('<iframe src="" class="iframe"></iframe>').appendTo($content);
+            $iframe.attr("src", url);
+
+        } else if (ktl.isNotBlank(content)) {
+            $content.html(content);
+        } else if (ktl.isValidAjaxUrl(url)) {
+            $content.html(kui.showLoading("inline"));
+            var errorMsg = $linker.data('kui-dialog-error') || $linker.data('dialog-error');
+            $.ajax({
+                url: url,
+                global: false,
+                success: function (xhr) {
+                    $content.html(xhr);
+                    $content.find(":input:visible").not("[readonly]").first().focus();
+                },
+                error: function (xhr) {
+                    if (ktl.isBlank(errorMsg)) {
+                        kui.showAjaxError(xhr, $content);
+                    } else {
+                        $content.html(errorMsg);
+                    }
+                }
+            });
+        }
+
+        if (isInline === false) {
+            $content.kuiDialog(options);
+        }
+
+        // Custom dialog option: css
+        var style = $linker.data("kui-dialog-style") || $linker.data("dialog-style");
+        if (!ktl.isBlank(style)) {
+            var $dialog = $content.closest('.ui-dialog');
+            $dialog.attr('style', $dialog.attr('style') + ';' + style);
+        }
+        return $content;
     };
 
     /**
      * Create and show a piece of alert message to indicate brief operation result.
+     *
      * @param status string value of `success`, `info`, `warn` or `error`
      * @param msg string or array of string. Message(s) to show. An empty/blank message will clear it
      * @param autoCloseSeconds integer, the message will close automatically after specified timeout seconds.
