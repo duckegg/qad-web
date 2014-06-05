@@ -252,11 +252,11 @@ Pagination.
 <#-- Timer refresh -->
 <#macro timer id action enabled=false manualRefreshText="手工刷新" defaultInterval="10">
 <form id="${id}-timer-form" class="form-inline">
-    <input name="interval" type="number" value="${defaultInterval}" class="input-mini"
+    <input name="interval" type="number" value="${defaultInterval}" class="form-control input-sm"
            style="width:4em" min="5" max="60" step="5"/>
     秒定时刷新
-    <a href="#" class="js-timer-toggler btn btn-xs"><i class="fa fa-play"></i></a>
-    <a href="#" class="js-manual-refresh btn btn-xs" title="手工刷新"><i
+    <a href="#" class="js-timer-toggler btn btn-default btn-sm"><i class="fa fa-play"></i></a>
+    <a href="#" class="js-manual-refresh btn btn-default btn-sm" title="手工刷新"><i
             class="fa fa-refresh"></i> ${manualRefreshText}
     </a>
     <span class="js-timer-indicator fa fa-refresh" style="font-size:smaller"></span>

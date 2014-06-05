@@ -343,8 +343,15 @@ $.fn.myCalendar = function (settings) {
 };
 
 /**
- * Extend jQuery UI dialog to support minimize and maximize
- * https://github.com/fieryprophet/jQuery-UI-Dialog-MinMax
+ * Extend jQuery UI dialog to support minimize and maximize.
+ * It adds extra options:
+ *
+ * - minimize: boolean, default is true
+ * - maximize: boolean, default is true
+ *
+ * If jUI dialog's option `resizable` is false, it will not show min and max button.
+ *
+ * @see https://github.com/fieryprophet/jQuery-UI-Dialog-MinMax
  */
 $.widget("ui.dialog", $.ui.dialog, {
     options: {
@@ -375,12 +382,12 @@ $.widget("ui.dialog", $.ui.dialog, {
             .appendTo(this.uiDialogTitlebar).click(function (e) {
                 self.close();
             });
-        if (!options.modal && options.maximize)
+        if (/*(!options.modal) &&*/ options.resizable && options.maximize)
             $('<a href="javascript:;" class="ui-dialog-titlebar-maximize pull-right" role="button"><span class="ui-icon ui-icon-plusthick">maximize</span></a>')
                 .appendTo(this.uiDialogTitlebar).click(function (e) {
                     self.maximize(e);
                 });
-        if (!options.modal && options.minimize)
+        if (/*(!options.modal) && */options.resizable && options.minimize)
             $('<a href="javascript:;" class="ui-dialog-titlebar-minimize pull-right" role="button"><span class="ui-icon ui-icon-minusthick">minimize</span></a>')
                 .appendTo(this.uiDialogTitlebar).click(function (e) {
                     self.minimize(e);
@@ -1028,7 +1035,7 @@ $.widget("ui.dialog", $.ui.dialog, {
         });
     }
 })(jQuery);
-
+var __sidebar = null;
 (function ($) {
     var pluginName = 'kuiSidebar',
         defaults = {
@@ -1040,15 +1047,26 @@ $.widget("ui.dialog", $.ui.dialog, {
      * Create sidebar.
      * @memberOf "$.fn"
      * @param options {{useMmenu:boolean, showMinIcon:boolean}}
-     * @returns {*}
      */
     $.fn.kuiSidebar = function (options) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                    new KuiSidebar(this, options));
-            }
-        });
+        /*return this.each(function () {
+         if (!$.data(this, 'plugin_' + pluginName)) {
+         $.data(this, 'plugin_' + pluginName,
+         new KuiSidebar(this, options));
+         }
+         });*/
+        var dataKey = 'plugin_' + pluginName;
+        var $this = $(this);
+        var plugin = $this.data(dataKey);
+        // var plugin = $.data(this, dataKey);
+        if (!plugin) {
+            // NOTE: use $.data cannot properly retrieve object back when call `.kuiSidebar('init');`
+            // $.data(this, 'plugin_' + pluginName, (plugin = new KuiSidebar(this, options)));
+            $this.data(dataKey, plugin = new KuiSidebar(this, options));
+        }
+        if (typeof options === 'string') {
+            plugin[options]();
+        }
     };
 
     // The actual plugin constructor

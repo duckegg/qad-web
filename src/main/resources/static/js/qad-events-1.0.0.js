@@ -97,7 +97,7 @@
                         kui.hideLoading();
 //                        _flashMessageAfterSend($form);
                         if (isDialog) {
-                            var $dialog = createSmartDialog($form, null, xhr).closest('.ui-dialog');
+                            var $dialog = kui.createSmartDialog($form, null, xhr).closest('.ui-dialog');
                             var title = $(xhr).data('title');
                             if ($dialog.length > 0 && ktl.isNotBlank(title)) {
                                 $('.ui-dialog-title', $dialog).html(title);

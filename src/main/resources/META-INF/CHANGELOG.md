@@ -1,6 +1,22 @@
 # CHANGE LOG
 
-qad-web-2.0.5@201406
+qad-web-2.0.6@201406
+-------------------
+
+### New Features
+* N/A
+
+### Bug Fixes
+* N/A
+
+### Enhancements
+* __Login__: refresh sidebar after popup login
+
+### Code Changes
+* N/A
+
+
+qad-web-2.0.5@20140604
 -------------------
 
 ### New Features

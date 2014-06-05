@@ -150,6 +150,24 @@ function QadUi(key) {
         cachedDataTables[tableId] = dataTable;
     };
 
+    /**
+     * If a jquery response has authentication error
+     * @param jqxhr
+     * @returns {boolean}
+     */
+    function ifResponseHashAuthcError(jqxhr) {
+        var result = false;
+        var statusCode = jqxhr.status;
+        //jqxhr.responseJSON used for jquery
+        //jqxhr.data used for angularjs
+        if (statusCode === 401 &&
+            ((ktl.isNotBlank(jqxhr.responseJSON) && 302 === jqxhr.responseJSON.error)
+                || (ktl.isNotBlank(jqxhr.data) && 302 === jqxhr.data.error))) {
+            result = true;
+        }
+        return result;
+    }
+
     //==========================================================================
     // STATUS & MESSAGE
     //==========================================================================
@@ -165,32 +183,15 @@ function QadUi(key) {
         }
         kui.hideLoading();
         var toastStatus;
-        var needLogin = false;
-        if (statusCode === 400 || statusCode === 401 || statusCode === 404) {
-            //jqxhr.responseJSON used for jquery
-            //jqxhr.data used for angularjs
-            if (statusCode === 401 &&
-                ((ktl.isNotBlank(jqxhr.responseJSON) && 302 === jqxhr.responseJSON.error)
-                    || (ktl.isNotBlank(jqxhr.data) && 302 === jqxhr.data.error))) {
-                needLogin = true;
-            }
-            toastStatus = "warn";
-        } else {
-            toastStatus = "error";
-        }
-        function showInlineLoginBox() {
-            //TODO: temp solution, tight with page element
-            var $loginLink = $('#js-inline-login');
-            if ($loginLink.length > 0) {
-                $loginLink.trigger("click");
-            } else {
-                logger.warn("Need define a js-inline-login link");
-            }
-        }
-
+        var needLogin = ifResponseHashAuthcError(jqxhr);
         if (needLogin) {
             showInlineLoginBox();
         } else {
+            if (statusCode === 400 || statusCode === 401 || statusCode === 404) {
+                toastStatus = "warn";
+            } else {
+                toastStatus = "error";
+            }
             var msg = '<strong>' + statusCode + '</strong> ' + jqxhr.statusText + ' <a href="#" class="js-details" data-pjax-disabled>...</a>';
             var flash;
             if (ktl.isBlank(container)) {
@@ -208,6 +209,10 @@ function QadUi(key) {
                 e.preventDefault();
             });
             return flash;
+        }
+        function showInlineLoginBox() {
+            var loginUrl = qadServerContextPath + '/login-inline';
+            var $dialog = $('<a href="' + loginUrl + '" data-kui-dialog style="display:none"></a>').appendTo('body').trigger("click").remove();
         }
     };
     /**
@@ -228,10 +233,10 @@ function QadUi(key) {
      *
      * __NOTE__: previous `data-dialog-*` are deprecated with `data-kui-dialog-*`
      *
-     * @param $linker a jQuery object contains `data` attribute
-     * @param url
-     * @param content content to be displayed in dialog
-     * @return {null|jQuery}
+     * @param $linker a jQuery element contains `data-kui-dialog-*` attribute
+     * @param url url to load AJAX content
+     * @param content if specified, the content to be displayed in dialog and parameter url will be omitted
+     * @return {jQuery} content element
      */
     this.createSmartDialog = function ($linker, url, content) {
         var options = {modal: true, resizable: false};
@@ -242,13 +247,17 @@ function QadUi(key) {
         if (ktl.isNotBlank(cssClass)) {
             options.dialogClass = cssClass;
         }
-
+        var dialogStyle = $linker.data("kui-dialog-style") || $linker.data("dialog-style");
         var isInline = !!(ktl.isNotBlank($linker.data("dialog-inline")) || ktl.isNotBlank($linker.data("kui-dialog-inline")));
         var contentType = $linker.data("kui-dialog-content-type") || $linker.data("dialog-content-type");
         var isIframe = contentType == "iframe";
         var $content = $(selector);
         var isAutoDiv = ktl.isBlank(selector);
 //        logger.debug("createSmartDialog: isAutoDiv=" + isAutoDiv + "; selector=" + selector + " length=" + $dialogDiv.length);
+        if (!isAutoDiv && $content.length === 0) {
+            logger.warn("Cannot find dialog element by selector '" + selector + "'. It will create one.");
+            isAutoDiv = true;
+        }
         if (isAutoDiv) {
             $content = $('<div class="auto-dialog"></div>').uniqueId();
             var $body = $('body');
@@ -258,10 +267,11 @@ function QadUi(key) {
                 at: "top+70",
                 of: $body
             };
-        } else if ($content.length === 0) {
-            logger.error("Cannot find dialog element by selector '" + selector + "'");
-            return null;
         }
+        /*else if ($content.length === 0) {
+         logger.error("Cannot find dialog element by selector '" + selector + "'");
+         return null;
+         }*/
 
         // Dialog option: buttons
         var buttons = $linker.data("kui-dialog-buttons") || $linker.data("dialog-buttons");
@@ -274,11 +284,12 @@ function QadUi(key) {
                 }
             ];
         }
-        var optModal = $linker.data("kui-dialog-modal") || $linker.data("dialog-modal");
+        var optModal = $linker.data("kui-dialog-modal");// || $linker.data("dialog-modal");
+        console.debug("optModal", optModal);
         if (ktl.isNotBlank(optModal)) {
             options.modal = optModal;
         }
-        var optResizable = $linker.data("kui-dialog-resizable") || $linker.data("dialog-resizable");
+        var optResizable = $linker.data("kui-dialog-resizable");// || $linker.data("dialog-resizable");
         if (ktl.isNotBlank(optResizable)) {
             options.resizable = optResizable;
         }
@@ -325,10 +336,11 @@ function QadUi(key) {
 
         // Load URL and show dialog
         var hasError = false;
+        var needLogin = false;
         if (isIframe) {
+            logger.warn("Dialog attribute 'data-kui-dialog-content-type=iframe' or 'data-dialog-content-type=iframe' is deprecated");
             var $iframe = $('<iframe src="" class="iframe"></iframe>').appendTo($content);
             $iframe.attr("src", url);
-
         } else if (ktl.isNotBlank(content)) {
             $content.html(content);
         } else if (ktl.isValidAjaxUrl(url)) {
@@ -342,26 +354,34 @@ function QadUi(key) {
                     $content.find(":input:visible").not("[readonly]").first().focus();
                 },
                 error: function (xhr) {
-                    if (ktl.isBlank(errorMsg)) {
-                        kui.showAjaxError(xhr, $content);
+                    needLogin = ifResponseHashAuthcError(xhr);
+                    if (needLogin) {
+                        that.showAjaxError(xhr);
+                        // Because this is async call, showDialog is always false, we need close previous dialog after error
+                        that.closeDialog($content);
                     } else {
-                        $content.html(errorMsg);
+                        if (ktl.isBlank(errorMsg)) {
+                            that.showAjaxError(xhr, $content);
+                        } else {
+                            $content.html(errorMsg);
+                        }
                     }
                 }
             });
         }
-
-        if (isInline === false) {
+//        return showDialog(needLogin);
+//        function showDialog(needLogin) {
+        if (isInline === false && !needLogin) {
+            console.debug("options", options);
             $content.kuiDialog(options);
-        }
-
-        // Custom dialog option: css
-        var style = $linker.data("kui-dialog-style") || $linker.data("dialog-style");
-        if (!ktl.isBlank(style)) {
-            var $dialog = $content.closest('.ui-dialog');
-            $dialog.attr('style', $dialog.attr('style') + ';' + style);
+            // Custom dialog option: css
+            if (!ktl.isBlank(dialogStyle)) {
+                var $dialog = $content.closest('.ui-dialog');
+                $dialog.attr('style', $dialog.attr('style') + ';' + dialogStyle);
+            }
         }
         return $content;
+//        }
     };
 
     /**
@@ -490,10 +510,11 @@ function QadUi(key) {
         });
     }
 
-//    this.uiBuildCollapsibleForm = function (selector) {
-//        $('.kui-collapsible-form fieldset', selector).collapsibleForm();
-//    };
-    this.uiBuildSidebar = function (selector) {
+    /**
+     * @param selector jQuery selector for sidebar
+     * @param forceRebuild true to force rebuild
+     */
+    this.uiBuildSidebar = function (selector, forceRebuild) {
         var $elem = $(selector);
         var useMmenu = $elem.data('kui-sidebar-mmenu') === true;
         var showMinIcon = $elem.data("kui-sidebar-min-icon") === true;

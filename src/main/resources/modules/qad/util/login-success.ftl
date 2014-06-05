@@ -10,6 +10,9 @@
 <script type="text/javascript">
     $(function () {
         $('.page-header').load("${base}/utils/layout/navbar");
+        $('.page-sidebar-left').load("${base}/utils/layout/sidebar", function () {
+            $('#page-sidebar-left').kuiSidebar('init');
+        });
         kui.closeDialog("#${pageId}");
     })
 </script>
