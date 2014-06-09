@@ -14,6 +14,7 @@
  * @type {string}
  */
 var qadServerContextPath = window.qadServerContextPath || '';
+var qadHttpsPort = window.qadHttpsPort || 443;
 
 (function (window) {
     "use strict";

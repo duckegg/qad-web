@@ -13,14 +13,38 @@ qad-web-2.0.6@201406
 * __Login__: refresh sidebar after popup login
 
 ### Code Changes
-* N/A
+* __scripts.ftl__: to support HTTPS login, add `<script type="text/javascript">window.qadHttpsPort=8443;</script>`
+before `<#include "/modules/qad/public/qad-js.ftl"/>`. Here `8443` should be changed to HTTPS port.
+* __web.xml__: to support Cross Origin Resource Sharing, add CORS filter
 
+        <filter>
+            <filter-name>CORS</filter-name>
+            <filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
+            <init-param>
+                <param-name>cors.allowOrigin</param-name>
+                <param-value>*</param-value>
+            </init-param>
+        </filter>
+        <filter-mapping>
+            <filter-name>CORS</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+
+* __login.ftl__:
+Replace `<@ui.strutsErrors/>` with
+
+        <#if Request.shiroLoginFailure??>
+            <div class="alert alert-danger">
+                用户名或密码错误 <!--${Request.shiroLoginFailure}-->
+            </div>
+        </#if>
 
 qad-web-2.0.5@20140604
 -------------------
 
 ### New Features
 * __Login__: inline pop-up login when session timeout.
+* Add CORS support for HTTPS
 
 ### Bug Fixes
 * __User Defined Page__: returned JSON does not include `so` which cause `$scope.so` is undefined

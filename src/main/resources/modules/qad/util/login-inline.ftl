@@ -15,7 +15,7 @@
     }
 
 </style>
-<form action="${base}/login-inline" method="post" data-kui-ajax-form data-kui-target="#${pageId}"
+<form action="" method="post" sdata-kui-ajax-form sdata-kui-target="#${pageId}"
       class="page-login-box">
     <div class="form-group">
         <span class="form-control-static">请输入Windows域帐户登录</span>
@@ -37,6 +37,7 @@
         <span class="form-control-feedback"><i class="fa fa-keyboard-o"></i></span>
     </div>
     <div>
+        <div class="alert alert-danger js-error" style="display: none"></div>
         <@ui.strutsErrors/>
     </div>
 
@@ -52,4 +53,44 @@
     <#--</button>-->
     </div>
 </form>
+<script type="text/javascript">
+    $(function () {
+        var $form = $('#${pageId} form');
+
+        function reloadUserInfo() {
+            $('.page-header').load("${base}/utils/layout/navbar");
+            $('.page-sidebar-left').load("${base}/utils/layout/sidebar", function () {
+                $('#page-sidebar-left').kuiSidebar('init');
+            });
+        }
+
+        var hostname = location.hostname;
+        //TODO: not hardcode
+        $form.on('submit', function () {
+            logger.debug(qadHttpsPort);
+            $.ajax({
+                url: "https://" + hostname + ":" + qadHttpsPort + "${base}/login",
+                type: 'POST',
+                dataType: "json",
+                global: false,
+                // withCredentials must be set for CORS request, otherwise each CORS request I get a different JSESSIONID.
+                // http://api.jquery.com/jQuery.ajax/
+                // http://software.dzhuvinov.com/cors-filter-tips.html
+                xhrFields: {withCredentials: true},
+                data: $form.serialize(), // serializes the form's elements.
+                success: function (xhr) {
+                    reloadUserInfo();
+                    kui.closeDialog("#${pageId}");
+                }, error: function (jqXHR, textStatus, errorThrown) {
+                    var msg = 'Unknown error happened. Please press F12 to check your browser console.';
+                    if (jqXHR.responseJSON) {
+                        msg = jqXHR.responseJSON.errorMessage;
+                    }
+                    $('.js-error', $form).html(msg).show();
+                }
+            });
+            return false;
+        });
+    })
+</script>
 </@ui.page>

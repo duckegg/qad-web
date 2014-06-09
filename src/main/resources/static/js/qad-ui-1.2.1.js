@@ -285,7 +285,7 @@ function QadUi(key) {
             ];
         }
         var optModal = $linker.data("kui-dialog-modal");// || $linker.data("dialog-modal");
-        console.debug("optModal", optModal);
+//        console.debug("optModal", optModal);
         if (ktl.isNotBlank(optModal)) {
             options.modal = optModal;
         }
@@ -346,9 +346,11 @@ function QadUi(key) {
         } else if (ktl.isValidAjaxUrl(url)) {
             $content.html(kui.showLoading("inline"));
             var errorMsg = $linker.data('kui-dialog-error') || $linker.data('dialog-error');
+//            logger.debug("xhrFields",false);
             $.ajax({
                 url: url,
                 global: false,
+//                xhrFields:false,
                 success: function (xhr) {
                     $content.html(xhr);
                     $content.find(":input:visible").not("[readonly]").first().focus();
@@ -372,7 +374,7 @@ function QadUi(key) {
 //        return showDialog(needLogin);
 //        function showDialog(needLogin) {
         if (isInline === false && !needLogin) {
-            console.debug("options", options);
+//            console.debug("options", options);
             $content.kuiDialog(options);
             // Custom dialog option: css
             if (!ktl.isBlank(dialogStyle)) {

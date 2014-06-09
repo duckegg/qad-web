@@ -25,12 +25,10 @@ User, role and permission
         <!-- =================================================================== -->
         <!-- Actions: login/logout -->
         <!-- =================================================================== -->
-        <action name="login-inline" class="hpps.qad.core.appsec.auth.AuthcAction" method="login">
+        <action name="login-inline" class="hpps.qad.core.appsec.auth.AuthcAction" method="$login">
             <result name="input" type="freemarker">/modules/qad/util/login-inline.ftl</result>
-            <result name="redirect" type="freemarker">/modules/qad/util/login-success.ftl</result>
-            <result name="success" type="freemarker">/modules/qad/util/login-success.ftl</result>
         </action>
-        <action name="login" class="hpps.qad.core.appsec.auth.AuthcAction" method="login">
+        <action name="login" class="hpps.qad.core.appsec.auth.AuthcAction" method="$login">
             <result name="redirect" type="redirect">${next}</result>
             <result name="success" type="redirectAction">
                 <param name="actionName">home</param>
@@ -43,7 +41,7 @@ User, role and permission
                 </param>
             </result>
         </action>
-        <action name="logout" class="hpps.qad.core.appsec.auth.AuthcAction" method="logout">
+        <action name="logout" class="hpps.qad.core.appsec.auth.AuthcAction" method="$logout">
             <result type="freemarker">/WEB-INF/pages/login.ftl</result>
         </action>
         <!-- =================================================================== -->
