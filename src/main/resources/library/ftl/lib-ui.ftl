@@ -17,8 +17,8 @@ Generate an array of tabs which are clickable, sortable, scrollable.
         <div class="js-smart-list horizontal accordion" data-role="collapsible" data-mini='true'>
             <h3>过滤</h3>
 
-            <div>
-                <input type="text" class="search input-small" placeholder="过滤" accesskey="f"
+            <div class="form-inline">
+                <input type="text" class="search input-sm form-control" placeholder="过滤" accesskey="f"
                        title="根据输入过滤列表中的内容"/>
             <span class="sort" data-sort="desc" style="cursor: pointer;margin:0 0.5em"
                   title="按名称排序"><i
@@ -446,7 +446,8 @@ Private macro. Display page after save.
     <@_afterSave link=link id=id type="update"/>
 </#macro>
 
-<#--
+<#---
+Display a bootstrap alert div.
 @param level "info", "success", "error", "danger", "warning", "help"
 -->
 <#macro alert level icon=true class="" style="" textOnly=false>

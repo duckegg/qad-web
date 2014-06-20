@@ -40,8 +40,8 @@
         $dialog.dialog(this.options);
         $dialog.closest('.ui-dialog-content');
         // Custom style options
+        var $obj = $(this).closest('.ui-dialog');
         if (!ktl.isBlank(this.options.style)) {
-            var $obj = $(this).closest('.ui-dialog');
             $obj.attr('style', $obj.attr('style') + ";" + this.options.style);
         }
 //        $dialog.find(":input:visible").not("[readonly]").first().focus();
@@ -238,6 +238,7 @@ $.fn.kuiActionTabs = function (option) {
         var $ul = $this.is('ul') ? $this : $this.children('ul');
         var $div = $ul.parent();
         if ($ul.hasClass('listing-scrollable')) {
+            console.debug("kuiActionTabs","listing-scrollable");
             $ul.carouFredSel({
                 circular: false,
                 infinite: false,

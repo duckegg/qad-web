@@ -67,9 +67,10 @@
         var hostname = location.hostname;
         //TODO: not hardcode
         $form.on('submit', function () {
-            logger.debug(qadHttpsPort);
+            var useHttps = qadHttpsPort > 0;
+            logger.debug("qadHttpsPort", qadHttpsPort);
             $.ajax({
-                url: "https://" + hostname + ":" + qadHttpsPort + "${base}/login",
+                url: (useHttps ? ("https://" + hostname + ":" + qadHttpsPort) : "") + "${base}/login",
                 type: 'POST',
                 dataType: "json",
                 global: false,

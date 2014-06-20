@@ -1,37 +1,27 @@
 # CHANGE LOG
 
-qad-web-2.0.6@201406
+qad-web-2.0.6@20140617
 -------------------
 
 ### New Features
-* N/A
+
+* __<@ui.ajaxTable>__
+
+    * Add parameter `pageLength` to define number of rows displayed in table
+    * Add parameter `order` to define initial ordering column
 
 ### Bug Fixes
-* N/A
+
+* __<@ui.ajaxTable>__: remove Y scroll bar in small table
 
 ### Enhancements
-* __Login__: refresh sidebar after popup login
+* N/A
 
 ### Code Changes
-* __scripts.ftl__: to support HTTPS login, add `<script type="text/javascript">window.qadHttpsPort=8443;</script>`
-before `<#include "/modules/qad/public/qad-js.ftl"/>`. Here `8443` should be changed to HTTPS port.
-* __web.xml__: to support Cross Origin Resource Sharing, add CORS filter
-
-        <filter>
-            <filter-name>CORS</filter-name>
-            <filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
-            <init-param>
-                <param-name>cors.allowOrigin</param-name>
-                <param-value>*</param-value>
-            </init-param>
-        </filter>
-        <filter-mapping>
-            <filter-name>CORS</filter-name>
-            <url-pattern>/*</url-pattern>
-        </filter-mapping>
-
+* __shiro.ini__: add `/login=authc` under `[urls]`
 * __login.ftl__:
-Replace `<@ui.strutsErrors/>` with
+
+    (1) Replace `<@ui.strutsErrors/>` with
 
         <#if Request.shiroLoginFailure??>
             <div class="alert alert-danger">
@@ -39,12 +29,14 @@ Replace `<@ui.strutsErrors/>` with
             </div>
         </#if>
 
+    (2) Remove `action` in `form`: `<form action="" method="post">`
+
+
 qad-web-2.0.5@20140604
 -------------------
 
 ### New Features
 * __Login__: inline pop-up login when session timeout.
-* Add CORS support for HTTPS
 
 ### Bug Fixes
 * __User Defined Page__: returned JSON does not include `so` which cause `$scope.so` is undefined

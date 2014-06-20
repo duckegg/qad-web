@@ -9,29 +9,38 @@ Request parameter "trc" (total record count) to determine if use serverSide
 Build table with AJAX data source. The AJAX source is specified by either `ajaxUrl` or `ajaxForm`.
 
 @param tableId {string} HTML element id of the table
-@param ajaxUrl {string} a URL with query string
-@param ajaxForm {jQuery|HTMLElement} a form element which is submitted to fetch data
-@param serverSide {boolean} If use server side pagination, sort, filter
-@param pagination {boolean} If display pagination
+@param ajaxUrl {string} AJAX URL with query string
+@param ajaxForm {jQuery|HTMLElement} HTML form element which is submitted to fetch data
+@param serverSide {boolean} Enable or disable server side pagination, sort, filter.
+@param pageLength {number} The initial page length (number of rows per page)
+@param pagination {boolean} Enable or disable table pagination
 @param autoWidth
-@param height
-@param printable    If display printable buttons (pdf, excel, word). If true, must have a corresponding .print.ftl page.
-@param columnFilter If display filter for each column.
+@param colVis {boolean} Enable or disable adjusting column visibility
+@param printable {boolean} Display or hide printable buttons (pdf, excel, word). If true, must have a corresponding .print.ftl page.
+@param columnFilter {boolean} Default: false. Display or hide filter for each column.
+@param order {string} Define initial ordering columns in format of [column-index-starting-with-zero, 'asc or desc'], example `[0,'desc']`, `[3,'asc']`.
+@param export {string} Define exportable data format seperated by comma
+@param cssClass {string} Define css class applied on wrapper
+
+@param autoColumn (DEPRECATED!)
+@param height (DEPRECATED!)
+@param theme (DEPRECATED!) by parameter cssClass
+@param scrollable (DEPRECATED!) {boolean} Default: true. Enable or disable scroller.
 -->
 <#macro ajaxTable tableId ajaxUrl="" ajaxForm="" serverSide=false autoColumn=false
 rowGroup="" rowReordering=false rowIdDataField="" rowReorderOptions=""
-filter=true colVis=true columnFilter=false scrollable=true
-autoWidth=false printable=false printPid="" height="auto" theme=""
+filter=true colVis=true columnFilter=false scrollable=true order=""
+autoWidth=false printable=false printPid="" height="auto" theme="" cssClass=""
 toolbarElement=""
 export="pdf,xls,doc"
-pagination=true keyboard=false ajaxheader=false>
+pageLength=10 pagination=true keyboard=false ajaxheader=false>
     <@_buildTable tableId=tableId ajaxUrl=ajaxUrl ajaxForm=ajaxForm serverSide=serverSide autoColumn=autoColumn
     rowGroup=rowGroup rowReordering=rowReordering rowIdDataField=rowIdDataField rowReorderOptions=rowReorderOptions
-    filter=filter colVis=colVis columnFilter=columnFilter scrollable=scrollable
-    autoWidth=autoWidth printable=printable printPid=printPid height=height theme=theme
+    filter=filter colVis=colVis columnFilter=columnFilter scrollable=scrollable order=order
+    autoWidth=autoWidth printable=printable printPid=printPid height=height theme=theme cssClass=cssClass
     toolbarElement=toolbarElement
     export=export
-    pagination=pagination keyboard=keyboard ajaxheader=ajaxheader/>
+    pageLength=pageLength pagination=pagination keyboard=keyboard ajaxheader=ajaxheader/>
 </#macro>
 <#--
 ********************************************************************************
@@ -41,18 +50,18 @@ Build table with existing static HTML table
 -->
 <#macro staticTable tableId
 rowGroup="" rowReordering=false rowIdDataField="" rowReorderOptions=""
-filter=true colVis=true columnFilter=false scrollable=true
-autoWidth=false printable=false printPid="" height="auto" theme=""
+filter=true colVis=true columnFilter=false scrollable=true order=""
+autoWidth=false printable=false printPid="" height="auto" theme="" cssClass=""
 toolbarElement=""
 export="pdf,xls,doc"
-pagination=true keyboard=false>
+pageLength=10 pagination=true keyboard=false>
     <@_buildTable tableId=tableId useAjax=false
     rowGroup=rowGroup rowReordering=rowReordering rowIdDataField=rowIdDataField rowReorderOptions=rowReorderOptions
-    filter=filter colVis=colVis columnFilter=columnFilter scrollable=scrollable
-    autoWidth=autoWidth printable=printable printPid=printPid height=height theme=theme
+    filter=filter colVis=colVis columnFilter=columnFilter scrollable=scrollable order=order
+    autoWidth=autoWidth printable=printable printPid=printPid height=height theme=theme cssClass=cssClass
     toolbarElement=toolbarElement
     export=export
-    pagination=pagination keyboard=keyboard/>
+    pageLength=pageLength pagination=pagination keyboard=keyboard/>
 </#macro>
 
 <#---
@@ -61,11 +70,11 @@ Core macro.
 -->
 <#macro _buildTable tableId useAjax=true ajaxUrl="" ajaxForm="" serverSide=false autoColumn=false
 rowGroup="" rowReordering=false rowIdDataField="" rowReorderOptions=""
-filter=true colVis=true columnFilter=false scrollable=true
-autoWidth=false pagination=true height="auto" theme=""
+filter=true colVis=true columnFilter=false scrollable=true order=""
+autoWidth=false pagination=true height="auto" theme="" cssClass=""
 toolbarElement=""
 export="pdf,xls,doc,json"
-printable=false printPid="" keyboard=false ajaxheader=false>
+pageLength=10 printable=false printPid="" keyboard=false ajaxheader=false>
 <#-- Determine mandatory parameters -->
     <#if ajaxUrl=="">
         <#if ajaxForm=="">
@@ -100,8 +109,7 @@ printable=false printPid="" keyboard=false ajaxheader=false>
     <#assign bKeyTable = keyboard && (!_serverSide && (rowGroup==""))/>
     <#if useAjax>
     <#-- Generate table wrapper -->
-    <table id="${tableId}" class="table table-condensed ${theme}" _tabindex="1"
-           _accesskey="t"></table>
+    <table id="${tableId}" class="table table-condensed"></table>
     </#if>
 <script type="text/javascript">
 <#-- Init global variables -->
@@ -148,7 +156,11 @@ $(function () {
     <#--###### General Settings ######-->
         "bPaginate":${pagination?string},
         "bProcessing": true,
+        "iDisplayLength": ${pageLength},
         "bStateSave": true,
+        <#if order!="">
+            "aaSorting": [${order}],
+        </#if>
         "fnCreatedRow": function (nRow, aData, iDataIndex) {
             <#if rowIdDataField!="">
                 $(nRow).attr('id', aData['${rowIdDataField}']);
@@ -200,27 +212,28 @@ $(function () {
             "sAjaxDataProp": "aaData",
         </#if>
     <#--###### Scroll ######-->
-        <#if scrollable>
-            "sScrollY": "${height}",
-        <#-- Use sScrollX to prevent column width change after sorting -->
-            "sScrollX": "100%",
+    <#--<#if scrollable>-->
+    <#--"sScrollY": "${height}",-->
+//            "sScrollY": "800px",
+//            "bScrollCollapse": true,
+    <#--</#if>-->
+    <#-- Use sScrollX to prevent column width change after sorting -->
+        "sScrollX": "100%",
 //        "sScrollXInner": "100%",
-        </#if>
-        "bScrollCollapse": true,
     <#--###### ColVis Extras ######-->
         <#if colVis==true>
             "oColVis": {
                 "sAlign": "left", "buttonText": '<span class="btn btn-default btn-xs" title="选择显示列"><i class="icon fa fa-columns"></i></span>', "bRestore": true, "sRestore": "Reset"
             },
         </#if>
-        fnDrawCallback: function( oSettings ) {
+        fnDrawCallback: function (oSettings) {
             $('.dataTables_filter input').addClass('form-control input-sm');
         },
         "fnInitComplete": function () {
             <#if useAjax>
                 theTable.fnSetFilteringDelay(400);
             </#if>
-            var $tableWrapper = $("#${tableId}_wrapper");
+            var $tableWrapper = $("#${tableId}_wrapper").addClass("${cssClass}");
             <#if ajaxheader>
 
                 var $tablehead;
@@ -242,7 +255,6 @@ $(function () {
                 var $toolbar = $('.dataTables_toolbar', $tableWrapper);
                 $toolbarElement.appendTo($toolbar).show();
             }
-            $tableWrapper.addClass("${theme}");
             <#if rowGroup!="" >
                 theTable.rowGrouping({
                     bCollapseAllGroup:${rowGroup?contains("collapseAll")?string},

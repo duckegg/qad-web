@@ -14,7 +14,13 @@
  * @type {string}
  */
 var qadServerContextPath = window.qadServerContextPath || '';
-var qadHttpsPort = window.qadHttpsPort || 443;
+/**
+ * Define HTTPS port.
+ * To support HTTPS login, add `<script type="text/javascript">window.qadHttpsPort=8443;</script>`
+ * before `<#include "/modules/qad/public/qad-js.ftl"/>`. Here `8443` shall be changed to HTTPS port.
+ * @type {number}
+ */
+var qadHttpsPort = window.qadHttpsPort || -1;
 
 (function (window) {
     "use strict";

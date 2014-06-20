@@ -212,7 +212,7 @@ function QadUi(key) {
         }
         function showInlineLoginBox() {
             var loginUrl = qadServerContextPath + '/login-inline';
-            var $dialog = $('<a href="' + loginUrl + '" data-kui-dialog style="display:none"></a>').appendTo('body').trigger("click").remove();
+            var $dialog = $('<a href="' + loginUrl + '" data-kui-dialog data-kui-dialog-class="login-inline" style="display:none"></a>').appendTo('body').trigger("click").remove();
         }
     };
     /**
@@ -247,6 +247,7 @@ function QadUi(key) {
         if (ktl.isNotBlank(cssClass)) {
             options.dialogClass = cssClass;
         }
+        console.debug("options.dialogClass",options.dialogClass);
         var dialogStyle = $linker.data("kui-dialog-style") || $linker.data("dialog-style");
         var isInline = !!(ktl.isNotBlank($linker.data("dialog-inline")) || ktl.isNotBlank($linker.data("kui-dialog-inline")));
         var contentType = $linker.data("kui-dialog-content-type") || $linker.data("dialog-content-type");
