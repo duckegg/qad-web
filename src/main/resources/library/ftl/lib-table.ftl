@@ -13,14 +13,14 @@ Build table with AJAX data source. The AJAX source is specified by either `ajaxU
 @param ajaxForm {jQuery|HTMLElement} HTML form element which is submitted to fetch data
 @param serverSide {boolean} Enable or disable server side pagination, sort, filter.
 @param pageLength {number} The initial page length (number of rows per page)
-@param pagination {boolean} Enable or disable table pagination
-@param autoWidth
-@param colVis {boolean} Enable or disable adjusting column visibility
 @param printable {boolean} Display or hide printable buttons (pdf, excel, word). If true, must have a corresponding .print.ftl page.
-@param columnFilter {boolean} Default: false. Display or hide filter for each column.
-@param order {string} Define initial ordering columns in format of [column-index-starting-with-zero, 'asc or desc'], example `[0,'desc']`, `[3,'asc']`.
 @param export {string} Define exportable data format seperated by comma
+@param order {string} Define initial ordering columns in format of [column-index-starting-with-zero, 'asc or desc'], example `[0,'desc']`, `[3,'asc']`.
 @param cssClass {string} Define css class applied on wrapper
+@param columnFilter {boolean} Default: false. Display or hide filter for each column.
+@param colVis {boolean} Enable or disable adjusting column visibility
+@param autoWidth
+@param pagination {boolean} Enable or disable table pagination
 
 @param autoColumn (DEPRECATED!)
 @param height (DEPRECATED!)

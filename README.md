@@ -45,8 +45,8 @@ To support Cross Origin Resource Sharing, add CORS filter in `WEB-INF/web.xml`
     </filter-mapping>
     ```
 ### HTTPS Login
-1. __CORS must be enabled
-2. In `WEB-INF/classes/shiro.ini`, add
+1. __CORS__ must be enabled
+2. In `WEB-INF/classes/shiro.ini`, add SSL authentication for login
 
 ```
 [urls]
