@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************************************
+Shared features like home, link, upload, download.
+
+@author leo.liao@hp.com, 2014/03/10, extract from struts.xml
+********************************************************************************
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="system" extends="qad-basic" namespace="/">
+        <!--<default-action-ref name="notFound"></default-action-ref>-->
+        <!-- =================================================================== -->
+        <!-- Actions: General -->
+        <!-- =================================================================== -->
+        <action name="index">
+            <result type="freemarker">/WEB-INF/pages/home.ftl</result>
+        </action>
+        <action name="home">
+            <result type="freemarker">/WEB-INF/pages/home.ftl</result>
+        </action>
+        <action name="my">
+            <result name="success" type="freemarker">/modules/qad/portal/my-portal.ftl</result>
+        </action>
+        <action name="my/portal/{function}" class="hpps.qad.core.appsec.user.ProfileAction" method="$portal_{1}">
+        </action>
+        <action name="my/pref" class="hpps.qad.core.appsec.user.ProfileAction" method="$pref">
+        </action>
+        <action name="help/{module}/{topic}" class="hpps.qad.base.action.HelpAction">
+            <result name="success" type="freemarker">/help/wrapper.ftl</result>
+        </action>
+        <action name="about">
+            <result name="success" type="freemarker">/modules/qad/system/about.ftl</result>
+        </action>
+        <!-- Changelog -->
+        <action name="changelog">
+            <result name="success" type="freemarker">/modules/qad/util/changelog.ftl</result>
+        </action>
+        <!-- Shotcuts -->
+        <action name="shortcuts">
+            <result name="success" type="freemarker">/modules/qad/util/shortcuts.ftl</result>
+        </action>
+        <!-- Integration with external system -->
+        <action name="outlink" class="hpps.qad.base.action.BasicAction" method="doDefault">
+            <result name="success" type="freemarker">/modules/qad/util/outlink.ftl</result>
+        </action>
+        <action name="datex/{function}" class="hpps.qad.core.citype.DataExchangeAction" method="${1}">
+            <result name="success" type="freemarker">/modules/qad/citype/datex-{1}.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/citype/datex-imp.ftl</result>
+            <interceptor-ref name="fileUpload">
+                <param name="allowedTypes">text/csv,text/txt,application/vnd.ms-excel</param>
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack"/>
+        </action>
+        <!-- File download -->
+        <action name="system/download" class="hpps.qad.base.action.SimpleDownloadAction" method="execute">
+            <result name="screen" type="dispatcher">/WEB-INF/pages/commons/util/read-file.jsp</result>
+            <result name="success" type="stream">
+                <param name="contentType">application/octet-stream</param>
+                <param name="inputName">downloadStream</param>
+                <param name="contentDisposition">attachment;filename="${isoFilename}"</param>
+            </result>
+        </action>
+        <!-- File upload -->
+        <action name="system/upload/input" class="hpps.qad.base.action.UploadAction" method="input">
+            <result name="input">/modules/qad/file/upload-input.ftl</result>
+        </action>
+        <action name="system/upload" class="hpps.qad.base.action.UploadAction">
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="fileUpload">
+                <!--<param name="allowedTypes">text/plain</param>-->
+                <!--<param name="maximumSize">5242880</param>-->
+            </interceptor-ref>
+            <result name="success">/modules/qad/file/upload-commit.ftl</result>
+            <result name="input">/modules/qad/file/upload-input.ftl</result>
+        </action>
+
+        <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+        <!--@DEPRECATED, use system/upload -->
+        <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+        <!-- File upload -->
+        <action name="upload/input" class="hpps.qad.base.action.UploadAction" method="input">
+            <result name="input">/modules/qad/file/upload-input.ftl</result>
+        </action>
+        <action name="upload" class="hpps.qad.base.action.UploadAction">
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="fileUpload">
+                <!--<param name="allowedTypes">text/plain</param>-->
+                <!--<param name="maximumSize">5242880</param>-->
+            </interceptor-ref>
+            <result name="success">/modules/qad/file/upload-commit.ftl</result>
+            <result name="input">/modules/qad/file/upload-input.ftl</result>
+        </action>
+    </package>
+</struts>

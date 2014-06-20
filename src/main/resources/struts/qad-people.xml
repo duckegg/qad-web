@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************************************
+User, role and permission
+
+@author Leo, 2014/03/10, extracted from struts-admin.xml
+********************************************************************************
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="qad-people" namespace="/" extends="qad-basic">
+        <action name="admin/people/role/{function}" class="hpps.qad.core.appsec.role.RoleAction" method="${1}">
+            <result name="success" type="freemarker">/modules/qad/appsec/role-{1}.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/appsec/role-edit.ftl</result>
+        </action>
+        <action name="admin/people/permission/{function}" class="hpps.qad.core.appsec.perm.PermissionAction"
+                method="${1}">
+            <result name="success" type="freemarker">/modules/qad/appsec/permission-{1}.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/appsec/permission-edit.ftl</result>
+            <result name="matrix">/modules/qad/appsec/permission-matrix.ftl</result>
+        </action>
+
+        <!-- =================================================================== -->
+        <!-- Actions: login/logout -->
+        <!-- =================================================================== -->
+        <action name="login-inline" class="hpps.qad.core.appsec.auth.AuthcAction" method="$login">
+            <result name="input" type="freemarker">/modules/qad/util/login-inline.ftl</result>
+        </action>
+        <action name="login" class="hpps.qad.core.appsec.auth.AuthcAction" method="$login">
+            <result name="redirect" type="redirect">${next}</result>
+            <result name="success" type="redirectAction">
+                <param name="actionName">home</param>
+                <param name="namespace">/</param>
+            </result>
+            <result name="input" type="freemarker">/WEB-INF/pages/login.ftl</result>
+            <result name="json" type="json">
+                <param name="includeProperties">
+                    sessionId
+                </param>
+            </result>
+        </action>
+        <action name="logout" class="hpps.qad.core.appsec.auth.AuthcAction" method="$logout">
+            <result type="freemarker">/WEB-INF/pages/login.ftl</result>
+        </action>
+        <!-- =================================================================== -->
+        <!-- Actions: profile, user, role and permission  -->
+        <!-- =================================================================== -->
+        <action name="user/profile" class="hpps.qad.core.appsec.user.ProfileAction" method="view">
+            <result name="success" type="freemarker">/modules/qad/user/profile-edit.ftl</result>
+            <result name="error" type="freemarker">/modules/qad/user/profile-not-found.ftl</result>
+        </action>
+        <action name="user/profile/save" class="hpps.qad.core.appsec.user.ProfileAction" method="save">
+            <!-- Put fileUpload before basicStack -->
+            <interceptor-ref name="fileUpload">
+                <param name="allowedTypes">image/jpeg,image/jpg,image/gif,image/png</param>
+                <!--<param name="maximumSize">204800</param>-->
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack"/>
+            <result name="success" type="freemarker">/modules/qad/user/profile-save.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/user/profile-edit.ftl</result>
+        </action>
+
+        <action name="user/avatar" class="hpps.qad.core.appsec.user.UserAction" method="avatar">
+            <param name="avid">{1}</param>
+            <result name="success" type="stream">
+                <param name="inputName">avatarStream</param>
+                <param name="contentDisposition">${avatarContentDisposition}</param>
+                <param name="contentType">${avatarContentType}</param>
+            </result>
+            <result name="error" type="httpheader">
+                <param name="error">404</param>
+                <param name="errorMessage">File not found</param>
+            </result>
+            <result name="default" type="plainText">
+            </result>
+        </action>
+        <action name="user/{function}/{id}" class="hpps.qad.core.appsec.user.UserAction" method="${1}">
+            <result name="success" type="freemarker">/modules/qad/user/user-{1}.ftl</result>
+        </action>
+        <action name="user/{function}" class="hpps.qad.core.appsec.user.UserAction" method="${1}">
+            <result name="success" type="freemarker">/modules/qad/user/user-{1}.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/user/user-edit.ftl</result>
+        </action>
+        <!-- =================================================================== -->
+        <!--DEPRECATED-->
+        <!-- =================================================================== -->
+        <action name="profile" class="hpps.qad.core.appsec.user.ProfileAction" method="view">
+            <result name="success" type="freemarker">/modules/qad/user/profile-edit.ftl</result>
+            <result name="error" type="freemarker">/modules/qad/user/profile-not-found.ftl</result>
+        </action>
+        <!--DEPRECATED-->
+        <action name="profile/save" class="hpps.qad.core.appsec.user.ProfileAction" method="save">
+            <!-- Put fileUpload before basicStack -->
+            <interceptor-ref name="fileUpload">
+                <param name="allowedTypes">image/jpeg,image/jpg,image/gif,image/png</param>
+                <!--<param name="maximumSize">204800</param>-->
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack"/>
+            <result name="success" type="freemarker">/modules/qad/user/profile-save.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/user/profile-edit.ftl</result>
+        </action>
+    </package>
+</struts>

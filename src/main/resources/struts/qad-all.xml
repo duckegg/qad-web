@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************************************
+A convenient includes of all qad struts config xml.
+
+@author Leo Liao, 2014/05/21, extracted from struts.xml
+********************************************************************************
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <include file="struts/qad-global.xml"/>
+    <include file="struts/qad-basic.xml"/>
+    <include file="struts/qad-people.xml"/>
+    <include file="struts/qad-query.xml"/>
+    <include file="struts/qad-report.xml"/>
+    <include file="struts/qad-devel.xml"/>
+    <include file="struts/qad-admin.xml"/>
+    <include file="struts/qad-search.xml"/>
+    <include file="struts/qad-system.xml"/>
+    <include file="struts/qad-utils.xml"/>
+    <include file="struts/qad-post.xml"/>
+    <include file="struts/qad-udr.xml"/>
+</struts>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************************************
+Basic abstract config file.
+
+@author Leo, 2012/07/01, created
+********************************************************************************
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="qad-basic" extends="struts-default" abstract="true">
+        <result-types>
+            <result-type name="json" class="hpps.qad.base.struts.CustomJsonResult"/>
+        </result-types>
+        <interceptors>
+            <interceptor name="json" class="org.apache.struts2.json.JSONInterceptor"/>
+            <interceptor name="auth" class="hpps.qad.core.appsec.auth.AuthzInterceptor"/>
+            <interceptor name="restRequest" class="hpps.qad.base.rest.RestRequestInterceptor"/>
+            <interceptor-stack name="authStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="auth"/>
+            </interceptor-stack>
+            <interceptor-stack name="restStack">
+                <interceptor-ref name="json"/>
+                <interceptor-ref name="restRequest"/>
+                <interceptor-ref name="authStack"/>
+            </interceptor-stack>
+            <interceptor-stack name="none">
+                <interceptor-ref name="i18n"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="restStack"/>
+
+        <global-results>
+            <result name="json" type="json"/>
+            <!--TODO: do not rename exceptionResult, it is hard coded in RestRequestInterceptor -->
+            <result name="exceptionResult" type="chain">
+                <param name="actionName">exceptionHandler</param>
+                <!--<param name="method">execute</param>-->
+                <param name="namespace">/</param>
+            </result>
+            <result name="defaultResult" type="freemarker">/modules/qad/util/default-result.ftl</result>
+            <result name="error" type="freemarker">/modules/qad/util/action-error.ftl</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <!--<exception-mapping exception="org.apache.shiro.authz.AuthorizationException" result="securityError"/>-->
+            <!--
+            Exception flow:
+             1. Exception (ex) thrown by Struts2 Action
+             2. Catch (ex) in struts.xml <exception-mapping>
+             3. ExceptionHandlerAction log (ex) and set HTTP status code 500 (Internal Server Error)
+             4. Web server catches HTTP error and display final page defined in selenium.xml <error-page>
+            -->
+            <exception-mapping exception="java.lang.Exception" result="exceptionResult"/>
+        </global-exception-mappings>
+        <action name="exceptionHandler" class="hpps.qad.base.action.ExceptionHandlerAction" method="execute">
+            <!-- QUESTION: if error happened in freemarker, a "dispatcher" result will cause
+            infinite action call error. not sure if this is a bug.-->
+            <result name="error" type="httpheader">
+                <param name="error">${statusCode}</param>
+                <param name="errorMessage">${exceptionMessage}</param>
+            </result>
+            <interceptor-ref name="defaultStack"/>
+        </action>
+    </package>
+</struts>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+********************************************************************************
+Post/article module.
+
+@author Leo, 2012/05/30, modified
+********************************************************************************
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="qad-post" namespace="/jpost" extends="qad-basic">
+        <!-- =================================================================== -->
+        <!-- Actions: jpost -->
+        <!-- =================================================================== -->
+        <action name="{postType}/execute" class="hpps.qad.core.post.JpostAction" method="execute">
+            <result name="success" type="freemarker">/modules/qad/jpost/jpost-execute.ftl</result>
+        </action>
+        <action name="{postType}/create" class="hpps.qad.core.post.JpostAction" method="$create">
+            <result name="success" type="freemarker">/modules/qad/jpost/jpost-create.ftl</result>
+        </action>
+        <action name="{postType}/create_do" class="hpps.qad.core.post.JpostAction" method="$create_do">
+            <result name="success" type="freemarker">/modules/qad/jpost/jpost-create_do.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/jpost/jpost-edit.ftl</result>
+            <result name="xml" type="freemarker">/modules/qad/jpost/jpost.xml.ftl</result>
+            <result name="json" type="json">
+                <param name="includeProperties">jpost.*</param>
+                <param name="excludeWildcards">jpost.createdUser.*</param>
+            </result>
+        </action>
+        <action name="{postType}/update" class="hpps.qad.core.post.JpostAction" method="$update">
+            <result name="success" type="freemarker">/modules/qad/jpost/jpost-update.ftl</result>
+            <result name="xml" type="freemarker">/modules/qad/jpost/jpost.xml.ftl</result>
+            <result name="json" type="json">
+                <param name="includeProperties">jpost.*</param>
+                <param name="excludeWildcards">jpost.createdUser.*</param>
+            </result>
+            <!--<param name="permCode">perm_jpost_update</param>-->
+        </action>
+        <action name="{postType}/update_do" class="hpps.qad.core.post.JpostAction" method="$update_do">
+            <result name="success" type="freemarker">/modules/qad/jpost/jpost-update_do.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/jpost/jpost-edit.ftl</result>
+            <result name="xml" type="freemarker">/modules/qad/jpost/jpost.xml.ftl</result>
+            <result name="json" type="json">
+                <param name="includeProperties">jpost.*</param>
+                <param name="excludeWildcards">jpost.createdUser.*</param>
+            </result>
+        </action>
+        <action name="{postType}/reply_do" class="hpps.qad.core.post.JpostAction" method="reply_do">
+            <result name="success" type="freemarker">/modules/qad/jpost/jpost-reply_do.ftl</result>
+            <result name="input" type="freemarker">/modules/qad/jpost/jpost-edit.ftl</result>
+        </action>
+        <action name="{postType}/delete" class="hpps.qad.core.post.JpostAction" method="$delete">
+            <result name="success" type="freemarker">/modules/qad/jpost/jpost-delete.ftl</result>
+        </action>
+        <action name="{postType}/delete_do" class="hpps.qad.core.post.JpostAction" method="$delete_do">
+            <result name="success" type="freemarker">/modules/qad/jpost/jpost-delete_do.ftl</result>
+            <result name="xml" type="freemarker">/modules/qad/jpost/jpost.xml.ftl</result>
+            <result name="json" type="json">
+                <param name="includeProperties">jpost.*</param>
+                <param name="excludeWildcards">jpost.createdUser.*</param>
+            </result>
+        </action>
+        <action name="{postType}/view" class="hpps.qad.core.post.JpostAction" method="$view">
+            <result name="success" type="freemarker">/modules/qad/jpost/jpost-view.ftl</result>
+            <result name="xml" type="freemarker">/modules/qad/jpost/jpost.xml.ftl</result>
+            <result name="json" type="json">
+                <param name="includeProperties">jpost.*</param>
+                <param name="excludeWildcards">jpost.createdUser.*</param>
+            </result>
+        </action>
+        <action name="{postType}/list" class="hpps.qad.core.post.JpostAction" method="$list">
+            <result name="success" type="freemarker">/modules/qad/jpost/jpost-list.ftl</result>
+            <result name="xml" type="freemarker">/modules/qad/jpost/jpost.xml.ftl</result>
+            <result name="json" type="json">
+                <param name="includeProperties">jpost.*</param>
+                <param name="excludeWildcards">jpost.createdUser.*</param>
+            </result>
+        </action>
+        <action name="{postType}/index" class="hpps.qad.core.post.JpostAction" method="$index">
+            <result name="success" type="freemarker">/modules/qad/jpost/{1}-index.ftl</result>
+        </action>
+        <action name="{postType}/newsticker" class="hpps.qad.core.post.JpostAction" method="newsticker">
+            <result name="success" type="freemarker">/modules/qad/jpost/jpost-newsticker.ftl</result>
+        </action>
+    </package>
+</struts>
