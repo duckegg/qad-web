@@ -2,7 +2,7 @@ This is web tier for qad core. It contains freemarker templates and struts confi
 
 It is distributed as a jar file and placed in your application.
 
-Development Guide
+Development Guide...
 ===================
 
 ## Basic
